@@ -2,7 +2,7 @@
 
 ## Projeto em andamento
 
-ele está sendo efito com :
+ele está sendo feito com :
 
 - python
 - flask
