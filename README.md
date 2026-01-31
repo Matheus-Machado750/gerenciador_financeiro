@@ -12,6 +12,7 @@ ele está sendo feito com :
 - js
 - sql
 - SQLite
+- muita coragem, pq a vontade de desistir é grande kkkkkkk
   
 Em breve estará sendo postado :)
 
