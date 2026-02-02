@@ -16,4 +16,6 @@ ele está sendo feito com :
   
 Em breve estará sendo postado :)
 
-Postei o main.py mas ainda tá com bugs, em breve ele será atualizado.
+Postei o main.py mas ainda tá com bugs, em breve ele será atualizado. 
+
+  - atualização: agora as despesas ficam em um mês selecionado, não em todos os messes como era antes.
