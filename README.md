@@ -16,4 +16,4 @@ ele está sendo feito com :
   
 Em breve estará sendo postado :)
 
-commit
+Postei o main.py mas ainda tá com bugs, em breve ele será atualizado.
