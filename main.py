@@ -131,7 +131,10 @@ def enviar_dados():
     valor = request.form["valor"]
     prioridade = request.form["prioridade"]
 
-    data_criacao = datetime.now().strftime("%Y-%m-%d")
+    mes = int(request.form["mes"])
+    ano = datetime.now().year
+
+    data_criacao = datetime(ano, mes, 1).strftime("%Y-%m-%d")
 
     conexao = get_db_connection()
     cursor = conexao.cursor()
@@ -143,10 +146,13 @@ def enviar_dados():
     conexao.commit()
     conexao.close()
 
-    return redirect(url_for("index"))
+    return redirect(url_for("index", mes=mes))
 
 @app.route("/excluir/<int:id>")
 def excluir_despesa(id):
+
+    mes = request.args.get("mes", type=int)
+
     conexao = get_db_connection()
     cursor = conexao.cursor()
 
@@ -155,7 +161,7 @@ def excluir_despesa(id):
     conexao.commit()
     conexao.close()
 
-    return redirect(url_for("index"))
+    return redirect(url_for("index", mes=mes))
 
 @app.route("/salvar_receita", methods=["POST"])
 def salvar_receita():
