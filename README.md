@@ -10,7 +10,7 @@ ele está sendo feito com :
 - html
 - css
 - js
-- chart.js
+- chart.js -> para gráficos
 - sql
 - SQLite
 - muita coragem, pq a vontade de desistir é grande kkkkkkk
