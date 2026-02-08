@@ -15,7 +15,7 @@ ele está sendo feito com :
 - SQLite
 - muita coragem, pq a vontade de desistir é grande kkkkkkk
   
-Em breve estará sendo postado :) -> vou commitar o html e o css dps para visualização e uso de vdd 👍.
+Em breve estará sendo postado :) -> vou commitar o html e o css dps para visualização e uso de vdd.
 
 Postei o main.py mas ainda tá com bugs, em breve ele será atualizado. 
 
