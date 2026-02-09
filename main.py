@@ -80,6 +80,32 @@ def calcular_total_despesas(mes, ano):
     return total if total else 0
 
 
+def gastos_por_prioridade(mes, ano):
+    conexao = get_db_connection()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        SELECT prioridade, SUM(valor) as total
+        FROM despesas
+        WHERE strftime('%m', data_criacao) = ?
+        AND strftime('%Y', data_criacao) = ?
+        GROUP BY prioridade
+    """, (f"{mes:02d}", str(ano)))
+
+    resultados = cursor.fetchall()
+    conexao.close()
+
+    labels = []
+    valores = []
+
+    for linha in resultados:
+        labels.append(linha["prioridade"])
+        valores.append(linha["total"])
+
+    return labels, valores
+
+
+
 def buscar_receita_mes(mes, ano):
     conexao = get_db_connection()
     cursor = conexao.cursor()
@@ -89,7 +115,7 @@ def buscar_receita_mes(mes, ano):
     resultado = cursor.fetchone()
     conexao.close()
 
-    return resultado["valor"] if resultado else 0
+    return float(resultado["valor"]) if resultado else None
 
 @app.route("/")
 def index():
@@ -107,11 +133,17 @@ def index():
     total = calcular_total_despesas(mes, ano)
     
     receita = buscar_receita_mes(mes, ano)
+    labels, valores = gastos_por_prioridade(mes, ano)
 
-    receita_formatada = f"{receita:.2f}"
+    if receita is None:
+        receita_formatada = "0.00"
+
+    else:
+        receita_formatada = f"{receita:.2f}"
+
     reais, centavos = receita_formatada.split(".")
     
-    return render_template("home.html", despesas=despesas, total=total, receita=receita, reais=reais, centavos=centavos, mes_atual=mes)
+    return render_template("home.html", despesas=despesas, total=total, receita=receita, reais=reais, centavos=centavos, mes_atual=mes, labels=labels, valores=valores)
 
 
 @app.route("/simulacao")
@@ -168,9 +200,8 @@ def salvar_receita():
 
     valor = float(request.form["valor"])
 
-    agora = datetime.now()
-    mes = agora.month
-    ano = agora.year
+    mes = int(request.form["mes"])
+    ano = datetime.now().year
 
     conexao = get_db_connection()
     cursor = conexao.cursor()
@@ -185,7 +216,7 @@ def salvar_receita():
     conexao.commit()
     conexao.close()
 
-    return redirect(url_for("index"))
+    return redirect(url_for("index", mes=mes))
 
 if __name__ == "__main__":
     criar_tabela_despesas()
