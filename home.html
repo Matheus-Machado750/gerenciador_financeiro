@@ -1,0 +1,268 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <section class="home">
+
+        <div class="home_superior">
+
+            <div class="input_salario">
+
+                <h3>Receita mensal</h3>
+
+                <form action="{{ url_for('salvar_receita') }}" method="POST">
+
+                    <input type="hidden" name="mes" value="{{ mes_atual }}">
+
+                    <div class="campo_input_receita">
+
+                        <label for="receita"></label>
+                        <input type="number" step="0.01" id="receita" name="valor"
+                        {% if receita is not none %}
+                            value="{{ receita }}"
+                        {% endif %}
+                        placeholder="Digite sua renda no formato: 000,00" class="input_valor_renda">
+
+                        <button type="submit" class="botao_receita">Salvar</button>
+                    </div>
+
+                    <div class="exibir_receita">
+
+                        <span class="texto_receita">Ganho do mês : </span>
+                        <span class="reais_receita">R$ {{ reais }},</span>
+                        <span class="centavos">{{ centavos }}</span>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="receita_vs_despesa">
+
+                <h3> Orçamento </h3>
+
+                {% if receita and receita > 0 %}
+
+                    <div class="grafico_receita_wrapper">
+
+                        <canvas id="grafico_receita_despesa"></canvas>
+
+                    </div>
+
+                    <div class="grafico_resumo">
+                        <span class="resumo_item resumo_gasto">Gasto: R$ {{ "%.2f"|format(total) }}</span>
+                        <span class="resumo_item resumo_restante">Restante: R$
+                            {% set restante = receita - total %}
+                            {% if restante < 0 %}
+                                0.00
+                            {% else %}
+                                {{ "%.2f"|format(restante) }}
+                            {% endif %}
+                        </span>
+
+                    </div>
+                {% else %}
+                    <p class="sem_receita"> Cadastre uma receita para ver o gráfico. </p>
+                {% endif %}
+            </div>
+
+            <div class="adicionar_despesa">
+
+                <h3>Adicionar despesa</h3>
+
+                <form action="/enviar-dados" method="POST">
+
+                    <input type="hidden" name="mes" value="{{ mes_atual }}">
+
+                <div class="campo_despesa_nome"> 
+                    <label for="nome">Nome</label>
+                    <input type="text" id="nome" name="nome" placeholder="Insira o nome da despesa" required class="input_nome_despesa">
+                </div>
+
+                <div class="linha_dois_campos">
+
+                    <div class="campo_despesa_valor">
+                        <label for="valor">Valor</label>
+                        <input type="number" step="0.01" id="valor" name="valor" placeholder="Insira o valor da despesa" required class="input_valor_despesa">
+                    </div>
+
+                    <div class="campo_despesa_prioridade">
+                        <label for="prioridade">Prioridade</label>
+                        <select name="prioridade" id="prioridade" required class="select_prioridade">
+                            <option value="" disabled selected>Selecionar</option>
+                            <option value="Necessário">Necessário</option>
+                            <option value="Conveniente">Conveniente</option>
+                            <option value="Desnecessário">Desnecessário</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <button type="submit" class="botao_adicionar">Adicionar</button>
+
+            </form>
+
+            </div>
+
+        </div>
+
+        <div class="home_inferior">
+
+            <div class="tabela_mensal">
+
+                <div class= "header_tabela">
+
+                    <form method="GET" action="/">
+
+                        <select name="mes" class="select_mes" onchange="this.form.submit()">
+
+                            <option value="1" {% if mes_atual == 1 %}selected{% endif %}>Janeiro</option>
+                            <option value="2" {% if mes_atual == 2 %}selected{% endif %}>Fevereiro</option>
+                            <option value="3" {% if mes_atual == 3 %}selected{% endif %}>Março</option>
+                            <option value="4" {% if mes_atual == 4 %}selected{% endif %}>Abril</option>
+                            <option value="5" {% if mes_atual == 5 %}selected{% endif %}>Maio</option>
+                            <option value="6" {% if mes_atual == 6 %}selected{% endif %}>Junho</option>
+                            <option value="7" {% if mes_atual == 7 %}selected{% endif %}>Julho</option>
+                            <option value="8" {% if mes_atual == 8 %}selected{% endif %}>Agosto</option>
+                            <option value="9" {% if mes_atual == 9 %}selected{% endif %}>Setembro</option>
+                            <option value="10" {% if mes_atual == 10 %}selected{% endif %}>Outubro</option>
+                            <option value="11" {% if mes_atual == 11 %}selected{% endif %}>Novembro</option>
+                            <option value="12" {% if mes_atual == 12 %}selected{% endif %}>Dezembro</option>
+
+                        </select>
+                    </form>
+                </div>
+
+                <div class="tabela_wrapper">
+
+                    <table class="tabela_despesas">
+
+                        <thead> <!-- Cabeçalho da tabela -->
+                            <tr>
+                                <th>Despesas</th>
+                                <th>Prioridade</th>
+                                <th>Valor</th>
+                                <th>Excluir</th>
+                            </tr>
+                        </thead>
+
+                        <tbody> <!-- Corpo da tabela -->
+
+                        {% if despesas %}
+
+                            {% for despesa in despesas %}
+
+                            <tr>
+                                <td> {{ despesa["nome"] }} </td>
+                                <td> {{ despesa["prioridade"] }} </td>
+                                <td> {{ "%.2f"|format(despesa["valor"]) }} </td>
+                                <td> <a href="{{ url_for('excluir_despesa', id=despesa['id'], mes=mes_atual) }}"> <button class="botao_excluir"> <i class="fa-solid fa-trash-can"></i> </button> </a> </td>
+                            </tr>
+
+                            {% endfor %}
+
+                        {% else %}
+
+                            <tr>
+                                <td colspan="4" style="text-align: center;">
+
+                                    Nenhuma despesa cadastrada
+                                </td>
+                            </tr>
+                            
+                        {% endif %}
+
+                        </tbody>
+
+                        <tfoot>
+                            <tr>
+
+                                <td colspan="2" id="texto_total"><strong>Total</strong></td>
+                                <td colspan="2" id="texto_custo_mensal"> <strong>R$ {{ "%.2f" | format(total) }}</strong> </td>
+
+                            </tr>
+                        </tfoot>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+            <div class="grafico_mensal">
+
+                {% if valores %}
+                    <canvas id="grafico_pizza"></canvas>
+                {% else %}
+                    <p>Sem despesas neste mês.</p>
+                {% endif %}
+
+            </div>
+
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+            <script>
+
+                const labels = {{ labels | default([]) | tojson }};
+                const valores = {{ valores | default([]) | tojson }};
+
+                if(valores.length > 0){
+
+                    const ctx = document.getElementById('grafico_pizza');
+
+                    new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                data: valores,
+                                backgroundColor: [
+                                    '#5fbae3',   // desnecessário
+                                    '#FFC107',   // conveniente
+                                    '#e74e4e'    // necessário
+                                ]
+                            }]
+                        }
+                    });
+
+                }
+
+                const receita = {{ receita | default(0) | tojson }};
+                const totalGasto = {{ total | default(0) | tojson }};
+
+                if (receita > 0) {
+                    const restante = Math.max(receita - totalGasto, 0);
+                    const ctxReceita = document.getElementById('grafico_receita_despesa');
+
+                    new Chart(ctxReceita, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Gasto', 'Restante'],
+                            datasets: [{
+                                data: [totalGasto, restante],
+                                backgroundColor: ['#e74e4e', '#5af7b1'],
+                                borderWidth: 0
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            rotation: -90,
+                            circumference: 180,
+                            cutout: '65%',
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: { enabled: true }
+                            }
+                        }
+                    });
+                }
+
+                </script>
+
+        </div>
+
+    </section>
+
+{% endblock %}
