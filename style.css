@@ -1,0 +1,570 @@
+* { 
+    margin: 0; /*Margem externa*/
+    padding: 0; /*Margem interna*/
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+html {
+    scroll-behavior: smooth; /* Suavisa o scroll na movimentação da página */
+}
+
+body {
+    background-color: rgb(237, 237, 237);
+}
+
+/*SESSÃO 1 //////////////////////////////////// NAVBAR ///////////////////////////////////// */
+
+nav { /* Toda a NAVBAR */
+    background-color: rgb(106, 223, 174);
+    display: flex;
+    position: fixed;
+    justify-content: space-between;
+    padding: 0 50px;
+    height: 80px;
+    align-items: center;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    z-index: 900;
+}
+
+.faixa_navbar { 
+    position:absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background-color: #0b3c5d;
+    display: flex;
+    align-items: center;
+    width:570px;
+    clip-path: polygon(0 0, 100% 0, 92% 100%, 0% 100%); /* corte diagonal */
+}
+
+/* =================== Conteúdo Navbar ===================== */
+
+.titulo_nav {
+    color: rgb(237, 237, 237);
+    font-size: 1.9rem;
+    padding-left: 90px;
+}
+
+/* -------------- Links ------------------- */
+
+.nav_bar a {
+    color: rgb(237, 237, 237);
+    text-decoration: none;
+    padding: 10px;
+    font-weight: 600;
+    margin: 0 25px;
+}
+
+.nav_bar a:hover {
+    background-color: rgba(24, 68, 107, 0.650);
+    box-shadow: 0 0 0 6px rgba(24, 68, 107, 0.650);
+    border-radius: 4px;
+    transition: 0.2s;
+}
+
+.nav_bar a:active {
+    opacity: 0.5;
+    transition: 0.3s;
+}
+
+/* -------------- botão para responsividade ---------------- */
+
+.botao_responsivo {
+    display: none; /* Faz o botão ficar oculto */
+    border: none;
+    background: none;
+    border-top: 3px solid rgb(237, 237, 237);
+}
+
+main { /* para a nav não se sobrepor ao conteúdo */
+    padding-top: 100px;
+    padding-bottom: 40px;
+}
+
+
+
+/*SESSÃO 2 ///////////////////////////////////// HOME ///////////////////////////////////////// */
+
+
+/* -------------------- Home principal ----------------------- */
+.home {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    padding: 20px;
+}
+
+/* ===================== PARTE DE CIMA DA HOME ======================= */
+
+.home_superior {
+    display: flex;
+    min-height: 240px;
+}
+
+/* ----------------- Parte superior esquerda ---------------------- */
+
+.input_salario {
+    flex: 3;
+}
+
+.input_salario h3 { /* Título */
+    color:#0b3c5d;
+    font-weight: 700;
+    font-size: 30px;
+    padding: 7px 0px 20px 15px;
+}
+
+/* -------- Campo literal do input -------- */
+
+.input_valor_renda {
+    font-family: "Poppins", sans-serif;
+    border: none;
+    background-color: rgb(226, 226, 226);
+    padding: 6px 10px;
+    border-radius: 4px;
+    transition: 0.2s ease;
+    height: 34px;
+    width: 290px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.input_valor_renda:focus {
+    outline: none;
+    box-shadow: 3px 3px 6px rgba(106, 223, 174, 0.45); /* mesmo glow */
+}
+
+.campo_input_receita {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+/* -------- Botão de receita -------- */
+
+button {
+    border: none;
+    cursor: pointer;
+    font-family: "Poppins", sans-serif;
+}
+
+.botao_receita {
+    font-size: 16px;
+    font-weight: 600;
+    font-family: "Poppins", sans-serif;
+    color: #ffffff;
+    background-color: rgb(106, 223, 174);
+    border: none;
+    height: 35px;
+    width: 90px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.botao_receita:hover {
+    box-shadow: 4px 4px 7px rgba(0, 0, 0, 0.171);
+    background-color: rgb(83, 183, 141);
+    transition: 0.2s ease;
+}
+
+/* -------- Retângulo de exibição -------- */
+
+.exibir_receita {
+    display: flex;
+    background-color: #f7f7f7;
+    margin-top: 25px;
+    height: 100px;
+    border: 17px solid rgb(106, 223, 174);
+    align-items: center;
+    border-radius: 5px;
+}
+
+.texto_receita {
+    justify-content: left;
+    font-size: 21px;
+    margin: 0 13px 0 15px;
+}
+
+.reais_receita {
+    font-size: 47px;
+    font-weight: 700;
+}
+
+.centavos {
+    padding-top: 14px;
+    margin-left: 5px;
+    font-size: 30px;
+    color: #373737;
+}
+
+/* ----------------- Parte do meio ---------------------- */
+
+.receita_vs_despesa {
+    margin-left: 20px;
+    flex: 2;
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.receita_vs_despesa h3 {
+    color: #0b3c5d;
+    font-weight: 700;
+    font-size: 30px;
+}
+
+.grafico_receita_wrapper {
+    width: 100%;
+    max-width: 260px;
+    height: 140px;
+}
+
+#grafico_receita_despesa {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.grafico_resumo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 14px;
+    color: #333;
+    font-weight: 600;
+}
+
+.resumo_gasto {
+    color: #e74e4e;
+}
+
+.resumo_restante {
+    color: #2a8a5e;
+}
+
+.sem_receita {
+    color: #6a6a6a;
+    font-weight: 600;
+    text-align: center;
+    padding: 0 10px;
+}
+
+/* ----------------- Parte superior direita ---------------------- */
+
+
+.adicionar_despesa { /* Aréa em si */
+    flex: 3;
+    min-height: 264px;
+    padding: 16px 24px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.adicionar_despesa h3 {
+    color: #0b3c5d;
+    font-weight: 700;
+    font-size: 30px;
+    margin-bottom: 13px;
+}
+
+.adicionar_despesa form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+}
+
+/* Labels (NOME / VALOR / PRIORIDADE) */
+.adicionar_despesa label {
+    color: #0b3c5d;
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+}
+
+.campo_despesa_nome {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.linha_dois_campos {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+}
+
+.campo_despesa_valor,
+.campo_despesa_prioridade {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+/* ----- Inputs e Select ----- */
+
+.input_nome_despesa,
+.input_valor_despesa,
+.select_prioridade {
+    font-family: "Poppins", sans-serif;
+    border: none;
+    background-color: rgb(226, 226, 226);
+    padding: 6px 10px;
+    border-radius: 4px;
+    transition: 0.2s ease;
+    height: 34px;
+    width: 100%;
+    text-align: center;
+    appearance: none;
+    font-size: 14px;
+}
+
+.input_nome_despesa:focus,
+.input_valor_despesa:focus,
+.select_prioridade:focus {
+    outline: none;
+    box-shadow: 3px 3px 6px rgba(106, 223, 174, 0.45);
+}
+
+/* Select no estado inicial (cinza) */
+.select_prioridade {
+    color: #777;
+}
+
+.select_prioridade.selecionado {
+    color: #000;
+}
+
+/* -------- Botão de adicionar despesa -------- */
+
+.botao_adicionar {
+    margin-top: auto;
+    width: 100%;
+    height: 38px;
+    font-size: 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-family: "Poppins", sans-serif;
+    color: #ffffff;
+    background-color: rgb(106, 223, 174);
+    border: none;
+}
+
+.botao_adicionar:hover {
+    box-shadow: 4px 4px 7px rgba(0, 0, 0, 0.171);
+    background-color: rgb(83, 183, 141);
+    transition: 0.2s ease;
+}
+
+/* ===================== PARTE DE BAIXO DA HOME ======================= */
+
+.home_inferior {
+    display: flex;
+    min-height: 525px;
+}
+
+/* ----------------- Parte inferior esquerda (tabela) ---------------------- */
+
+.tabela_mensal {
+    background-color: rgb(51, 51, 51);
+    flex: 5;
+    padding: 20px;
+    margin-right: 20px;
+    border-radius: 8px;
+
+    display: flex;
+    flex-direction: column;
+
+    max-height: 520px;
+    overflow: hidden;
+}
+
+.tabela_wrapper { /* Wrapper que controla o scroll */
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+}
+
+.tabela_mensal table {
+    width: 100%;
+    border-collapse: collapse;
+    height: 100%;
+}
+
+/* ----- Cabeçalho fixo ----- */
+
+.header_tabela {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(51, 51, 51);
+    border-radius: 6px 6px 0 0;
+    padding-bottom: 19px;
+}
+
+.tabela_mensal thead th {
+    position: sticky;
+    top: 0;
+    background-color: #5af7b1;
+    color: #000;
+    font-weight: 600;
+    padding: 12px;
+    font-size: 15px;
+    z-index: 2;
+}
+
+.select_mes {
+    border: none;
+    color: #f9f9f9;
+    background-color: rgb(51, 51, 51);
+    cursor: pointer;
+
+    font-size: 35px;
+    font-weight: 700;
+    margin-left: 12px;
+
+    border-radius: 6px;
+
+    padding: 0 18px;
+    min-width: 190px;
+
+    text-align: center;
+    text-align-last: center; /* Chrome/Edge */
+}
+
+.select_mes:focus {
+    outline: none;
+}
+
+.select_mes option {
+    text-align: start;
+    font-family: "Poppins", sans-serif;
+    font-size: 16px;
+    padding: 6px 10px;
+}
+
+/* ----- Corpo ----- */
+
+.tabela_mensal tbody td {
+    padding: 12px;
+    text-align: center;
+    font-size: 15px;
+    color: #ffffff;
+}
+
+/* ----- Linhas ----- */
+
+.tabela_mensal tbody tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.tabela_mensal tbody tr:last-child {
+    border-bottom: none;
+}
+
+/* ----- Rodapé ----- */
+
+.tabela_mensal tfoot td {
+    background-color: #5af7b1;
+    font-weight: 700;
+    color: #000;
+    padding: 12px;
+}
+
+tfoot {
+    background-color: #5af7b1;
+}
+
+#texto_total {
+    padding-left: 185px;
+    font-size: 25px;
+}
+
+#texto_custo_mensal {
+    padding-left: 120px;
+    background-color: #0b3c5d;
+    font-size: 30px;
+    color: rgb(237, 237, 237);
+    clip-path: polygon(5% 0, 100% 0, 100% 100%, 0% 100%);
+}
+
+/* ----- Botão de excluir despesa ----- */
+
+.botao_excluir {
+    border: none;
+    background-color: transparent;
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 10px 14px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.botao_excluir:hover {
+    background-color: rgba(19, 68, 108, 0.862);
+}
+
+/* ----------------- Parte inferior direita (gráfico) ---------------------- */
+
+.grafico_mensal {
+    flex: 3;
+    min-height: 450px;
+    margin-top: 50px;
+}
+
+#grafico_pizza {
+    background-color: transparent;
+    height:380px !important;
+    width: 380px !important;
+    margin-left: 70px;
+}
+
+/*SESSÃO 5 ////////////////////////////////// RODAPÉ ///////////////////////////////////// */
+
+footer {
+    background-color: rgb(49, 49, 49);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 190px;
+    text-align: center;
+    align-items: center;
+}
+
+.contatos {
+    display: flex;
+    gap: 50px;
+}
+
+.contatos i {
+    flex-direction: center;
+    color: rgb(244, 244, 244);
+    padding: 20px;
+    font-size: 30px;
+    margin: 5px;
+    transition: 0.3s ease-in-out;
+}
+
+.contatos i:hover {
+    border-radius: 7px;
+    background-color:rgb(106, 223, 174);
+    color:#0b3c5d;
+}
+
+.texto_footer {
+    margin-top: 25px;
+    margin-bottom: 30px;
+    opacity: 0.8;
+    color:rgb(255, 255, 255);
+}
