@@ -32,7 +32,7 @@ var height = 170
 
 var cx = width / 2
 var cy = height
-var raio = height - 10
+var raio = height - 42
 
 var percentual = gasto / receita
 
@@ -57,11 +57,22 @@ pontoFinal2 = cy - raio * Math.sin(radianos)
 
 // passo 7
 
+const pathBase = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+
+pathBase.setAttribute('d', `M ${pontoInicial1} ${pontoInicial2} A ${raio} ${raio} 0 0 1 ${cx + raio} ${cy}`);
+pathBase.setAttribute('fill', 'none');
+pathBase.setAttribute('stroke', '#7fe261');
+pathBase.setAttribute('stroke-width', '45');
+pathBase.setAttribute('stroke-linecap', 'round');
+svg.appendChild(pathBase)
+
+
+
 const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 
 path.setAttribute('d', `M ${pontoInicial1} ${pontoInicial2} A ${raio} ${raio} 0 0 1 ${pontoFinal1} ${pontoFinal2}`);
 path.setAttribute('fill', 'none');
 path.setAttribute('stroke', '#e74e4e');
-path.setAttribute('stroke-width', '35');
+path.setAttribute('stroke-width', '45');
 path.setAttribute('stroke-linecap', 'round');
 svg.appendChild(path)

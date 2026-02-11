@@ -80,32 +80,6 @@ def calcular_total_despesas(mes, ano):
     return total if total else 0
 
 
-def gastos_por_prioridade(mes, ano):
-    conexao = get_db_connection()
-    cursor = conexao.cursor()
-
-    cursor.execute("""
-        SELECT prioridade, SUM(valor) as total
-        FROM despesas
-        WHERE strftime('%m', data_criacao) = ?
-        AND strftime('%Y', data_criacao) = ?
-        GROUP BY prioridade
-    """, (f"{mes:02d}", str(ano)))
-
-    resultados = cursor.fetchall()
-    conexao.close()
-
-    labels = []
-    valores = []
-
-    for linha in resultados:
-        labels.append(linha["prioridade"])
-        valores.append(linha["total"])
-
-    return labels, valores
-
-
-
 def buscar_receita_mes(mes, ano):
     conexao = get_db_connection()
     cursor = conexao.cursor()
@@ -133,8 +107,6 @@ def index():
     total = calcular_total_despesas(mes, ano)
     
     receita = buscar_receita_mes(mes, ano)
-    labels, valores = gastos_por_prioridade(mes, ano)
-
     if receita is None:
         receita_formatada = "0.00"
 
@@ -143,7 +115,7 @@ def index():
 
     reais, centavos = receita_formatada.split(".")
     
-    return render_template("home.html", despesas=despesas, total=total, receita=receita, reais=reais, centavos=centavos, mes_atual=mes, labels=labels, valores=valores)
+    return render_template("home.html", despesas=despesas, total=total, receita=receita, reais=reais, centavos=centavos, mes_atual=mes)
 
 
 @app.route("/simulacao")
