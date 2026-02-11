@@ -38,33 +38,25 @@
 
             </div>
 
-            <div class="receita_vs_despesa">
+            <div class="receita_vs_despesa" data-gasto="{{ total }}" data-receita="{{ receita }}">
 
                 <h3> Orçamento </h3>
 
-                {% if receita and receita > 0 %}
+                <div class="container_svg">
 
-                    <div class="grafico_receita_wrapper">
+                    <svg class="grafico_progresso">
+                    
+                    </svg>
 
-                        <canvas id="grafico_receita_despesa"></canvas>
+                    <div class="texto_orçamento">
 
-                    </div>
-
-                    <div class="grafico_resumo">
-                        <span class="resumo_item resumo_gasto">Gasto: R$ {{ "%.2f"|format(total) }}</span>
-                        <span class="resumo_item resumo_restante">Restante: R$
-                            {% set restante = receita - total %}
-                            {% if restante < 0 %}
-                                0.00
-                            {% else %}
-                                {{ "%.2f"|format(restante) }}
-                            {% endif %}
-                        </span>
+                        <span class="texto_valor_gasto"> Gasto: R$ {} </span>
+                        <span class="texto_saldo_restante"> Restante: R$ {} </span>
 
                     </div>
-                {% else %}
-                    <p class="sem_receita"> Cadastre uma receita para ver o gráfico. </p>
-                {% endif %}
+                
+                </div>
+
             </div>
 
             <div class="adicionar_despesa">
@@ -191,75 +183,8 @@
             </div>
 
             <div class="grafico_mensal">
-
-                {% if valores %}
-                    <canvas id="grafico_pizza"></canvas>
-                {% else %}
-                    <p>Sem despesas neste mês.</p>
-                {% endif %}
-
+            
             </div>
-
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-            <script>
-
-                const labels = {{ labels | default([]) | tojson }};
-                const valores = {{ valores | default([]) | tojson }};
-
-                if(valores.length > 0){
-
-                    const ctx = document.getElementById('grafico_pizza');
-
-                    new Chart(ctx, {
-                        type: 'pie',
-                        data: {
-                            labels: labels,
-                            datasets: [{
-                                data: valores,
-                                backgroundColor: [
-                                    '#5fbae3',   // desnecessário
-                                    '#FFC107',   // conveniente
-                                    '#e74e4e'    // necessário
-                                ]
-                            }]
-                        }
-                    });
-
-                }
-
-                const receita = {{ receita | default(0) | tojson }};
-                const totalGasto = {{ total | default(0) | tojson }};
-
-                if (receita > 0) {
-                    const restante = Math.max(receita - totalGasto, 0);
-                    const ctxReceita = document.getElementById('grafico_receita_despesa');
-
-                    new Chart(ctxReceita, {
-                        type: 'doughnut',
-                        data: {
-                            labels: ['Gasto', 'Restante'],
-                            datasets: [{
-                                data: [totalGasto, restante],
-                                backgroundColor: ['#e74e4e', '#5af7b1'],
-                                borderWidth: 0
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            rotation: -90,
-                            circumference: 180,
-                            cutout: '65%',
-                            plugins: {
-                                legend: { display: false },
-                                tooltip: { enabled: true }
-                            }
-                        }
-                    });
-                }
-
-                </script>
 
         </div>
 
