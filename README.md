@@ -13,6 +13,7 @@ ele está sendo feito com :
 - sql
 - SQLite
 - muita coragem, pq a vontade de desistir é grande kkkkkkk
+- SVG -> para os gráficos
   
 Em breve estará sendo postado
 
