@@ -80,6 +80,41 @@ def calcular_total_despesas(mes, ano):
     return total if total else 0
 
 
+def calcular_gastos_por_prioridade(mes, ano):
+
+    conexao = get_db_connection()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+                    SELECT prioridade,
+                    SUM(valor) AS total FROM despesas
+                    WHERE strftime('%m', data_criacao) = ?
+                    AND strftime('%Y', data_criacao) = ?
+                    GROUP BY prioridade
+                   """, (f"{mes:02d}", str(ano)))
+    
+    resultados = cursor.fetchall()
+    conexao.close()
+
+    gastos = {"necessario":0.0 , "conveniente":0.0, "desnecesario":0.0}
+
+
+    for linha in resultados:
+        prioridade = linha["prioridaade"]
+        total = float(linha["total"] or 0)
+
+        if prioridade == "Necessário":
+            gastos["necesario"] = total
+
+        elif prioridade == "Conveniente":
+            gastos["conveniente"] = total
+
+        elif prioridade == "Desnecessário":
+            gastos["desnecesario"] = total
+
+    return gastos
+
+
 def buscar_receita_mes(mes, ano):
     conexao = get_db_connection()
     cursor = conexao.cursor()
@@ -104,7 +139,10 @@ def index():
     ano = agora.year
 
     despesas = buscar_despesas(mes, ano)
+
     total = calcular_total_despesas(mes, ano)
+
+    gastos_prioridade = calcular_gastos_por_prioridade(mes, ano)
     
     receita = buscar_receita_mes(mes, ano)
     if receita is None:
@@ -115,7 +153,7 @@ def index():
 
     reais, centavos = receita_formatada.split(".")
     
-    return render_template("home.html", despesas=despesas, total=total, receita=receita, reais=reais, centavos=centavos, mes_atual=mes)
+    return render_template("home.html", despesas=despesas, total=total, receita=receita, reais=reais, centavos=centavos, mes_atual=mes, gastos_prioridade=gastos_prioridade)
 
 
 @app.route("/simulacao")
