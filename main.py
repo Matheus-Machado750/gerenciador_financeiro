@@ -96,21 +96,21 @@ def calcular_gastos_por_prioridade(mes, ano):
     resultados = cursor.fetchall()
     conexao.close()
 
-    gastos = {"necessario":0.0 , "conveniente":0.0, "desnecesario":0.0}
+    gastos = {"necessario":0.0 , "conveniente":0.0, "desnecessario":0.0}
 
 
     for linha in resultados:
-        prioridade = linha["prioridaade"]
+        prioridade = linha["prioridade"]
         total = float(linha["total"] or 0)
 
         if prioridade == "Necessário":
-            gastos["necesario"] = total
+            gastos["necessario"] = total
 
         elif prioridade == "Conveniente":
             gastos["conveniente"] = total
 
         elif prioridade == "Desnecessário":
-            gastos["desnecesario"] = total
+            gastos["desnecessario"] = total
 
     return gastos
 
@@ -216,7 +216,7 @@ def salvar_receita():
     conexao = get_db_connection()
     cursor = conexao.cursor()
 
-    # remove reeita antiga
+    # remove receita antiga
     cursor.execute("DELETE FROM receita WHERE mes = ? AND ano = ?", (mes, ano))
 
     # insere nova
