@@ -182,7 +182,11 @@
 
             </div>
 
-            <div class="grafico_mensal">
+            <div class="grafico_mensal" data-necessario = "{{ gastos_prioridade['necessario'] }}" data-conveniente= "{{ gastos_prioridade['conveniente'] }}" data-denecessario="{{ gastos_prioridade['desnecessario'] }}">
+
+                <svg class="grafico_mensal_svg"> </svg>
+
+                <div class="legenda_grafico_mensal"> </div>
             
             </div>
 
