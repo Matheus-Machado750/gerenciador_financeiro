@@ -76,3 +76,23 @@ path.setAttribute('stroke', '#e74e4e');
 path.setAttribute('stroke-width', '45');
 path.setAttribute('stroke-linecap', 'round');
 svg.appendChild(path)
+
+
+
+// Tópico 3
+
+const graficoMensal = document.querySelector(".grafico_mensal")
+const graficoSVG = document.querySelector(".grafico_mensal_svg")
+
+var necessario = parseFloat(graficoMensal.dataset.necessario)
+var conveniente = parseFloat(graficoMensal.dataset.conveniente)
+var desnecessario = parseFloat(graficoMensal.dataset.desnecessario)
+
+var total = necessario + conveniente + desnecessario
+
+console.log({necessario, conveniente, desnecessario, total})
+
+if (total == 0) {
+    console.log("Sem despesas no mês")
+    
+}
