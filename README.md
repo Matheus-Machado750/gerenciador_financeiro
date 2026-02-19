@@ -25,6 +25,8 @@ Postei o main.py mas ainda tá com bugs, em breve ele será atualizado.
 
   - os gráficos agr serão feitos em JS, pra melhor codificação e atualizações futuras :) -> tbm devido a isso o projeto tá demorando mais do q o esperado;
 
-  - o gráfico de orçamento tá funcionando ( cheio de bugs ainda ;-; )
+  - o gráfico de orçamento tá funcionando (cheio de bugs ainda ;-;)
 
   - última atualização só foi pra corrigir erros ortográficos
+
+  - gráfico mensal em andamento...
