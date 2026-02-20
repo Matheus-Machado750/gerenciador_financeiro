@@ -78,21 +78,97 @@ path.setAttribute('stroke-linecap', 'round');
 svg.appendChild(path)
 
 
-
 // Tópico 3
 
 const graficoMensal = document.querySelector(".grafico_mensal")
 const graficoSVG = document.querySelector(".grafico_mensal_svg")
 
-var necessario = parseFloat(graficoMensal.dataset.necessario)
-var conveniente = parseFloat(graficoMensal.dataset.conveniente)
-var desnecessario = parseFloat(graficoMensal.dataset.desnecessario)
+if (graficoMensal && graficoSVG) {
+    const necessario = parseFloat(graficoMensal.dataset.necessario) || 0;
+    const conveniente = parseFloat(graficoMensal.dataset.conveniente) || 0;
+    const desnecessario = parseFloat(graficoMensal.dataset.desnecessario) || 0;
 
-var total = necessario + conveniente + desnecessario
+    const listaPrioridade = [necessario, conveniente, desnecessario]
 
-console.log({necessario, conveniente, desnecessario, total})
+    const total = necessario + conveniente + desnecessario;
+    console.log({ necessario, conveniente, desnecessario, total });
 
-if (total == 0) {
-    console.log("Sem despesas no mês")
+    if (total <= 0) {
+        graficoSVG.innerHTML = ""; // Apaga o desenho
+        document.querySelector(".legenda_grafico_mensal").style.display = "none";
+        
+        const aviso = document.createElement("p");
+        aviso.textContent = "Sem despesas no mês";
+        graficoMensal.appendChild(aviso);
+    } 
     
+    else {
+        const widthPizza = 500;
+        const heightPizza = 500;
+        const cxPizza = widthPizza / 2;
+        const cyPizza = heightPizza / 2;
+        const raioPizza = 180;
+
+        graficoSVG.setAttribute("width", String(widthPizza));
+        graficoSVG.setAttribute("height", String(heightPizza));
+        graficoSVG.setAttribute("viewBox", `0 0 ${widthPizza} ${heightPizza}`);
+        graficoSVG.innerHTML = "";
+
+        const fatias = [
+            { nome: "necessario", valor: necessario, cor: '#e74e4e' },
+            { nome: "conveniente", valor: conveniente, cor: '#f6e635' },
+            { nome: "desnecessario", valor: desnecessario, cor: '#4fc1e6' },
+        ];
+
+        let anguloAtual = -90;
+
+        for (const fatia of fatias) {
+
+            if (fatia.valor <= 0) continue;
+
+            const anguloFatia = (fatia.valor / total) * 360;
+            const anguloInicio = anguloAtual;
+            const anguloFim = anguloAtual + anguloFatia;
+
+            const inicioRad = anguloInicio * (Math.PI / 180);
+            const fimRad = anguloFim * (Math.PI / 180);
+
+            const x1 = cxPizza + raioPizza * Math.cos(inicioRad);
+            const y1 = cyPizza + raioPizza * Math.sin(inicioRad);
+            const x2 = cxPizza + raioPizza * Math.cos(fimRad);
+            const y2 = cyPizza + raioPizza * Math.sin(fimRad);
+
+            const largeArcFlag = anguloFatia > 180 ? 1 : 0;
+
+            const d = [
+                `M ${cxPizza} ${cyPizza}`,
+                `L ${x1} ${y1}`,
+                `A ${raioPizza} ${raioPizza} 0 ${largeArcFlag} 1 ${x2} ${y2}`,
+                "Z",
+            ].join(" ");
+
+            const path2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+
+            path2.setAttribute('d', d);
+            path2.setAttribute('fill', fatia.cor);
+            graficoSVG.appendChild(path2);
+
+            anguloAtual = anguloFim;
+        }
+
+        if (desnecessario <= 0) {
+            document.querySelector(".texto_desnecessario").style.display = "none";
+            document.querySelector(".cor_desnecessario").style.display = "none";
+        }
+
+        if (conveniente <= 0) {
+            document.querySelector(".texto_conveniente").style.display = "none";
+            document.querySelector(".cor_conveniente").style.display = "none";
+        }
+
+        if (necessario <= 0) {
+            document.querySelector(".texto_necessario").style.display = "none";
+            document.querySelector(".cor_necessario").style.display = "none";
+        }
+    }
 }
