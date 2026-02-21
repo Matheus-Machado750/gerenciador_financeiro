@@ -67,7 +67,6 @@ pathBase.setAttribute('stroke-linecap', 'round');
 svg.appendChild(pathBase)
 
 
-
 const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 
 path.setAttribute('d', `M ${pontoInicial1} ${pontoInicial2} A ${raio} ${raio} 0 0 1 ${pontoFinal1} ${pontoFinal2}`);
@@ -80,6 +79,8 @@ svg.appendChild(path)
 
 // Tópico 3
 
+
+
 const graficoMensal = document.querySelector(".grafico_mensal")
 const graficoSVG = document.querySelector(".grafico_mensal_svg")
 
@@ -87,8 +88,6 @@ if (graficoMensal && graficoSVG) {
     const necessario = parseFloat(graficoMensal.dataset.necessario) || 0;
     const conveniente = parseFloat(graficoMensal.dataset.conveniente) || 0;
     const desnecessario = parseFloat(graficoMensal.dataset.desnecessario) || 0;
-
-    const listaPrioridade = [necessario, conveniente, desnecessario]
 
     const total = necessario + conveniente + desnecessario;
     console.log({ necessario, conveniente, desnecessario, total });
@@ -100,7 +99,7 @@ if (graficoMensal && graficoSVG) {
         const aviso = document.createElement("p");
         aviso.textContent = "Sem despesas no mês";
         graficoMensal.appendChild(aviso);
-    } 
+    }
     
     else {
         const widthPizza = 500;
@@ -120,55 +119,73 @@ if (graficoMensal && graficoSVG) {
             { nome: "desnecessario", valor: desnecessario, cor: '#4fc1e6' },
         ];
 
-        let anguloAtual = -90;
+        const fatiasAtivas = fatias.filter(f =>f.valor > 0); //percorre o array e "puxa" apenas valores > 0
+        
+        if (fatiasAtivas.length === 1) {
+            const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
 
-        for (const fatia of fatias) {
+            circle.setAttribute('cx', cxPizza);
+            circle.setAttribute('cy', cyPizza);
+            circle.setAttribute('r', raioPizza);
+            circle.setAttribute('fill', fatiasAtivas[0].cor);
 
-            if (fatia.valor <= 0) continue;
+            let fill =  fatiasAtivas[0].cor;
 
-            const anguloFatia = (fatia.valor / total) * 360;
-            const anguloInicio = anguloAtual;
-            const anguloFim = anguloAtual + anguloFatia;
-
-            const inicioRad = anguloInicio * (Math.PI / 180);
-            const fimRad = anguloFim * (Math.PI / 180);
-
-            const x1 = cxPizza + raioPizza * Math.cos(inicioRad);
-            const y1 = cyPizza + raioPizza * Math.sin(inicioRad);
-            const x2 = cxPizza + raioPizza * Math.cos(fimRad);
-            const y2 = cyPizza + raioPizza * Math.sin(fimRad);
-
-            const largeArcFlag = anguloFatia > 180 ? 1 : 0;
-
-            const d = [
-                `M ${cxPizza} ${cyPizza}`,
-                `L ${x1} ${y1}`,
-                `A ${raioPizza} ${raioPizza} 0 ${largeArcFlag} 1 ${x2} ${y2}`,
-                "Z",
-            ].join(" ");
-
-            const path2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
-
-            path2.setAttribute('d', d);
-            path2.setAttribute('fill', fatia.cor);
-            graficoSVG.appendChild(path2);
-
-            anguloAtual = anguloFim;
+            graficoSVG.appendChild(circle);
         }
 
-        if (desnecessario <= 0) {
-            document.querySelector(".texto_desnecessario").style.display = "none";
-            document.querySelector(".cor_desnecessario").style.display = "none";
-        }
+        else {
 
-        if (conveniente <= 0) {
-            document.querySelector(".texto_conveniente").style.display = "none";
-            document.querySelector(".cor_conveniente").style.display = "none";
-        }
+            let anguloAtual = -90;
 
-        if (necessario <= 0) {
-            document.querySelector(".texto_necessario").style.display = "none";
-            document.querySelector(".cor_necessario").style.display = "none";
+            for (const fatia of fatias) {
+
+                if (fatia.valor <= 0) continue;
+
+                const anguloFatia = (fatia.valor / total) * 360;
+                const anguloInicio = anguloAtual;
+                const anguloFim = anguloAtual + anguloFatia;
+
+                const inicioRad = anguloInicio * (Math.PI / 180);
+                const fimRad = anguloFim * (Math.PI / 180);
+
+                const x1 = cxPizza + raioPizza * Math.cos(inicioRad);
+                const y1 = cyPizza + raioPizza * Math.sin(inicioRad);
+                const x2 = cxPizza + raioPizza * Math.cos(fimRad);
+                const y2 = cyPizza + raioPizza * Math.sin(fimRad);
+
+                const largeArcFlag = anguloFatia > 180 ? 1 : 0;
+
+                const d = [
+                    `M ${cxPizza} ${cyPizza}`,
+                    `L ${x1} ${y1}`,
+                    `A ${raioPizza} ${raioPizza} 0 ${largeArcFlag} 1 ${x2} ${y2}`,
+                    "Z",
+                ].join(" ");
+
+                const path2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+
+                path2.setAttribute('d', d);
+                path2.setAttribute('fill', fatia.cor);
+                graficoSVG.appendChild(path2);
+
+                anguloAtual = anguloFim;
+            }
+
+            if (desnecessario <= 0) {
+                document.querySelector(".texto_desnecessario").style.display = "none";
+                document.querySelector(".cor_desnecessario").style.display = "none";
+            }
+
+            if (conveniente <= 0) {
+                document.querySelector(".texto_conveniente").style.display = "none";
+                document.querySelector(".cor_conveniente").style.display = "none";
+            }
+
+            if (necessario <= 0) {
+                document.querySelector(".texto_necessario").style.display = "none";
+                document.querySelector(".cor_necessario").style.display = "none";
+            }
         }
     }
 }
