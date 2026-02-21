@@ -31,4 +31,4 @@ Postei o main.py mas ainda tá com bugs, em breve ele será atualizado.
 
   - gráfico mensal em andamento...
 
-  - gráfico mensal feito em JS, e agr a legenda acompaha os tipos de prioridaede cadastradas
+  - gráfico mensal feito em JS, e agr a legenda acompaha os tipos de prioridades cadastradas
