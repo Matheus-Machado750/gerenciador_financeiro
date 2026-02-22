@@ -12,7 +12,6 @@ ele está sendo feito com :
 - js
 - sql
 - SQLite
-- muita coragem, pq a vontade de desistir é grande kkkkkkk
 - SVG -> para os gráficos
   
 Em breve estará sendo postado
@@ -21,11 +20,11 @@ Postei o main.py mas ainda tá com bugs, em breve ele será atualizado.
 
   - atualização: agora as despesas ficam em um mês selecionado, não em todos os messes como era antes.
 
-  - atualização 2: o sistema possui um gráfico interativo conforme as despesas de determinado mês. Além disso, o progresso do salário gasto tá funcionando. -> estão sendo baseados no input da renda do user em um mês específico. (atualaização cancelada p/ ser refeita)
+  - atualização 2: o sistema possui um gráfico interativo conforme as despesas de determinado mês. Além disso, o progresso do salário gasto tá funcionando. -> estão sendo baseados no input da renda do user em um mês específico. (atualização cancelada p/ ser refeita)
 
-  - os gráficos agr serão feitos em JS, pra melhor codificação e atualizações futuras :) -> tbm devido a isso o projeto tá demorando mais do q o esperado;
+  - os gráficos agr serão feitos em JS, pra melhor codificação e atualizações futuras -> tbm devido a isso o projeto está demorando mais do q o esperado;
 
-  - o gráfico de orçamento tá funcionando (cheio de bugs ainda :(  )
+  - o gráfico de orçamento está funcionando
 
   - última atualização só foi pra corrigir erros ortográficos
 
