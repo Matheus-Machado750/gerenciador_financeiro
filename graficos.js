@@ -1,7 +1,8 @@
+const blocoProgresso = document.querySelector(".container_svg")
 const elemento = document.querySelector(".receita_vs_despesa")
 
-var gasto = parseFloat(elemento.dataset.gasto)
-var receita = parseFloat(elemento.dataset.receita)
+var gasto = parseFloat(elemento.dataset.gasto) || 0;
+var receita = parseFloat(elemento.dataset.receita) || 0;
 
 var restante = receita - gasto
 
@@ -40,6 +41,18 @@ if (receita == 0) {
     percentual = 0
 }
 
+if (receita > 0) {
+    percentual = Math.min(gasto / receita, 1); // mínimo de 1
+}
+
+else if (receita === 0 && gasto > 0) {
+    percentual = 1
+}
+
+else {
+    percentual = 0
+}
+
 var anguloGasto = 180 * percentual
 var anguloRestante = 180
 
@@ -57,28 +70,35 @@ pontoFinal2 = cy - raio * Math.sin(radianos)
 
 // passo 7
 
-const pathBase = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 
-pathBase.setAttribute('d', `M ${pontoInicial1} ${pontoInicial2} A ${raio} ${raio} 0 0 1 ${cx + raio} ${cy}`);
-pathBase.setAttribute('fill', 'none');
-pathBase.setAttribute('stroke', '#7fe261');
-pathBase.setAttribute('stroke-width', '45');
-pathBase.setAttribute('stroke-linecap', 'round');
-svg.appendChild(pathBase)
+if (percentual < 1) {
+    const pathBase = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 
+    pathBase.setAttribute('d', `M ${pontoInicial1} ${pontoInicial2} A ${raio} ${raio} 0 0 1 ${cx + raio} ${cy}`);
+    pathBase.setAttribute('fill', 'none');
+    pathBase.setAttribute('stroke', '#7fe261');
+    pathBase.setAttribute('stroke-width', '45');
+    pathBase.setAttribute('stroke-linecap', 'round');
+    svg.appendChild(pathBase)
+}
 
-const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+if (percentual > 0) {
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 
-path.setAttribute('d', `M ${pontoInicial1} ${pontoInicial2} A ${raio} ${raio} 0 0 1 ${pontoFinal1} ${pontoFinal2}`);
-path.setAttribute('fill', 'none');
-path.setAttribute('stroke', '#e74e4e');
-path.setAttribute('stroke-width', '45');
-path.setAttribute('stroke-linecap', 'round');
-svg.appendChild(path)
+    path.setAttribute('d', `M ${pontoInicial1} ${pontoInicial2} A ${raio} ${raio} 0 0 1 ${pontoFinal1} ${pontoFinal2}`);
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke', '#e74e4e');
+    path.setAttribute('stroke-width', '45');
+    path.setAttribute('stroke-linecap', 'round');
+    svg.appendChild(path)
+}
+
+if (receita === 0 && gasto === 0) {
+    blocoProgresso.innerHTML = ""; // Apaga o gráfico
+}
 
 
 // Tópico 3
-
 
 
 const graficoMensal = document.querySelector(".grafico_mensal")
@@ -120,6 +140,21 @@ if (graficoMensal && graficoSVG) {
         ];
 
         const fatiasAtivas = fatias.filter(f =>f.valor > 0); //percorre o array e "puxa" apenas valores > 0
+
+        if (desnecessario <= 0) {
+            document.querySelector(".texto_desnecessario").style.display = "none";
+            document.querySelector(".cor_desnecessario").style.display = "none";
+        }
+
+        if (conveniente <= 0) {
+            document.querySelector(".texto_conveniente").style.display = "none";
+            document.querySelector(".cor_conveniente").style.display = "none";
+        }
+
+        if (necessario <= 0) {
+            document.querySelector(".texto_necessario").style.display = "none";
+            document.querySelector(".cor_necessario").style.display = "none";
+        }
         
         if (fatiasAtivas.length === 1) {
             const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
@@ -170,22 +205,7 @@ if (graficoMensal && graficoSVG) {
                 graficoSVG.appendChild(path2);
 
                 anguloAtual = anguloFim;
-            }
-
-            if (desnecessario <= 0) {
-                document.querySelector(".texto_desnecessario").style.display = "none";
-                document.querySelector(".cor_desnecessario").style.display = "none";
-            }
-
-            if (conveniente <= 0) {
-                document.querySelector(".texto_conveniente").style.display = "none";
-                document.querySelector(".cor_conveniente").style.display = "none";
-            }
-
-            if (necessario <= 0) {
-                document.querySelector(".texto_necessario").style.display = "none";
-                document.querySelector(".cor_necessario").style.display = "none";
-            }
+            }   
         }
     }
 }
