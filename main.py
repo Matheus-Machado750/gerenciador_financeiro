@@ -205,13 +205,23 @@ def excluir_despesa(id):
 
     return redirect(url_for("index", mes=mes))
 
-@app.route("/salvar_receita", methods=["POST"])
-def salvar_receita():
 
-    valor = float(request.form["valor"])
+@app.route("/salvar_receita", methods=["POST"])
+
+def salvar_receita():
 
     mes = int(request.form["mes"])
     ano = datetime.now().year
+    valor_str = request.form.get("valor", "").strip()
+
+    if not valor_str:
+        return redirect(url_for("index", mes=mes))
+    
+    try:
+        valor = float(valor_str)
+    except ValueError:
+        return redirect(url_for("index", mes=mes))
+
 
     conexao = get_db_connection()
     cursor = conexao.cursor()
