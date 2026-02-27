@@ -1,5 +1,6 @@
 const blocoProgresso = document.querySelector(".container_svg")
 const elemento = document.querySelector(".receita_vs_despesa")
+let avisoProgresso = elemento.querySelector(".aviso_orcamento") //para evitar duplicação
 
 var gasto = parseFloat(elemento.dataset.gasto) || 0;
 var receita = parseFloat(elemento.dataset.receita) || 0;
@@ -94,7 +95,22 @@ if (percentual > 0) {
 }
 
 if (receita === 0 && gasto === 0) {
-    blocoProgresso.innerHTML = ""; // Apaga o gráfico
+    blocoProgresso.style.display = "none";
+
+    if (!avisoProgresso) {
+        avisoProgresso = document.createElement("p");
+        avisoProgresso.classList.add("aviso_orcamento");
+        avisoProgresso.textContent = "Sem despesas ou receita no mês";
+        elemento.appendChild(avisoProgresso);
+    }
+
+    avisoProgresso.style.display = "block";
+} else {
+    blocoProgresso.style.display = "flex";
+
+    if (avisoProgresso) {
+        avisoProgresso.style.display = "none";
+    }
 }
 
 
@@ -117,6 +133,7 @@ if (graficoMensal && graficoSVG) {
         document.querySelector(".legenda_grafico_mensal").style.display = "none";
         
         const aviso = document.createElement("p");
+        aviso.classList.add("aviso_despesas");
         aviso.textContent = "Sem despesas no mês";
         graficoMensal.appendChild(aviso);
     }
@@ -141,20 +158,13 @@ if (graficoMensal && graficoSVG) {
 
         const fatiasAtivas = fatias.filter(f =>f.valor > 0); //percorre o array e "puxa" apenas valores > 0
 
-        if (desnecessario <= 0) {
-            document.querySelector(".texto_desnecessario").style.display = "none";
-            document.querySelector(".cor_desnecessario").style.display = "none";
-        }
+        const itemDesnecessario = document.querySelector(".item_legenda_desnecessario");
+        const itemConveniente = document.querySelector(".item_legenda_conveniente");
+        const itemNecessario = document.querySelector(".item_legenda_necessario");
 
-        if (conveniente <= 0) {
-            document.querySelector(".texto_conveniente").style.display = "none";
-            document.querySelector(".cor_conveniente").style.display = "none";
-        }
-
-        if (necessario <= 0) {
-            document.querySelector(".texto_necessario").style.display = "none";
-            document.querySelector(".cor_necessario").style.display = "none";
-        }
+        itemDesnecessario.style.display = desnecessario > 0 ? "inline-flex" : "none";
+        itemConveniente.style.display = conveniente > 0 ? "inline-flex" : "none";
+        itemNecessario.style.display = necessario > 0 ? "inline-flex" : "none";
         
         if (fatiasAtivas.length === 1) {
             const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
