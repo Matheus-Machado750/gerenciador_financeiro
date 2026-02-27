@@ -211,8 +211,9 @@ button {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 12px;
+    position: relative;
 }
 
 .receita_vs_despesa h3 {
@@ -248,6 +249,19 @@ button {
 .texto_saldo_restante {
     color: rgb(29, 179, 29);
 }
+
+.aviso_orcamento {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    margin: 0;
+    width: 80%;
+}
+
+
+
 
 
 /* ----------------- Parte superior direita ---------------------- */
@@ -513,10 +527,76 @@ tfoot {
 /* ----------------- Parte inferior direita (gráfico) ---------------------- */
 
 .grafico_mensal {
-    background-color: #000;
     height: 520px;
     width: 540px;
+    position: relative;
 }
+
+.legenda_grafico_mensal {
+    background-color: transparent;
+}
+
+.texto_legenda {
+    display: flex;
+    justify-content: center;
+    gap: 22px;
+}
+
+.item_legenda_desnecessario {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.item_legenda_conveniente {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.item_legenda_necessario {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.aviso_despesas {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    margin: 0;
+    width: 80%;
+}
+
+.cor_desnecessario {
+    background-color: #4fc1e6;
+    color: #4fc1e6;
+    padding: 0 12px;
+    border-radius: 4px;
+    width: 27px;
+    height: 17px;
+}
+
+.cor_conveniente {
+    background-color: #f6e635;
+    color: #f6e635;
+    padding: 0 12px;
+    border-radius: 4px;
+    width: 27px;
+    height: 17px;
+}
+
+.cor_necessario {
+    background-color: #e74e4e;
+    color: #e74e4e;
+    padding: 0 12px;
+    border-radius: 4px;
+    width: 27px;
+    height: 17px;
+}
+
 
 
 /*SESSÃO 5 ////////////////////////////////// RODAPÉ ///////////////////////////////////// */
