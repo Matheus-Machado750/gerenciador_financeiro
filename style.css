@@ -88,8 +88,6 @@ main { /* para a nav não se sobrepor ao conteúdo */
 
 /*SESSÃO 2 ///////////////////////////////////// HOME ///////////////////////////////////////// */
 
-
-/* -------------------- Home principal ----------------------- */
 .home {
     display: flex;
     flex-direction: column;
@@ -144,7 +142,7 @@ main { /* para a nav não se sobrepor ao conteúdo */
     justify-content: center;
 }
 
-/* -------- Botão de receita -------- */
+/* --------- Botão de receita --------- */
 
 button {
     border: none;
@@ -171,7 +169,7 @@ button {
     transition: 0.2s ease;
 }
 
-/* -------- Retângulo de exibição -------- */
+/* --------- Retângulo de exibição --------- */
 
 .exibir_receita {
     display: flex;
@@ -261,9 +259,6 @@ button {
 }
 
 
-
-
-
 /* ----------------- Parte superior direita ---------------------- */
 
 
@@ -290,7 +285,7 @@ button {
     flex: 1;
 }
 
-/* Labels (NOME / VALOR / PRIORIDADE) */
+/* ---------- Labels (nome, valor, prioridade) ----------- */
 .adicionar_despesa label {
     color: #0b3c5d;
     font-weight: 700;
@@ -319,7 +314,7 @@ button {
     flex: 1;
 }
 
-/* ----- Inputs e Select ----- */
+/* ------- Inputs e Select -------- */
 
 .input_nome_despesa,
 .input_valor_despesa,
@@ -344,7 +339,7 @@ button {
     box-shadow: 3px 3px 6px rgba(106, 223, 174, 0.45);
 }
 
-/* Select no estado inicial (cinza) */
+/* --------- Select no estado inicial (cinza) ----------*/
 .select_prioridade {
     color: #777;
 }
@@ -353,7 +348,7 @@ button {
     color: #000;
 }
 
-/* -------- Botão de adicionar despesa -------- */
+/* ---------- Botão de adicionar despesa ---------- */
 
 .botao_adicionar {
     margin-top: auto;
@@ -376,14 +371,14 @@ button {
 
 /* ===================== PARTE DE BAIXO DA HOME ======================= */
 
-.home_inferior {
+.home_inferior, .simulacao_superior {
     display: flex;
     min-height: 525px;
 }
 
 /* ----------------- Parte inferior esquerda (tabela) ---------------------- */
 
-.tabela_mensal {
+.tabela_mensal, .tabela_simulacao {
     background-color: rgb(51, 51, 51);
     flex: 5;
     padding: 20px;
@@ -403,15 +398,15 @@ button {
     display: flex;
 }
 
-.tabela_mensal table {
+.tabela_mensal table, .tabela_simulacao table {
     width: 100%;
     border-collapse: collapse;
     height: 100%;
 }
 
-/* ----- Cabeçalho fixo ----- */
+/* -------- Cabeçalho fixo -------- */
 
-.header_tabela {
+.header_tabela, .header_tabela_simulacao {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -420,7 +415,7 @@ button {
     padding-bottom: 19px;
 }
 
-.tabela_mensal thead th {
+.tabela_mensal thead th, .tabela_simulacao thead th {
     position: sticky;
     top: 0;
     background-color: #5af7b1;
@@ -461,28 +456,28 @@ button {
     padding: 6px 10px;
 }
 
-/* ----- Corpo ----- */
+/* -------- Corpo --------- */
 
-.tabela_mensal tbody td {
+.tabela_mensal tbody td, .tabela_simulacao tbody td {
     padding: 12px;
     text-align: center;
     font-size: 15px;
     color: #ffffff;
 }
 
-/* ----- Linhas ----- */
+/* --------- Linhas ---------- */
 
-.tabela_mensal tbody tr {
+.tabela_mensal tbody tr, .tabela_simulacao tbody tr {
     border-bottom: 1px solid rgba(255, 255, 255, 0.35);
 }
 
-.tabela_mensal tbody tr:last-child {
+.tabela_mensal tbody tr:last-child, .tabela_simulacao tbody tr:last-child{
     border-bottom: none;
 }
 
-/* ----- Rodapé ----- */
+/* -------- Rodapé -------- */
 
-.tabela_mensal tfoot td {
+.tabela_mensal tfoot td, .tabela_simulacao tfoot td {
     background-color: #5af7b1;
     font-weight: 700;
     color: #000;
@@ -493,12 +488,12 @@ tfoot {
     background-color: #5af7b1;
 }
 
-#texto_total {
+#texto_total, #texto_total_simulacao {
     padding-left: 185px;
     font-size: 25px;
 }
 
-#texto_custo_mensal {
+#texto_custo_mensal, #texto_custo_simulacao {
     padding-left: 120px;
     background-color: #0b3c5d;
     font-size: 30px;
@@ -506,9 +501,9 @@ tfoot {
     clip-path: polygon(5% 0, 100% 0, 100% 100%, 0% 100%);
 }
 
-/* ----- Botão de excluir despesa ----- */
+/* --------- Botão de excluir despesa --------- */
 
-.botao_excluir {
+.botao_excluir, .botao_ocultar {
     border: none;
     background-color: transparent;
     color: #ffffff;
@@ -520,7 +515,7 @@ tfoot {
     transition: background-color 0.3s ease;
 }
 
-.botao_excluir:hover {
+.botao_excluir:hover, .botao_ocultar:hover {
     background-color: rgba(19, 68, 108, 0.862);
 }
 
@@ -596,7 +591,6 @@ tfoot {
     width: 27px;
     height: 17px;
 }
-
 
 
 /*SESSÃO 5 ////////////////////////////////// RODAPÉ ///////////////////////////////////// */
