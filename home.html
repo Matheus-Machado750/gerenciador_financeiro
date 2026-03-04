@@ -4,6 +4,8 @@
 
     <section class="home">
 
+    <!-- ////////////////////////// PARTE SUPERIOR ////////////////////////// -->
+
         <div class="home_superior">
 
             <div class="input_salario">
@@ -98,6 +100,8 @@
             </div>
 
         </div>
+
+    <!-- ////////////////////////// PARTE INFERIOR ////////////////////////// -->
 
         <div class="home_inferior">
 
@@ -204,4 +208,8 @@
 
     </section>
 
+{% endblock %}
+
+{% block page_scripts %}
+<script src="{{ url_for('static', filename='js/graficos.js') }}"></script>
 {% endblock %}

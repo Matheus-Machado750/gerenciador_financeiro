@@ -2,6 +2,125 @@
 
 {% block content %}
 
-    <h1>Filtros</h1>
+    <section class="simulacao">
+
+    <!-- ////////////////////////// PARTE SUPERIOR ////////////////////////// -->
+
+        <div class="simulacao_superior">
+
+            <div class="tabela_simulacao">
+
+                <div class= "header_tabela_simulacao">
+
+                    <form method="GET" action="/simulacao">
+
+                        <select name="mes" class="select_mes" onchange="this.form.submit()">
+
+                            <option value="1" {% if mes_atual == 1 %}selected{% endif %}>Janeiro</option>
+                            <option value="2" {% if mes_atual == 2 %}selected{% endif %}>Fevereiro</option>
+                            <option value="3" {% if mes_atual == 3 %}selected{% endif %}>Março</option>
+                            <option value="4" {% if mes_atual == 4 %}selected{% endif %}>Abril</option>
+                            <option value="5" {% if mes_atual == 5 %}selected{% endif %}>Maio</option>
+                            <option value="6" {% if mes_atual == 6 %}selected{% endif %}>Junho</option>
+                            <option value="7" {% if mes_atual == 7 %}selected{% endif %}>Julho</option>
+                            <option value="8" {% if mes_atual == 8 %}selected{% endif %}>Agosto</option>
+                            <option value="9" {% if mes_atual == 9 %}selected{% endif %}>Setembro</option>
+                            <option value="10" {% if mes_atual == 10 %}selected{% endif %}>Outubro</option>
+                            <option value="11" {% if mes_atual == 11 %}selected{% endif %}>Novembro</option>
+                            <option value="12" {% if mes_atual == 12 %}selected{% endif %}>Dezembro</option>
+
+                        </select>
+                    </form>
+                </div>
+
+                <div class="tabela_wrapper">
+
+                    <table class="tabela_despesas">
+
+                        <thead> <!-- Cabeçalho da tabela -->
+                            <tr>
+                                <th>Despesas</th>
+                                <th>Prioridade</th>
+                                <th>Valor</th>
+                                <th>Ocultar</th>
+                            </tr>
+                        </thead>
+
+                        <tbody> <!-- Corpo da tabela -->
+
+                        {% if despesas %}
+
+                            {% for despesa in despesas %}
+
+                            <tr data-id="{{ despesa['id'] }}"
+                                data-prioridade="{{ despesa['prioridade'] }}"
+                                data-valor="{{ despesa['valor'] }}">
+                                <td>{{ despesa["nome"] }}</td>
+                                <td>{{ despesa["prioridade"] }}</td>
+                                <td>{{ "%.2f"|format(despesa["valor"]) }}</td>
+                                <td><button type="button" class="botao_ocultar"><i class="fa-solid fa-eye-slash"></i></button></td>
+                            </tr>
+
+                            {% endfor %}
+
+                        {% else %}
+
+                            <tr>
+                                <td colspan="4" style="text-align: center;">
+
+                                    Nenhuma despesa cadastrada
+                                </td>
+                            </tr>
+                            
+                        {% endif %}
+
+                        </tbody>
+
+                        <tfoot>
+                            <tr>
+
+                                <td colspan="2" id="texto_total_simulacao"><strong>Total</strong></td>
+                                <td colspan="2" id="texto_custo_simulacao"> <strong>R$ {{ "%.2f" | format(total_original) }}</strong> </td>
+
+                            </tr>
+                        </tfoot>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+    <!-------------- FILTROS --------------->
+
+            <div class="painel_filtros">
+
+                <div class="faixa_filtros_superior">
+
+                    <h3> Filtrar por: </h3>
+
+                    <input type="checkbox" id="opcao1" name="opcao1" value="valor">
+                    <label for="opcao1">Opção 1</label>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    <!-- ///////////////////////// PARTE INFERIOR ////////////////////////// -->
+
+
+        <div class="simulacao_inferior">
+
+            <div class="grafico_simulacao">
+            </div>
+
+
+
+        </div>
+
+    </section>
 
 {% endblock %}
