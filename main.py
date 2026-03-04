@@ -158,7 +158,21 @@ def index():
 
 @app.route("/simulacao")
 def simulacao():
-    return render_template("simulacao.html")
+
+    agora = datetime.now()
+
+    mes = request.args.get("mes", type=int)
+
+    if not mes or mes < 1 or mes > 12:
+        mes = agora.month
+
+    ano = agora.year
+
+    despesas = buscar_despesas(mes, ano)
+    total_original = calcular_total_despesas(mes, ano)
+
+
+    return render_template("simulacao.html", despesas=despesas, mes_atual=mes, total_original=total_original, ano_atual=ano)
 
 
 @app.route("/config")
