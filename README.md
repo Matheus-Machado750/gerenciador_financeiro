@@ -7,12 +7,11 @@ ele está sendo feito com :
 - python
 - flask
 - jinja2
-- html
-- css
-- js
-- sql
+- HTML
+- CSS
+- JS
+- SQL
 - SQLite
-- SVG -> para os gráficos
   
 Em breve estará sendo postado
 
