@@ -27,6 +27,4 @@ Postei o main.py mas ainda tá com bugs, em breve ele será atualizado.
 
   - última atualização só foi pra corrigir erros ortográficos
 
-  - gráfico mensal em andamento...
-
-  - gráfico mensal feito em JS, e agr a legenda acompaha os tipos de prioridades cadastradas
+  - gráfico mensal refeito em JS, e agr a legenda acompaha os tipos de prioridades cadastradas
