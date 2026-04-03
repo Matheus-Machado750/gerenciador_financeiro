@@ -1,4 +1,4 @@
-# gerenciador_financeiro
+# Gerenciador Financeiro
 
 ## Projeto em andamento
 
@@ -28,3 +28,5 @@ Postei o main.py mas ainda tá com bugs, em breve ele será atualizado.
   - última atualização só foi pra corrigir erros ortográficos
 
   - gráfico mensal refeito em JS, e agr a legenda acompaha os tipos de prioridades cadastradas
+
+  - as cores serão atualizadas
