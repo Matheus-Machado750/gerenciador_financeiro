@@ -30,3 +30,7 @@ Postei o main.py mas ainda tá com bugs, em breve ele será atualizado.
   - gráfico mensal refeito em JS, e agr a legenda acompaha os tipos de prioridades cadastradas
 
   - as cores serão atualizadas
+
+
+
+## EM DESENVOLVIMENTO...
