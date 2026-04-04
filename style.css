@@ -1,4 +1,4 @@
-* { 
+﻿* { 
     margin: 0; /*Margem externa*/
     padding: 0; /*Margem interna*/
     box-sizing: border-box;
@@ -51,23 +51,41 @@ nav { /* Toda a NAVBAR */
 /* -------------- Links ------------------- */
 
 .nav_bar a {
+    position: relative;
     color: rgb(237, 237, 237);
     text-decoration: none;
-    padding: 10px;
+    padding: 10px 2px 14px;
     font-weight: 600;
-    margin: 0 25px;
+    margin: 0 18px;
+    transition: color 0.25s ease;
+}
+
+.nav_bar a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 2px;
+    width: 100%;
+    height: 4px;
+    background-color: #0b3c5d;
+    border-radius: 999px;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.25s ease;
 }
 
 .nav_bar a:hover {
-    background-color: rgba(24, 68, 107, 0.650);
-    box-shadow: 0 0 0 6px rgba(24, 68, 107, 0.650);
-    border-radius: 2px;
-    transition: 0.2s;
+    color: #1e74ae;
+}
+
+.nav_bar a:hover::after,
+.nav_bar a:focus-visible::after {
+    transform: scaleX(1);
 }
 
 .nav_bar a:active {
-    opacity: 0.5;
-    transition: 0.3s;
+    opacity: 0.7;
+    transition: opacity 0.15s ease;
 }
 
 /* -------------- botão para responsividade ---------------- */
@@ -398,10 +416,42 @@ button {
     display: flex;
 }
 
-.tabela_mensal table, .tabela_simulacao table {
+.tabela_mensal table,
+.tabela_simulacao table {
     width: 100%;
     border-collapse: collapse;
     height: 100%;
+    table-layout: fixed;
+}
+
+.tabela_mensal thead th:nth-child(1),
+.tabela_mensal tbody td:nth-child(1),
+.tabela_simulacao thead th:nth-child(1),
+.tabela_simulacao tbody td:nth-child(1) {
+    width: 40%;
+}
+
+.tabela_mensal thead th:nth-child(2),
+.tabela_mensal tbody td:nth-child(2),
+.tabela_simulacao thead th:nth-child(2),
+.tabela_simulacao tbody td:nth-child(2) {
+    width: 24%;
+}
+
+.tabela_mensal thead th:nth-child(3),
+.tabela_mensal tbody td:nth-child(3),
+.tabela_simulacao thead th:nth-child(3),
+.tabela_simulacao tbody td:nth-child(3) {
+    width: 21%;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.tabela_mensal thead th:nth-child(4),
+.tabela_mensal tbody td:nth-child(4),
+.tabela_simulacao thead th:nth-child(4),
+.tabela_simulacao tbody td:nth-child(4) {
+    width: 15%;
 }
 
 /* -------- Cabeçalho fixo -------- */
@@ -488,17 +538,24 @@ tfoot {
     background-color: #5af7b1;
 }
 
-#texto_total, #texto_total_simulacao {
-    padding-left: 185px;
+#texto_total,
+#texto_total_simulacao {
+    padding-left: 0;
+    text-align: center;
     font-size: 25px;
+    white-space: nowrap;
 }
 
-#texto_custo_mensal, #texto_custo_simulacao {
-    padding-left: 120px;
+#texto_custo_mensal,
+#texto_custo_simulacao {
+    padding-left: 0;
+    text-align: center;
     background-color: #0b3c5d;
     font-size: 30px;
     color: rgb(237, 237, 237);
     clip-path: polygon(5% 0, 100% 0, 100% 100%, 0% 100%);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
 }
 
 /* --------- Botão de excluir despesa --------- */
@@ -630,4 +687,934 @@ footer {
     margin-bottom: 30px;
     opacity: 0.8;
     color:rgb(255, 255, 255);
+}
+
+
+.tabela_simulacao tbody tr.linha_oculta {
+    opacity: 0.35;
+}
+
+
+/* ===== Simulação: filtro no formato wireframe (menor) ===== */
+
+.simulacao_superior {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 22px;
+    align-items: start;
+    min-height: 525px;
+}
+
+.tabela_simulacao {
+    margin-right: 0;
+}
+
+.painel_filtros {
+    min-height: 520px;
+    max-height: 520px;
+    display: flex;
+    flex-direction: column;
+    padding: 14px 10px;
+    overflow: hidden;
+    background: transparent;
+}
+
+.filtro_header {
+    background: #e1e1e1;
+    border-radius: 4px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 12px;
+}
+
+.filtro_titulo {
+    margin: 0;
+    color:#0b3c5d;
+    font-size: 27px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.select_filtro {
+    width: 190px;
+    height: 40px;
+    border: none;
+    border-radius: 4px;
+    background: rgb(237, 237, 237);
+    color: #4a4a4a;
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
+    text-align-last: center;
+}
+
+.filtro_conteudo {
+    margin-top: 18px;
+    background: transparent;
+    min-height: 360px;
+    max-height: 360px;
+    position: relative;
+}
+
+.mensagem_filtro,
+#filtro_prioridade_box,
+#filtro_preco_box {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+.mensagem_filtro {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #545454;
+    font-size: 22px;
+    font-weight: 700;
+    padding: 12px;
+}
+
+.filtro_box {
+    background: #d8d8d8;
+    border-radius: 8px;
+    padding: 14px 16px;
+    overflow-y: auto;
+}
+
+.filtro_subtitulo {
+    margin: 0 0 12px 0;
+    color: #505050;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.filtro_box label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+    color: #111;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.chk-prioridade,
+.radio-preco {
+    width: 16px;
+    height: 16px;
+    accent-color: #65c9ef;
+}
+
+.tabela_simulacao tbody tr.linha_oculta {
+    opacity: 0.35;
+}
+
+/* Simulação: tabela com mesma largura/área visual da Home + respiro à esquerda */
+.simulacao {
+    padding-left: 20px; /* espaço da borda esquerda da tela */
+    padding-right: 20px;
+}
+
+.simulacao_superior {
+    display: flex;      /* igual lógica da Home */
+    min-height: 525px;
+}
+
+.tabela_simulacao {
+    flex: 5;            /* mesma proporção da .tabela_mensal */
+    margin-right: 20px; /* mesmo espaçamento para o painel da direita */
+    margin-left: 0;
+}
+
+.painel_filtros {
+    flex: 3;            /* igual bloco da direita da Home */
+}
+
+/* ===== Simulação: gráfico abaixo do filtro ===== */
+.painel_filtros {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.grafico_simulacao {
+    background: #efefef;
+    border-radius: 8px;
+    padding: 14px 16px;
+    min-height: 200px;
+    max-height: 200px;
+}
+
+.barras_simulacao {
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: end;
+    gap: 30px;
+}
+
+.barra_item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+    height: 100%;
+}
+
+.barra {
+    width: 57px;
+    height: 0%;
+    border-radius: 6px 6px 0 0;
+    transition: height 0.25s ease;
+}
+
+.barra_original { background: #e74e4e; }
+.barra_economia { background: #7fe261; }
+
+.barra_label {
+    font-size: 16px;
+    font-weight: 800;
+    text-align: center;
+    line-height: 1.2;
+}
+
+.barra_label_vermelho { color: #e74e4e; }
+.barra_label_verde { color: #4dbf6a; }
+
+.barra_valor {
+    font-size: 15px;
+    font-weight: 800;
+    color: #111;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Fix: garantir altura real para aparecer as barras */
+.grafico_simulacao {
+    height: 230px; /* antes era só min-height */
+    box-sizing: border-box;
+}
+
+.barras_simulacao {
+    height: 100%;
+}
+
+.barra_label,
+.barra_valor {
+    display: block;
+    opacity: 1;
+}
+
+/* Fix: painel sem cortar o gráfico */
+.painel_filtros {
+    height: 520px;
+    overflow: visible; /* deixa o gráfico aparecer */
+}
+
+/* o conteúdo de filtro ocupa só o espaço disponível */
+.filtro_conteudo {
+    flex: 1;
+    min-height: 0;
+    max-height: none;
+}
+
+/* gráfico ocupa altura fixa e visível */
+.grafico_simulacao {
+    height: 170px;
+    min-height: 170px;
+    max-height: 170px;
+}
+
+/* barras ocupam toda a altura do gráfico */
+.barras_simulacao {
+    height: 100%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ===== CONFIG ===== */
+
+.config {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 24px;
+    padding: 20px;
+}
+
+.tabela_config {
+    background: #f0f0f0;
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.header_tabela_config {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 6px 10px 14px 10px;
+}
+
+.titulo_config {
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.config_esquerda table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.config_esquerda thead th {
+    background:#5af7b1;
+    font-weight: 800;
+    padding: 10px;
+    border: 2px solid #111;
+}
+
+.config_esquerda tbody td {
+    background:#0e456a;
+    padding: 10px;
+    border: 1px solid #d5d5d5;
+    text-align: center;
+    font-weight: 700;
+}
+
+.prio {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+}
+
+.prio_necessario { background: #e74e4e; }
+.prio_conveniente { background: #f6e635; }
+.prio_desnecessario { background: #4fc1e6; }
+
+/* Toggle status (sempre visível) */
+.toggle_status {
+    width: 48px;
+    height: 26px;
+    background: #bdbdbd;
+    border-radius: 20px;
+    border: none;
+    position: relative;
+}
+
+.toggle_status .bola_status {
+    position: absolute;
+    top: 2px;
+    right: 5px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    font-size: 14px;
+    line-height: 22px;
+    text-align: center;
+    font-weight: 800;
+    color: #fff;
+    background: #f04b4b;
+}
+
+.toggle_status.ativo .bola_status {
+    background: #61c454;
+}
+
+/* Ícones nunca somem, só mudam cor */
+.toggle_status .ok { display: inline; }
+.toggle_status .x { display: inline; }
+
+.config_direita .config_box {
+    background: #f0f0f0;
+    padding: 18px;
+    border-radius: 8px;
+}
+
+.config_alerta {
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 14px;
+}
+
+.barra_config {
+    width: 100%;
+    height: 40px;
+    background: #7fe261;
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.barra_config_fill {
+    height: 100%;
+    width: 0%;
+    background: #ff5a5a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 800;
+    transition: width 0.25s ease;
+}
+
+.config_mensagem {
+    font-size: 14px;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 14px;
+}
+
+.config_form_titulo {
+    font-weight: 800;
+    margin-bottom: 6px;
+}
+
+.config_inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.config_input, .config_select {
+    height: 30px;
+    border: none;
+    border-radius: 4px;
+    background: #ddd;
+    text-align: center;
+}
+
+.config_btn {
+    width: 100%;
+    height: 32px;
+    border: none;
+    border-radius: 6px;
+    background:#5af7b1;
+    font-weight: 700;
+}
+
+
+
+/* Toggle que move e troca símbolo */
+.toggle_status {
+    width: 48px;
+    height: 26px;
+    background: #bdbdbd;
+    border-radius: 20px;
+    border: none;
+    position: relative;
+    cursor: pointer;
+}
+
+.bola_status {
+    position: absolute;
+    top: 2px;
+    left: 2px; /* inativo: esquerda */
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    font-size: 14px;
+    line-height: 22px;
+    text-align: center;
+    font-weight: 800;
+    color: #fff;
+    background: #f04b4b;
+    transition: left 0.2s ease;
+}
+
+.toggle_status.ativo .bola_status {
+    left: 24px; /* ativo: direita */
+    background: #61c454;
+}
+
+/* Form mais separado e limpo */
+.config_form {
+    margin-top: 16px;
+    padding-top: 10px;
+    border-top: 1px solid #ccc;
+}
+
+
+
+
+
+/* Corrigir texto da tabela */
+.config_esquerda tbody td {
+    color: #ffffff;
+}
+
+/* Limitar largura do nome e evitar deformar */
+.config_esquerda table {
+    table-layout: fixed;
+}
+.nome_cell {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Aviso quando não há itens */
+.aviso_config {
+    text-align: center;
+    font-weight: 700;
+    color: #333;
+    margin: 30px 0;
+}
+
+/* Barra sem % quando total = 0 */
+.barra_config_fill span:empty {
+    display: none;
+}
+
+/* ===== FIX CONFIG: linhas horizontais + altura normal ===== */
+
+/* tabela não estica as linhas quando tem poucos itens */
+.config_esquerda .tabela_wrapper {
+    display: block;
+}
+.config_esquerda table {
+    height: auto;
+}
+
+/* só linhas horizontais (sem verticais) */
+.config_esquerda thead th,
+.config_esquerda tbody td {
+    border-left: none !important;
+    border-right: none !important;
+}
+.config_esquerda thead th {
+    border-top: none !important;
+    border-bottom: 2px solid #111 !important;
+}
+.config_esquerda tbody tr {
+    border-bottom: 1px solid rgba(0,0,0,0.3);
+}
+
+/* evita faixa branca abaixo do footer */
+body {
+    min-height: 100vh;
+}
+main {
+    min-height: calc(100vh - 80px - 190px);
+}
+
+/* suavidade do toggle */
+.toggle_status {
+    transition: background-color 0.2s ease;
+}
+.bola_status {
+    transition: left 0.2s ease, background-color 0.2s ease;
+}
+
+.botao_editar {
+    background: transparent;
+    border: none;
+    margin-left: 8px;
+    cursor: pointer;
+    color: #333;
+    font-size: 14px;
+}
+.botao_editar:hover {
+    color: #0b3c5d;
+}
+.th_situacao {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+/* remove faixa branca abaixo do footer */
+html, body {
+    height: 100%;
+}
+body {
+    background-color: rgb(237, 237, 237);
+}
+main {
+    min-height: calc(100vh - 80px - 190px);
+}
+
+/* remove linha grossa na última coluna */
+.config_esquerda thead th:last-child,
+.config_esquerda tbody td:last-child {
+    border-right: none !important;
+}
+.config_esquerda thead th {
+    border: none !important;
+    border-bottom: 1px solid #000000 !important;
+}
+
+/* Footer colado no fim em todas as páginas */
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1 0 auto;
+    padding-top: 100px;
+    padding-bottom: 40px;
+}
+
+footer {
+    flex-shrink: 0;
+}
+
+/* Remove bordas duplicadas só nessa tabela */
+#tabela_fixos {
+    border-collapse: collapse;
+}
+
+#tabela_fixos thead tr {
+    border-bottom: 1px solid #111;
+}
+
+#tabela_fixos thead th,
+#tabela_fixos tbody td {
+    border: none !important;
+}
+
+
+/* divisória cinza entre linhas da tabela de configurações */
+#tabela_fixos tbody tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+}
+#tabela_fixos tbody tr:last-child {
+    border-bottom: none;
+}
+
+/* remove faixa branca abaixo do footer */
+html, body {
+    height: 100%;
+}
+body {
+    background-color: rgb(237, 237, 237);
+}
+main {
+    min-height: calc(100vh - 80px - 190px);
+}
+
+/* remove linha grossa na última coluna */
+.config_esquerda thead th:last-child,
+.config_esquerda tbody td:last-child {
+    border-right: none !important;
+}
+.config_esquerda thead th {
+    border: none !important;
+    border-bottom: 1px solid #000000 !important;
+}
+
+/* Footer colado no fim em todas as páginas */
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1 0 auto;
+    padding-top: 100px;
+    padding-bottom: 40px;
+}
+
+footer {
+    flex-shrink: 0;
+}
+
+/* Remove bordas duplicadas só nessa tabela */
+#tabela_fixos {
+    border-collapse: collapse;
+}
+
+#tabela_fixos thead tr {
+    border-bottom: 1px solid #111;
+}
+
+#tabela_fixos thead th,
+#tabela_fixos tbody td {
+    border: none !important;
+}
+
+
+/* divisória cinza entre linhas da tabela de configurações */
+#tabela_fixos tbody tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+}
+#tabela_fixos tbody tr:last-child {
+    border-bottom: none;
+}
+
+/* remove faixa branca abaixo do footer */
+html, body {
+    height: 100%;
+}
+body {
+    background-color: rgb(237, 237, 237);
+}
+main {
+    min-height: calc(100vh - 80px - 190px);
+}
+
+/* remove linha grossa na última coluna */
+.config_esquerda thead th:last-child,
+.config_esquerda tbody td:last-child {
+    border-right: none !important;
+}
+.config_esquerda thead th {
+    border: none !important;
+    border-bottom: 1px solid #000000 !important;
+}
+
+/* Footer colado no fim em todas as páginas */
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1 0 auto;
+    padding-top: 100px;
+    padding-bottom: 40px;
+}
+
+footer {
+    flex-shrink: 0;
+}
+
+/* Remove bordas duplicadas só nessa tabela */
+#tabela_fixos {
+    border-collapse: collapse;
+}
+
+#tabela_fixos thead tr {
+    border-bottom: 1px solid #111;
+}
+
+#tabela_fixos thead th,
+#tabela_fixos tbody td {
+    border: none !important;
+}
+
+
+/* divisória cinza entre linhas da tabela de configurações */
+#tabela_fixos tbody tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+}
+#tabela_fixos tbody tr:last-child {
+    border-bottom: none;
+}
+
+/* remove faixa branca abaixo do footer */
+html, body {
+    height: 100%;
+}
+body {
+    background-color: rgb(237, 237, 237);
+}
+main {
+    min-height: calc(100vh - 80px - 190px);
+}
+
+/* remove linha grossa na última coluna */
+.config_esquerda thead th:last-child,
+.config_esquerda tbody td:last-child {
+    border-right: none !important;
+}
+.config_esquerda thead th {
+    border: none !important;
+    border-bottom: 1px solid #000000 !important;
+}
+
+/* Footer colado no fim em todas as páginas */
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1 0 auto;
+    padding-top: 100px;
+    padding-bottom: 40px;
+}
+
+footer {
+    flex-shrink: 0;
+}
+
+/* Remove bordas duplicadas só nessa tabela */
+#tabela_fixos {
+    border-collapse: collapse;
+}
+
+#tabela_fixos thead tr {
+    border-bottom: 1px solid #111;
+}
+
+#tabela_fixos thead th,
+#tabela_fixos tbody td {
+    border: none !important;
+}
+
+
+/* divisória cinza entre linhas da tabela de configurações */
+#tabela_fixos tbody tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+}
+#tabela_fixos tbody tr:last-child {
+    border-bottom: none;
+}
+
+/* remove faixa branca abaixo do footer */
+html, body {
+    height: 100%;
+}
+body {
+    background-color: rgb(237, 237, 237);
+}
+main {
+    min-height: calc(100vh - 80px - 190px);
+}
+
+/* remove linha grossa na última coluna */
+.config_esquerda thead th:last-child,
+.config_esquerda tbody td:last-child {
+    border-right: none !important;
+}
+.config_esquerda thead th {
+    border: none !important;
+    border-bottom: 1px solid #000000 !important;
+}
+
+/* Footer colado no fim em todas as páginas */
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1 0 auto;
+    padding-top: 100px;
+    padding-bottom: 40px;
+}
+
+footer {
+    flex-shrink: 0;
+}
+
+/* Remove bordas duplicadas só nessa tabela */
+#tabela_fixos {
+    border-collapse: collapse;
+}
+
+#tabela_fixos thead tr {
+    border-bottom: 1px solid #111;
+}
+
+#tabela_fixos thead th,
+#tabela_fixos tbody td {
+    border: none !important;
+}
+
+
+/* divisória cinza entre linhas da tabela de configurações */
+#tabela_fixos tbody tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+}
+#tabela_fixos tbody tr:last-child {
+    border-bottom: none;
+}
+
+
+
+
+
+
+.tabela_simulacao .tabela_wrapper {
+    flex: 1;
+    min-height: 400px;
+}
+
+.linha_vazia_simulacao td {
+    height: 260px;
+    vertical-align: middle;
+    font-size: 18px;
+}
+
+
+
+
+
+
+
+
+
+
+.th_situacao {
+    padding: 0 !important;
+}
+
+.botao_editar {
+    width: 100%;
+    min-height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 12px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #333;
+    font-size: 14px;
+    font-weight: 800;
+    transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.botao_editar:hover {
+    background-color: rgba(11, 60, 93, 0.08);
+    color: #0b3c5d;
+}
+
+.botao_editar:focus-visible {
+    outline: 2px solid #0b3c5d;
+    outline-offset: -2px;
 }
