@@ -2,6 +2,75 @@
 
 {% block content %}
 
-    <h1>Configurações</h1>
+<section class="config">
 
+    <div class="config_esquerda tabela_mensal tabela_config">
+        <div class="header_tabela_config">
+            <span class="titulo_config">Definir gastos fixos :</span>
+        </div>
+
+        <p class="aviso_config" id="aviso_config">Nenhum gasto fixo cadastrado.</p>
+
+        <div class="tabela_wrapper" id="wrapper_fixos">
+            <table class="tabela_despesas" id="tabela_fixos">
+                <thead>
+                    <tr>
+                        <th>Despesa</th>
+                        <th>Prioridade</th>
+                        <th>Valor</th>
+                        <th class="th_situacao">
+                            <button type="button" class="botao_editar" id="btn_editar" title="Alternar entre Situação e Excluir">
+                                <span id="label_situacao">Situação</span>
+                                <i class="fa-solid fa-right-left"></i>
+                            </button>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="tbody_fixos">
+                    <!-- linhas geradas via JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="config_direita">
+        <div class="config_box">
+            <p class="config_alerta">
+                Com seus gastos fixos atuais, você sempre começará o mês com
+                <strong id="fixo_total">R$ 0,00</strong> comprometidos.
+            </p>
+
+            <div class="barra_config">
+                <div class="barra_config_fill" id="barra_config_fill">
+                    <span id="barra_config_txt">0%</span>
+                </div>
+            </div>
+
+            <p class="config_mensagem">
+                Perigo: seus gastos fixos podem comprometer muito sua renda mensal.
+            </p>
+
+            <form class="config_form" id="form_config">
+                <p class="config_form_titulo">Adicionar gasto fixo:</p>
+                <div class="config_inputs">
+                    <input class="config_input" id="fixo_nome" placeholder="Nome" maxlength="20" required>
+                    <input class="config_input" id="fixo_valor" placeholder="Valor" inputmode="decimal" required>
+                    <select class="config_select" id="fixo_categoria" required>
+                        <option value="">Categoria</option>
+                        <option value="Necessário">Necessário</option>
+                        <option value="Conveniente">Conveniente</option>
+                        <option value="Dispensável">Dispensável</option>
+                    </select>
+                </div>
+                <button class="config_btn" type="submit">Adicionar</button>
+            </form>
+        </div>
+    </div>
+
+</section>
+
+{% endblock %}
+
+{% block page_scripts %}
+<script src="{{ url_for('static', filename='js/config.js') }}"></script>
 {% endblock %}
