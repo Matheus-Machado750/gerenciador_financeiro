@@ -6,7 +6,7 @@
 
     <div class="config_esquerda tabela_mensal tabela_config">
         <div class="header_tabela_config">
-            <span class="titulo_config">Definir gastos fixos :</span>
+            <h3 class="titulo_config"> Definir gastos fixos </h3>
         </div>
 
         <p class="aviso_config" id="aviso_config">Nenhum gasto fixo cadastrado.</p>
@@ -50,19 +50,44 @@
                 Perigo: seus gastos fixos podem comprometer muito sua renda mensal.
             </p>
 
-            <form class="config_form" id="form_config">
-                <p class="config_form_titulo">Adicionar gasto fixo:</p>
-                <div class="config_inputs">
-                    <input class="config_input" id="fixo_nome" placeholder="Nome" maxlength="20" required>
-                    <input class="config_input" id="fixo_valor" placeholder="Valor" inputmode="decimal" required>
-                    <select class="config_select" id="fixo_categoria" required>
-                        <option value="">Categoria</option>
-                        <option value="Necessário">Necessário</option>
-                        <option value="Conveniente">Conveniente</option>
-                        <option value="Dispensável">Dispensável</option>
-                    </select>
+            <form class="config_form formulario_gasto_fixo" id="form_config">
+                <h3>Adicionar gasto fixo</h3>
+
+                <div class="campo_despesa_nome">
+                    <label for="fixo_nome">Nome</label>
+                    <input
+                        class="input_nome_despesa"
+                        id="fixo_nome"
+                        placeholder="Insira o nome do gasto fixo"
+                        maxlength="20"
+                        required
+                    >
                 </div>
-                <button class="config_btn" type="submit">Adicionar</button>
+
+                <div class="linha_dois_campos">
+                    <div class="campo_despesa_valor">
+                        <label for="fixo_valor">Valor</label>
+                        <input
+                            class="input_valor_despesa"
+                            id="fixo_valor"
+                            placeholder="Insira o valor"
+                            inputmode="decimal"
+                            required
+                        >
+                    </div>
+
+                    <div class="campo_despesa_prioridade">
+                        <label for="fixo_categoria">Categoria</label>
+                        <select class="select_prioridade" id="fixo_categoria" required>
+                            <option value="" disabled selected hidden>Selecionar</option>
+                            <option value="Necessário">Necessário</option>
+                            <option value="Conveniente">Conveniente</option>
+                            <option value="Dispensável">Dispensável</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="botao_adicionar" type="submit">Adicionar</button>
             </form>
         </div>
     </div>
