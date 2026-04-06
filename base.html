@@ -25,11 +25,11 @@
 
         <div class="nav_direita">
 
-            <a href="/">Home</a>
+            <a href="{{ url_for('index') }}" class="{% if request.path == url_for('index') %}nav_ativo{% endif %}">Home</a>
 
-            <a href="/simulacao">Simulação</a>
+            <a href="{{ url_for('simulacao') }}" class="{% if request.path.startswith(url_for('simulacao')) %}nav_ativo{% endif %}">Simulação</a>
 
-            <a href="/config">Configurações</a>
+            <a href="{{ url_for('config') }}" class="{% if request.path.startswith(url_for('config')) %}nav_ativo{% endif %}">Configurações</a>
 
         </div>
 
