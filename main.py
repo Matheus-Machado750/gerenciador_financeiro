@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 import sqlite3
 import os
 from datetime import datetime
@@ -7,6 +7,7 @@ app = Flask(__name__)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "database", "finance.db")
+PRIORIDADES_VALIDAS = {"Necessário", "Conveniente", "Desnecessário"}
 
 
 def get_db_connection():
@@ -46,74 +47,120 @@ def criar_tabela_receita():
     conexao.commit()
     conexao.close()
 
-
-def buscar_despesas(mes, ano): # do mês
+def criar_tabela_gastos_fixos():
     conexao = get_db_connection()
     cursor = conexao.cursor()
 
-    cursor.execute("""
-                   SELECT * FROM despesas 
-                   WHERE strftime('%m', data_criacao) = ? 
-                   AND strftime('%Y', data_criacao) = ?  ORDER BY data_criacao DESC
-                   """, (f"{mes:02d}", str(ano)))
-    
-    despesas = cursor.fetchall()
+    cursor.execute(""" CREATE TABLE IF NOT EXISTS gastos_fixos (
+            id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+            nome TEXT NOT NULL,
+            valor REAL NOT NULL,
+            prioridade TEXT NOT NULL,
+            ativo INTEGER NOT NULL DEFAULT 1,
+            data_inicio TEXT NOT NULL
+        )""")
 
+    conexao.commit()
+    conexao.close()
+
+def buscar_despesas_avulsas(mes, ano):
+    conexao = get_db_connection()
+    cursor = conexao.cursor()
+
+    cursor.execute(""" SELECT id, nome, valor, prioridade, data_criacao
+        FROM despesas
+        WHERE strftime('%m', data_criacao) = ?
+          AND strftime('%Y', data_criacao) = ?
+        ORDER BY data_criacao DESC, id DESC
+    """, (f"{mes:02d}", str(ano)))
+
+    despesas = cursor.fetchall()
     conexao.close()
     return despesas
 
 
-def calcular_total_despesas(mes, ano):
-    conexao = get_db_connection()
-    cursor = conexao.cursor()
-
-    cursor.execute("""
-                   SELECT SUM(valor) FROM despesas 
-                   WHERE strftime('%m', data_criacao) = ? 
-                   AND strftime('%Y', data_criacao) = ?  
-                   """, (f"{mes:02d}", str(ano)))
-    
-    total = cursor.fetchone()[0]
-
-    conexao.close()
-
-    return total if total else 0
-
-
-def calcular_gastos_por_prioridade(mes, ano):
+def buscar_gastos_fixos_ativos(mes, ano):
+    data_referencia = f"{ano}-{mes:02d}-01"
 
     conexao = get_db_connection()
     cursor = conexao.cursor()
 
-    cursor.execute("""
-                    SELECT prioridade,
-                    SUM(valor) AS total FROM despesas
-                    WHERE strftime('%m', data_criacao) = ?
-                    AND strftime('%Y', data_criacao) = ?
-                    GROUP BY prioridade
-                   """, (f"{mes:02d}", str(ano)))
-    
-    resultados = cursor.fetchall()
+    cursor.execute(""" SELECT id, nome, valor, prioridade, ativo, data_inicio
+        FROM gastos_fixos
+        WHERE ativo = 1
+          AND date(data_inicio) <= date(?)
+        ORDER BY id DESC
+    """, (data_referencia,))
+
+    gastos_fixos = cursor.fetchall()
     conexao.close()
+    return gastos_fixos
 
-    gastos = {"necessario":0.0 , "conveniente":0.0, "desnecessario":0.0}
+
+def buscar_despesas(mes, ano):
+    despesas = []
+
+    for linha in buscar_despesas_avulsas(mes, ano):
+        item = dict(linha)
+        item["uid"] = f"manual-{linha['id']}"
+        item["tipo"] = "manual"
+        despesas.append(item)
+
+    for linha in buscar_gastos_fixos_ativos(mes, ano):
+        despesas.append({
+            "id": linha["id"],
+            "uid": f"fixo-{linha['id']}",
+            "nome": linha["nome"],
+            "valor": float(linha["valor"]),
+            "prioridade": linha["prioridade"],
+            "tipo": "fixo",
+        })
+
+    return despesas
 
 
-    for linha in resultados:
-        prioridade = linha["prioridade"]
-        total = float(linha["total"] or 0)
+def calcular_total_despesas(despesas):
+    return sum(float(despesa["valor"] or 0) for despesa in despesas)
 
-        if prioridade == "Necessário":
-            gastos["necessario"] = total
 
-        elif prioridade == "Conveniente":
-            gastos["conveniente"] = total
+def calcular_gastos_por_prioridade(despesas):
+    gastos = {"necessario": 0.0, "conveniente": 0.0, "desnecessario": 0.0}
+    mapa = {
+        "Necessário": "necessario",
+        "Conveniente": "conveniente",
+        "Desnecessário": "desnecessario",
+    }
 
-        elif prioridade == "Desnecessário":
-            gastos["desnecessario"] = total
+    for despesa in despesas:
+        chave = mapa.get(despesa["prioridade"])
+        if chave:
+            gastos[chave] += float(despesa["valor"] or 0)
 
     return gastos
 
+
+def buscar_gastos_fixos_config():
+    conexao = get_db_connection()
+    cursor = conexao.cursor()
+
+    cursor.execute(""" SELECT id, nome, valor, prioridade, ativo, data_inicio
+        FROM gastos_fixos
+        ORDER BY id DESC """)
+
+    itens = cursor.fetchall()
+    conexao.close()
+    return itens
+
+
+def serializar_gasto_fixo(linha):
+    return {
+        "id": linha["id"],
+        "nome": linha["nome"],
+        "valor": float(linha["valor"]),
+        "prioridade": linha["prioridade"],
+        "ativo": bool(linha["ativo"]),
+        "data_inicio": linha["data_inicio"],
+    }
 
 def buscar_receita_mes(mes, ano):
     conexao = get_db_connection()
@@ -128,9 +175,7 @@ def buscar_receita_mes(mes, ano):
 
 @app.route("/")
 def index():
-
     agora = datetime.now()
-
     mes = request.args.get("mes", type=int)
 
     if not mes:
@@ -139,28 +184,31 @@ def index():
     ano = agora.year
 
     despesas = buscar_despesas(mes, ano)
+    total = calcular_total_despesas(despesas)
+    gastos_prioridade = calcular_gastos_por_prioridade(despesas)
 
-    total = calcular_total_despesas(mes, ano)
-
-    gastos_prioridade = calcular_gastos_por_prioridade(mes, ano)
-    
     receita = buscar_receita_mes(mes, ano)
     if receita is None:
         receita_formatada = "0.00"
-
     else:
         receita_formatada = f"{receita:.2f}"
 
     reais, centavos = receita_formatada.split(".")
-    
-    return render_template("home.html", despesas=despesas, total=total, receita=receita, reais=reais, centavos=centavos, mes_atual=mes, gastos_prioridade=gastos_prioridade)
 
+    return render_template(
+        "home.html",
+        despesas=despesas,
+        total=total,
+        receita=receita,
+        reais=reais,
+        centavos=centavos,
+        mes_atual=mes,
+        gastos_prioridade=gastos_prioridade
+    )
 
 @app.route("/simulacao")
 def simulacao():
-
     agora = datetime.now()
-
     mes = request.args.get("mes", type=int)
 
     if not mes or mes < 1 or mes > 12:
@@ -169,15 +217,21 @@ def simulacao():
     ano = agora.year
 
     despesas = buscar_despesas(mes, ano)
-    total_original = calcular_total_despesas(mes, ano)
+    total_original = calcular_total_despesas(despesas)
 
-
-    return render_template("simulacao.html", despesas=despesas, mes_atual=mes, total_original=total_original, ano_atual=ano)
-
+    return render_template(
+        "simulacao.html",
+        despesas=despesas,
+        mes_atual=mes,
+        total_original=total_original,
+        ano_atual=ano
+    )
 
 @app.route("/config")
 def config():
-    return render_template("config.html")
+    agora = datetime.now()
+    receita = buscar_receita_mes(agora.month, agora.year) or 0
+    return render_template("config.html", receita_config=receita)
 
 
 @app.route("/enviar-dados", methods=["POST"])
@@ -252,7 +306,108 @@ def salvar_receita():
 
     return redirect(url_for("index", mes=mes))
 
-if __name__ == "__main__":
+@app.route("/api/gastos-fixos", methods=["GET"])
+def listar_gastos_fixos_api():
+    itens = [serializar_gasto_fixo(linha) for linha in buscar_gastos_fixos_config()]
+    return jsonify(itens)
+
+
+@app.route("/api/gastos-fixos", methods=["POST"])
+def criar_gasto_fixo_api():
+    dados = request.get_json(silent=True) or {}
+
+    nome = str(dados.get("nome", "")).strip()
+    valor_bruto = str(dados.get("valor", "")).strip().replace(",", ".")
+    prioridade = str(dados.get("prioridade", "")).strip()
+
+    if not nome or not valor_bruto or prioridade not in PRIORIDADES_VALIDAS:
+        return jsonify({"erro": "Dados inválidos."}), 400
+
+    try:
+        valor = float(valor_bruto)
+    except ValueError:
+        return jsonify({"erro": "Valor inválido."}), 400
+
+    if valor <= 0:
+        return jsonify({"erro": "O valor deve ser maior que zero."}), 400
+
+    data_inicio = datetime.now().strftime("%Y-%m-01")
+
+    conexao = get_db_connection()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        INSERT INTO gastos_fixos (nome, valor, prioridade, ativo, data_inicio)
+        VALUES (?, ?, ?, 1, ?)
+    """, (nome[:20], valor, prioridade, data_inicio))
+
+    novo_id = cursor.lastrowid
+    conexao.commit()
+
+    cursor.execute("""
+        SELECT id, nome, valor, prioridade, ativo, data_inicio
+        FROM gastos_fixos
+        WHERE id = ?
+    """, (novo_id,))
+
+    novo_item = cursor.fetchone()
+    conexao.close()
+
+    return jsonify(serializar_gasto_fixo(novo_item)), 201
+
+
+@app.route("/api/gastos-fixos/<int:id>/toggle", methods=["POST"])
+def alternar_gasto_fixo_api(id):
+    conexao = get_db_connection()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        UPDATE gastos_fixos
+        SET ativo = CASE WHEN ativo = 1 THEN 0 ELSE 1 END
+        WHERE id = ?
+    """, (id,))
+
+    if cursor.rowcount == 0:
+        conexao.close()
+        return jsonify({"erro": "Gasto fixo não encontrado."}), 404
+
+    conexao.commit()
+
+    cursor.execute("""
+        SELECT id, nome, valor, prioridade, ativo, data_inicio
+        FROM gastos_fixos
+        WHERE id = ?
+    """, (id,))
+
+    item = cursor.fetchone()
+    conexao.close()
+
+    return jsonify(serializar_gasto_fixo(item))
+
+
+@app.route("/api/gastos-fixos/<int:id>", methods=["DELETE"])
+def excluir_gasto_fixo_api(id):
+    conexao = get_db_connection()
+    cursor = conexao.cursor()
+
+    cursor.execute("DELETE FROM gastos_fixos WHERE id = ?", (id,))
+
+    if cursor.rowcount == 0:
+        conexao.close()
+        return jsonify({"erro": "Gasto fixo não encontrado."}), 404
+
+    conexao.commit()
+    conexao.close()
+
+    return "", 204
+
+
+def inicializar_banco():
     criar_tabela_despesas()
     criar_tabela_receita()
+    criar_tabela_gastos_fixos()
+
+inicializar_banco()
+
+if __name__ == "__main__":
     app.run(debug=True)
