@@ -10,6 +10,12 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!tbody) return;
 
   const linhas = Array.from(tbody.querySelectorAll("tr[data-id]"));
+  const tabelaSimulacao = document.querySelector(".tabela_simulacao");
+
+  if (tabelaSimulacao) {
+    tabelaSimulacao.classList.toggle("sem-itens", linhas.length === 0);
+    tabelaSimulacao.classList.toggle("poucos-itens", linhas.length > 0 && linhas.length <= 2);
+  }
   const checksPrioridade = Array.from(document.querySelectorAll(".chk-prioridade"));
   const radiosPreco = Array.from(document.querySelectorAll(".radio-preco"));
 
