@@ -1,19 +1,35 @@
-﻿* { 
-    margin: 0; /*Margem externa*/
-    padding: 0; /*Margem interna*/
+﻿* {
+    margin: 0; /* Margem externa */
+    padding: 0; /* Margem interna */
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
 }
 
 html {
-    scroll-behavior: smooth; /* Suavisa o scroll na movimentação da página */
+    height: 100%;
+    scroll-behavior: smooth; /* Suaviza o scroll na movimentacao da pagina */
 }
 
 body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
     background-color: rgb(237, 237, 237);
 }
 
-/*SESSÃO 1 //////////////////////////////////// NAVBAR ///////////////////////////////////// */
+button {
+    border: none;
+    cursor: pointer;
+    font-family: "Poppins", sans-serif;
+}
+
+main {
+    flex: 1 0 auto;
+    padding-top: 100px; /* para a nav nao se sobrepor ao conteudo */
+    padding-bottom: 40px;
+}
+
+/*SESSAO 1 //////////////////////////////////// NAVBAR ///////////////////////////////////// */
 
 nav { /* Toda a NAVBAR */
     background-color: rgb(106, 223, 174);
@@ -28,19 +44,17 @@ nav { /* Toda a NAVBAR */
     z-index: 900;
 }
 
-.faixa_navbar { 
-    position:absolute;
+.faixa_navbar {
+    position: absolute;
     left: 0;
     top: 0;
     height: 100%;
-    background-color: #0b3c5d;
+    background-color: #0e456a;
     display: flex;
     align-items: center;
-    width:570px;
+    width: 570px;
     clip-path: polygon(0 0, 100% 0, 92% 100%, 0% 100%); /* corte diagonal */
 }
-
-/* =================== Conteúdo Navbar ===================== */
 
 .titulo_nav {
     color: rgb(237, 237, 237);
@@ -67,7 +81,7 @@ nav { /* Toda a NAVBAR */
     bottom: 2px;
     width: 100%;
     height: 4px;
-    background-color: #0b3c5d;
+    background-color: #0e456a;
     border-radius: 999px;
     transform: scaleX(0);
     transform-origin: center;
@@ -75,12 +89,17 @@ nav { /* Toda a NAVBAR */
 }
 
 .nav_bar a:hover {
-    color: #1e74ae;
+    color: #0e6096;
 }
 
 .nav_bar a:hover::after,
-.nav_bar a:focus-visible::after {
+.nav_bar a:focus-visible::after,
+.nav_bar a.nav_ativo::after {
     transform: scaleX(1);
+}
+
+.nav_bar a.nav_ativo {
+    color: #1e74ae;
 }
 
 .nav_bar a:active {
@@ -88,23 +107,16 @@ nav { /* Toda a NAVBAR */
     transition: opacity 0.15s ease;
 }
 
-/* -------------- botão para responsividade ---------------- */
+/* -------------- botao para responsividade ---------------- */
 
 .botao_responsivo {
-    display: none; /* Faz o botão ficar oculto */
+    display: none; /* Faz o botao ficar oculto */
     border: none;
     background: none;
     border-top: 3px solid rgb(237, 237, 237);
 }
 
-main { /* para a nav não se sobrepor ao conteúdo */
-    padding-top: 100px;
-    padding-bottom: 40px;
-}
-
-
-
-/*SESSÃO 2 ///////////////////////////////////// HOME ///////////////////////////////////////// */
+/*SESSAO 2 ///////////////////////////////////// HOME ///////////////////////////////////////// */
 
 .home {
     display: flex;
@@ -126,14 +138,12 @@ main { /* para a nav não se sobrepor ao conteúdo */
     flex: 3;
 }
 
-.input_salario h3 { /* Título */
-    color:#0b3c5d;
+.input_salario h3 {
+    color: #0e456a;
     font-weight: 700;
     font-size: 30px;
-    padding: 7px 0px 20px 15px;
+    padding: 7px 0 20px 15px;
 }
-
-/* -------- Campo literal do input -------- */
 
 .input_valor_renda {
     font-family: "Poppins", sans-serif;
@@ -150,7 +160,7 @@ main { /* para a nav não se sobrepor ao conteúdo */
 
 .input_valor_renda:focus {
     outline: none;
-    box-shadow: 3px 3px 6px rgba(106, 223, 174, 0.45); /* mesmo glow */
+    box-shadow: 3px 3px 6px rgba(106, 223, 174, 0.45);
 }
 
 .campo_input_receita {
@@ -160,24 +170,13 @@ main { /* para a nav não se sobrepor ao conteúdo */
     justify-content: center;
 }
 
-/* --------- Botão de receita --------- */
-
-button {
-    border: none;
-    cursor: pointer;
-    font-family: "Poppins", sans-serif;
-}
-
 .botao_receita {
     font-size: 16px;
     font-weight: 600;
-    font-family: "Poppins", sans-serif;
     color: #ffffff;
     background-color: rgb(106, 223, 174);
-    border: none;
     height: 35px;
     width: 90px;
-    cursor: pointer;
     border-radius: 3px;
 }
 
@@ -186,8 +185,6 @@ button {
     background-color: rgb(83, 183, 141);
     transition: 0.2s ease;
 }
-
-/* --------- Retângulo de exibição --------- */
 
 .exibir_receita {
     display: flex;
@@ -233,7 +230,7 @@ button {
 }
 
 .receita_vs_despesa h3 {
-    color: #0b3c5d;
+    color: #0e456a;
     font-weight: 700;
     font-size: 30px;
 }
@@ -276,11 +273,9 @@ button {
     width: 80%;
 }
 
-
 /* ----------------- Parte superior direita ---------------------- */
 
-
-.adicionar_despesa { /* Aréa em si */
+.adicionar_despesa {
     flex: 3;
     min-height: 264px;
     padding: 16px 24px;
@@ -289,23 +284,34 @@ button {
     overflow: hidden;
 }
 
-.adicionar_despesa h3 {
+.adicionar_despesa h3,
+.formulario_gasto_fixo h3 {
     color: #0b3c5d;
     font-weight: 700;
     font-size: 30px;
     margin-bottom: 13px;
 }
 
-.adicionar_despesa form {
+.adicionar_despesa form,
+.formulario_gasto_fixo {
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+
+.adicionar_despesa form {
     flex: 1;
 }
 
-/* ---------- Labels (nome, valor, prioridade) ----------- */
-.adicionar_despesa label {
-    color: #0b3c5d;
+.formulario_gasto_fixo {
+    margin-top: 18px;
+    padding-top: 0;
+    border-top: none;
+}
+
+.adicionar_despesa label,
+.formulario_gasto_fixo label {
+    color: #0e456a;
     font-weight: 700;
     font-size: 16px;
     letter-spacing: 0.5px;
@@ -357,7 +363,6 @@ button {
     box-shadow: 3px 3px 6px rgba(106, 223, 174, 0.45);
 }
 
-/* --------- Select no estado inicial (cinza) ----------*/
 .select_prioridade {
     color: #777;
 }
@@ -366,7 +371,7 @@ button {
     color: #000;
 }
 
-/* ---------- Botão de adicionar despesa ---------- */
+/* ---------- Botao de adicionar ---------- */
 
 .botao_adicionar {
     margin-top: auto;
@@ -375,10 +380,8 @@ button {
     font-size: 16px;
     border-radius: 6px;
     font-weight: 600;
-    font-family: "Poppins", sans-serif;
     color: #ffffff;
     background-color: rgb(106, 223, 174);
-    border: none;
 }
 
 .botao_adicionar:hover {
@@ -389,28 +392,27 @@ button {
 
 /* ===================== PARTE DE BAIXO DA HOME ======================= */
 
-.home_inferior, .simulacao_superior {
+.home_inferior {
     display: flex;
     min-height: 525px;
 }
 
-/* ----------------- Parte inferior esquerda (tabela) ---------------------- */
+/* ----------------- Parte inferior esquerda (tabelas Home/Simulacao) ---------------------- */
 
-.tabela_mensal, .tabela_simulacao {
+.tabela_mensal,
+.tabela_simulacao {
     background-color: rgb(51, 51, 51);
     flex: 5;
     padding: 20px;
     margin-right: 20px;
     border-radius: 8px;
-
     display: flex;
     flex-direction: column;
-
     max-height: 520px;
     overflow: hidden;
 }
 
-.tabela_wrapper { /* Wrapper que controla o scroll */
+.tabela_wrapper {
     flex: 1;
     overflow-y: auto;
     display: flex;
@@ -421,42 +423,12 @@ button {
     width: 100%;
     border-collapse: collapse;
     height: 100%;
-    table-layout: fixed;
 }
 
-.tabela_mensal thead th:nth-child(1),
-.tabela_mensal tbody td:nth-child(1),
-.tabela_simulacao thead th:nth-child(1),
-.tabela_simulacao tbody td:nth-child(1) {
-    width: 40%;
-}
+/* -------- Cabecalho fixo -------- */
 
-.tabela_mensal thead th:nth-child(2),
-.tabela_mensal tbody td:nth-child(2),
-.tabela_simulacao thead th:nth-child(2),
-.tabela_simulacao tbody td:nth-child(2) {
-    width: 24%;
-}
-
-.tabela_mensal thead th:nth-child(3),
-.tabela_mensal tbody td:nth-child(3),
-.tabela_simulacao thead th:nth-child(3),
-.tabela_simulacao tbody td:nth-child(3) {
-    width: 21%;
-    white-space: nowrap;
-    font-variant-numeric: tabular-nums;
-}
-
-.tabela_mensal thead th:nth-child(4),
-.tabela_mensal tbody td:nth-child(4),
-.tabela_simulacao thead th:nth-child(4),
-.tabela_simulacao tbody td:nth-child(4) {
-    width: 15%;
-}
-
-/* -------- Cabeçalho fixo -------- */
-
-.header_tabela, .header_tabela_simulacao {
+.header_tabela,
+.header_tabela_simulacao {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -465,7 +437,8 @@ button {
     padding-bottom: 19px;
 }
 
-.tabela_mensal thead th, .tabela_simulacao thead th {
+.tabela_mensal thead th,
+.tabela_simulacao thead th {
     position: sticky;
     top: 0;
     background-color: #5af7b1;
@@ -481,18 +454,14 @@ button {
     color: #f9f9f9;
     background-color: rgb(51, 51, 51);
     cursor: pointer;
-
     font-size: 35px;
     font-weight: 700;
     margin-left: 12px;
-
     border-radius: 6px;
-
     padding: 0 18px;
     min-width: 190px;
-
     text-align: center;
-    text-align-last: center; /* Chrome/Edge */
+    text-align-last: center;
 }
 
 .select_mes:focus {
@@ -506,28 +475,32 @@ button {
     padding: 6px 10px;
 }
 
-/* -------- Corpo --------- */
+/* -------- Corpo -------- */
 
-.tabela_mensal tbody td, .tabela_simulacao tbody td {
+.tabela_mensal tbody td,
+.tabela_simulacao tbody td {
     padding: 12px;
     text-align: center;
     font-size: 15px;
     color: #ffffff;
 }
 
-/* --------- Linhas ---------- */
+/* -------- Linhas -------- */
 
-.tabela_mensal tbody tr, .tabela_simulacao tbody tr {
+.tabela_mensal tbody tr,
+.tabela_simulacao tbody tr {
     border-bottom: 1px solid rgba(255, 255, 255, 0.35);
 }
 
-.tabela_mensal tbody tr:last-child, .tabela_simulacao tbody tr:last-child{
+.tabela_mensal tbody tr:last-child,
+.tabela_simulacao tbody tr:last-child {
     border-bottom: none;
 }
 
-/* -------- Rodapé -------- */
+/* -------- Rodape -------- */
 
-.tabela_mensal tfoot td, .tabela_simulacao tfoot td {
+.tabela_mensal tfoot td,
+.tabela_simulacao tfoot td {
     background-color: #5af7b1;
     font-weight: 700;
     color: #000;
@@ -540,48 +513,59 @@ tfoot {
 
 #texto_total,
 #texto_total_simulacao {
-    padding-left: 0;
-    text-align: center;
+    padding-left: 185px;
     font-size: 25px;
     white-space: nowrap;
 }
 
 #texto_custo_mensal,
 #texto_custo_simulacao {
-    padding-left: 0;
-    text-align: center;
-    background-color: #0b3c5d;
+    padding-left: 120px;
+    padding-right: 28px;
+    min-width: 290px;
+    background-color: #0e456a;
     font-size: 30px;
     color: rgb(237, 237, 237);
     clip-path: polygon(5% 0, 100% 0, 100% 100%, 0% 100%);
     white-space: nowrap;
+}
+
+#texto_custo_mensal strong,
+#texto_custo_simulacao strong {
+    display: inline-block;
+    min-width: 8ch;
     font-variant-numeric: tabular-nums;
 }
 
-/* --------- Botão de excluir despesa --------- */
+/* -------- Botoes de acao -------- */
 
-.botao_excluir, .botao_ocultar {
-    border: none;
+.botao_excluir,
+.botao_ocultar {
     background-color: transparent;
     color: #ffffff;
     font-size: 20px;
     font-weight: 700;
-    cursor: pointer;
     padding: 10px 14px;
     border-radius: 8px;
     transition: background-color 0.3s ease;
 }
 
-.botao_excluir:hover, .botao_ocultar:hover {
+.botao_excluir:hover,
+.botao_ocultar:hover {
     background-color: rgba(19, 68, 108, 0.862);
 }
 
-/* ----------------- Parte inferior direita (gráfico) ---------------------- */
+/* ----------------- Parte inferior direita (grafico Home) ---------------------- */
 
 .grafico_mensal {
     height: 520px;
     width: 540px;
     position: relative;
+}
+
+.grafico_mensal_svg {
+    width: 100%;
+    height: auto;
 }
 
 .legenda_grafico_mensal {
@@ -594,18 +578,8 @@ tfoot {
     gap: 22px;
 }
 
-.item_legenda_desnecessario {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-}
-
-.item_legenda_conveniente {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-}
-
+.item_legenda_desnecessario,
+.item_legenda_conveniente,
 .item_legenda_necessario {
     display: inline-flex;
     align-items: center;
@@ -622,100 +596,87 @@ tfoot {
     width: 80%;
 }
 
-.cor_desnecessario {
-    background-color: #4fc1e6;
-    color: #4fc1e6;
+.cor_desnecessario,
+.cor_conveniente,
+.cor_necessario {
     padding: 0 12px;
     border-radius: 4px;
     width: 27px;
     height: 17px;
+}
+
+.cor_desnecessario {
+    background-color: #4fc1e6;
+    color: #4fc1e6;
 }
 
 .cor_conveniente {
     background-color: #f6e635;
     color: #f6e635;
-    padding: 0 12px;
-    border-radius: 4px;
-    width: 27px;
-    height: 17px;
 }
 
 .cor_necessario {
     background-color: #e74e4e;
     color: #e74e4e;
-    padding: 0 12px;
-    border-radius: 4px;
-    width: 27px;
-    height: 17px;
 }
 
+/*SESSAO 3 ///////////////////////////////////// SIMULACAO ///////////////////////////////////// */
 
-/*SESSÃO 5 ////////////////////////////////// RODAPÉ ///////////////////////////////////// */
+.simulacao {
+    padding-left: 20px;
+    padding-right: 20px;
+}
 
-footer {
-    background-color: rgb(49, 49, 49);
+.simulacao_superior {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    height: 190px;
-    text-align: center;
-    align-items: center;
+    min-height: 525px;
 }
 
-.contatos {
+.tabela_simulacao {
+    min-height: 320px;
+}
+
+.tabela_simulacao .tabela_wrapper {
+    flex: 1;
     display: flex;
-    gap: 50px;
 }
 
-.contatos i {
-    flex-direction: center;
-    color: rgb(244, 244, 244);
-    padding: 20px;
-    font-size: 30px;
-    margin: 5px;
-    transition: 0.3s ease-in-out;
+.tabela_simulacao table {
+    height: 100%;
 }
-
-.contatos i:hover {
-    border-radius: 7px;
-    background-color:rgb(106, 223, 174);
-    color:#0b3c5d;
-}
-
-.texto_footer {
-    margin-top: 25px;
-    margin-bottom: 30px;
-    opacity: 0.8;
-    color:rgb(255, 255, 255);
-}
-
 
 .tabela_simulacao tbody tr.linha_oculta {
     opacity: 0.35;
 }
 
-
-/* ===== Simulação: filtro no formato wireframe (menor) ===== */
-
-.simulacao_superior {
-    display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
-    gap: 22px;
-    align-items: start;
-    min-height: 525px;
+.linha_vazia_simulacao td {
+    height: 210px;
+    vertical-align: middle;
+    font-size: 18px;
 }
 
-.tabela_simulacao {
-    margin-right: 0;
+.tabela_simulacao.poucos-itens tbody tr[data-id] td {
+    padding-top: 22px;
+    padding-bottom: 22px;
 }
+
+.tabela_simulacao.sem-itens .linha_vazia_simulacao td {
+    height: 240px;
+    vertical-align: middle;
+}
+
+/* ----------------- Painel de filtros ---------------------- */
 
 .painel_filtros {
+    flex: 3;
+    height: 520px;
     min-height: 520px;
     max-height: 520px;
     display: flex;
     flex-direction: column;
+    gap: 16px;
     padding: 14px 10px;
-    overflow: hidden;
+    overflow: visible;
     background: transparent;
 }
 
@@ -731,7 +692,7 @@ footer {
 
 .filtro_titulo {
     margin: 0;
-    color:#0b3c5d;
+    color: #0e456a;
     font-size: 27px;
     font-weight: 800;
     white-space: nowrap;
@@ -753,9 +714,10 @@ footer {
 .filtro_conteudo {
     margin-top: 18px;
     background: transparent;
-    min-height: 360px;
-    max-height: 360px;
     position: relative;
+    flex: 1;
+    min-height: 0;
+    max-height: none;
 }
 
 .mensagem_filtro,
@@ -805,47 +767,19 @@ footer {
 .radio-preco {
     width: 16px;
     height: 16px;
-    accent-color: #65c9ef;
+    accent-color: #48a8f1;
 }
 
-.tabela_simulacao tbody tr.linha_oculta {
-    opacity: 0.35;
-}
-
-/* Simulação: tabela com mesma largura/área visual da Home + respiro à esquerda */
-.simulacao {
-    padding-left: 20px; /* espaço da borda esquerda da tela */
-    padding-right: 20px;
-}
-
-.simulacao_superior {
-    display: flex;      /* igual lógica da Home */
-    min-height: 525px;
-}
-
-.tabela_simulacao {
-    flex: 5;            /* mesma proporção da .tabela_mensal */
-    margin-right: 20px; /* mesmo espaçamento para o painel da direita */
-    margin-left: 0;
-}
-
-.painel_filtros {
-    flex: 3;            /* igual bloco da direita da Home */
-}
-
-/* ===== Simulação: gráfico abaixo do filtro ===== */
-.painel_filtros {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
+/* ----------------- Grafico de barras da simulacao ---------------------- */
 
 .grafico_simulacao {
     background: #efefef;
     border-radius: 8px;
     padding: 14px 16px;
-    min-height: 200px;
-    max-height: 200px;
+    height: 170px;
+    min-height: 170px;
+    max-height: 170px;
+    box-sizing: border-box;
 }
 
 .barras_simulacao {
@@ -872,81 +806,42 @@ footer {
     transition: height 0.25s ease;
 }
 
-.barra_original { background: #e74e4e; }
-.barra_economia { background: #7fe261; }
+.barra_original {
+    background: #e74e4e;
+}
+
+.barra_economia {
+    background: #7fe261;
+}
 
 .barra_label {
+    display: block;
+    opacity: 1;
     font-size: 16px;
     font-weight: 800;
     text-align: center;
     line-height: 1.2;
 }
 
-.barra_label_vermelho { color: #e74e4e; }
-.barra_label_verde { color: #4dbf6a; }
+.barra_label_vermelho {
+    color: #e74e4e;
+}
+
+.barra_label_verde {
+    color: #4dbf6a;
+}
 
 .barra_valor {
+    display: block;
+    opacity: 1;
     font-size: 15px;
-    font-weight: 800;
+    font-weight: 600;
     color: #111;
     text-align: center;
     font-variant-numeric: tabular-nums;
 }
 
-/* Fix: garantir altura real para aparecer as barras */
-.grafico_simulacao {
-    height: 230px; /* antes era só min-height */
-    box-sizing: border-box;
-}
-
-.barras_simulacao {
-    height: 100%;
-}
-
-.barra_label,
-.barra_valor {
-    display: block;
-    opacity: 1;
-}
-
-/* Fix: painel sem cortar o gráfico */
-.painel_filtros {
-    height: 520px;
-    overflow: visible; /* deixa o gráfico aparecer */
-}
-
-/* o conteúdo de filtro ocupa só o espaço disponível */
-.filtro_conteudo {
-    flex: 1;
-    min-height: 0;
-    max-height: none;
-}
-
-/* gráfico ocupa altura fixa e visível */
-.grafico_simulacao {
-    height: 170px;
-    min-height: 170px;
-    max-height: 170px;
-}
-
-/* barras ocupam toda a altura do gráfico */
-.barras_simulacao {
-    height: 100%;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* ===== CONFIG ===== */
+/*SESSAO 4 ///////////////////////////////////// CONFIG /////////////////////////////////////// */
 
 .config {
     display: grid;
@@ -958,39 +853,106 @@ footer {
 .tabela_config {
     background: #f0f0f0;
     border-radius: 8px;
-    padding: 16px;
 }
 
 .header_tabela_config {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    padding: 6px 10px 14px 10px;
+    padding: 6px 0 14px 0;
 }
 
 .titulo_config {
-    font-size: 22px;
-    font-weight: 800;
+    color: #0e456a;
+    font-weight: 700;
+    font-size: 30px;
+    margin-bottom: 13px;
 }
 
-.config_esquerda table {
-    width: 100%;
-    border-collapse: collapse;
+/* ----------------- Tabela de gastos fixos ---------------------- */
+
+.config_esquerda .tabela_wrapper {
+    flex: 1;
+    display: block;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 8px;
 }
 
 .config_esquerda thead th {
-    background:#5af7b1;
+    background: #5af7b1;
     font-weight: 800;
     padding: 10px;
-    border: 2px solid #111;
+    border: none;
+    border-bottom: 1px solid #000000;
 }
 
 .config_esquerda tbody td {
-    background:#0e456a;
+    background: #0e456a;
     padding: 10px;
-    border: 1px solid #d5d5d5;
     text-align: center;
     font-weight: 700;
+    color: #ffffff;
+    border: none;
+}
+
+#tabela_fixos {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+}
+
+#tabela_fixos thead th {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    background: #5af7b1;
+}
+
+#tabela_fixos thead th:last-child,
+#tabela_fixos tbody td:last-child {
+    width: auto !important;
+}
+
+#tabela_fixos .celula_situacao {
+    width: 1%;
+    white-space: nowrap;
+    padding: 10px 12px !important;
+    text-align: center;
+}
+
+#tabela_fixos tbody tr {
+    height: 48px;
+}
+
+#tabela_fixos tbody td {
+    height: 48px;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    vertical-align: middle;
+    border: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18) !important;
+    box-shadow: none !important;
+    background-clip: padding-box;
+}
+
+#tabela_fixos tbody tr:last-child td {
+    border-bottom: none !important;
+}
+
+.nome_cell {
+    max-width: none;
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+    padding-right: 12px;
+}
+
+.nome_texto {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .prio {
@@ -1000,46 +962,140 @@ footer {
     border-radius: 50%;
 }
 
-.prio_necessario { background: #e74e4e; }
-.prio_conveniente { background: #f6e635; }
-.prio_desnecessario { background: #4fc1e6; }
-
-/* Toggle status (sempre visível) */
-.toggle_status {
-    width: 48px;
-    height: 26px;
-    background: #bdbdbd;
-    border-radius: 20px;
-    border: none;
-    position: relative;
+.prio_necessario {
+    background: #e74e4e;
 }
 
-.toggle_status .bola_status {
+.prio_conveniente {
+    background: #f6e635;
+}
+
+.prio_desnecessario {
+    background: #4fc1e6;
+}
+
+.aviso_config {
+    text-align: center;
+    font-weight: 700;
+    color: #333;
+    margin: 30px 0;
+}
+
+/* ----------------- Coluna Situacao / Excluir ---------------------- */
+
+.th_situacao {
+    display: table-cell !important;
+    vertical-align: middle;
+    padding: 0 !important;
+}
+
+.botao_editar {
+    width: 100%;
+    min-height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 12px;
+    box-sizing: border-box;
+    background: transparent;
+    color: #333;
+    font-size: 14px;
+    font-weight: 800;
+    transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.botao_editar:hover {
+    background-color: rgba(11, 60, 93, 0.08);
+    color: #0b3c5d;
+}
+
+.botao_editar:focus-visible {
+    outline: 2px solid #0b3c5d;
+    outline-offset: -2px;
+}
+
+#label_situacao {
+    display: inline-block;
+    min-width: 8ch;
+    text-align: center;
+}
+
+#tabela_fixos .celula_situacao {
+    height: 48px;
+    padding: 0 12px !important;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.toggle_status,
+.botao_excluir_config {
+    width: 48px;
+    min-width: 48px;
+    max-width: 48px;
+    height: 28px;
+    min-height: 28px;
+    max-height: 28px;
+    padding: 0;
+    margin: 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.toggle_status {
+    background: #bdbdbd;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: background-color 0.2s ease;
+}
+
+.bola_status {
     position: absolute;
-    top: 2px;
-    right: 5px;
+    top: 3px;
+    left: 3px;
     width: 22px;
     height: 22px;
     border-radius: 50%;
-    font-size: 14px;
-    line-height: 22px;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    line-height: 1;
     font-weight: 800;
     color: #fff;
     background: #f04b4b;
+    transition: left 0.2s ease, background-color 0.2s ease;
 }
 
 .toggle_status.ativo .bola_status {
+    left: 23px;
     background: #61c454;
 }
 
-/* Ícones nunca somem, só mudam cor */
-.toggle_status .ok { display: inline; }
-.toggle_status .x { display: inline; }
+.botao_excluir_config {
+    background: transparent;
+    color: #ffffff;
+    font-size: 18px;
+    border-radius: 8px;
+}
+
+.botao_excluir_config i {
+    display: block;
+    line-height: 1;
+    font-size: 18px;
+}
+
+
+/* ----------------- Painel da direita ---------------------- */
 
 .config_direita .config_box {
     background: #f0f0f0;
-    padding: 18px;
+    padding: 16px 24px;
     border-radius: 8px;
 }
 
@@ -1070,6 +1126,10 @@ footer {
     transition: width 0.25s ease;
 }
 
+.barra_config_fill span:empty {
+    display: none;
+}
+
 .config_mensagem {
     font-size: 14px;
     color: #333;
@@ -1077,544 +1137,41 @@ footer {
     margin-bottom: 14px;
 }
 
-.config_form_titulo {
-    font-weight: 800;
-    margin-bottom: 6px;
-}
+/*SESSAO 5 ///////////////////////////////////// RODAPE /////////////////////////////////////// */
 
-.config_inputs {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 8px;
-}
-
-.config_input, .config_select {
-    height: 30px;
-    border: none;
-    border-radius: 4px;
-    background: #ddd;
-    text-align: center;
-}
-
-.config_btn {
-    width: 100%;
-    height: 32px;
-    border: none;
-    border-radius: 6px;
-    background:#5af7b1;
-    font-weight: 700;
-}
-
-
-
-/* Toggle que move e troca símbolo */
-.toggle_status {
-    width: 48px;
-    height: 26px;
-    background: #bdbdbd;
-    border-radius: 20px;
-    border: none;
-    position: relative;
-    cursor: pointer;
-}
-
-.bola_status {
-    position: absolute;
-    top: 2px;
-    left: 2px; /* inativo: esquerda */
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    font-size: 14px;
-    line-height: 22px;
-    text-align: center;
-    font-weight: 800;
-    color: #fff;
-    background: #f04b4b;
-    transition: left 0.2s ease;
-}
-
-.toggle_status.ativo .bola_status {
-    left: 24px; /* ativo: direita */
-    background: #61c454;
-}
-
-/* Form mais separado e limpo */
-.config_form {
-    margin-top: 16px;
-    padding-top: 10px;
-    border-top: 1px solid #ccc;
-}
-
-
-
-
-
-/* Corrigir texto da tabela */
-.config_esquerda tbody td {
-    color: #ffffff;
-}
-
-/* Limitar largura do nome e evitar deformar */
-.config_esquerda table {
-    table-layout: fixed;
-}
-.nome_cell {
-    max-width: 200px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-/* Aviso quando não há itens */
-.aviso_config {
-    text-align: center;
-    font-weight: 700;
-    color: #333;
-    margin: 30px 0;
-}
-
-/* Barra sem % quando total = 0 */
-.barra_config_fill span:empty {
-    display: none;
-}
-
-/* ===== FIX CONFIG: linhas horizontais + altura normal ===== */
-
-/* tabela não estica as linhas quando tem poucos itens */
-.config_esquerda .tabela_wrapper {
-    display: block;
-}
-.config_esquerda table {
-    height: auto;
-}
-
-/* só linhas horizontais (sem verticais) */
-.config_esquerda thead th,
-.config_esquerda tbody td {
-    border-left: none !important;
-    border-right: none !important;
-}
-.config_esquerda thead th {
-    border-top: none !important;
-    border-bottom: 2px solid #111 !important;
-}
-.config_esquerda tbody tr {
-    border-bottom: 1px solid rgba(0,0,0,0.3);
-}
-
-/* evita faixa branca abaixo do footer */
-body {
-    min-height: 100vh;
-}
-main {
-    min-height: calc(100vh - 80px - 190px);
-}
-
-/* suavidade do toggle */
-.toggle_status {
-    transition: background-color 0.2s ease;
-}
-.bola_status {
-    transition: left 0.2s ease, background-color 0.2s ease;
-}
-
-.botao_editar {
-    background: transparent;
-    border: none;
-    margin-left: 8px;
-    cursor: pointer;
-    color: #333;
-    font-size: 14px;
-}
-.botao_editar:hover {
-    color: #0b3c5d;
-}
-.th_situacao {
+footer {
+    background-color: rgb(49, 49, 49);
     display: flex;
-    align-items: center;
+    flex-direction: column;
     justify-content: center;
-    gap: 6px;
-}
-
-/* remove faixa branca abaixo do footer */
-html, body {
-    height: 100%;
-}
-body {
-    background-color: rgb(237, 237, 237);
-}
-main {
-    min-height: calc(100vh - 80px - 190px);
-}
-
-/* remove linha grossa na última coluna */
-.config_esquerda thead th:last-child,
-.config_esquerda tbody td:last-child {
-    border-right: none !important;
-}
-.config_esquerda thead th {
-    border: none !important;
-    border-bottom: 1px solid #000000 !important;
-}
-
-/* Footer colado no fim em todas as páginas */
-html, body {
-    height: 100%;
-}
-
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-main {
-    flex: 1 0 auto;
-    padding-top: 100px;
-    padding-bottom: 40px;
-}
-
-footer {
-    flex-shrink: 0;
-}
-
-/* Remove bordas duplicadas só nessa tabela */
-#tabela_fixos {
-    border-collapse: collapse;
-}
-
-#tabela_fixos thead tr {
-    border-bottom: 1px solid #111;
-}
-
-#tabela_fixos thead th,
-#tabela_fixos tbody td {
-    border: none !important;
-}
-
-
-/* divisória cinza entre linhas da tabela de configurações */
-#tabela_fixos tbody tr {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.35);
-}
-#tabela_fixos tbody tr:last-child {
-    border-bottom: none;
-}
-
-/* remove faixa branca abaixo do footer */
-html, body {
-    height: 100%;
-}
-body {
-    background-color: rgb(237, 237, 237);
-}
-main {
-    min-height: calc(100vh - 80px - 190px);
-}
-
-/* remove linha grossa na última coluna */
-.config_esquerda thead th:last-child,
-.config_esquerda tbody td:last-child {
-    border-right: none !important;
-}
-.config_esquerda thead th {
-    border: none !important;
-    border-bottom: 1px solid #000000 !important;
-}
-
-/* Footer colado no fim em todas as páginas */
-html, body {
-    height: 100%;
-}
-
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-main {
-    flex: 1 0 auto;
-    padding-top: 100px;
-    padding-bottom: 40px;
-}
-
-footer {
-    flex-shrink: 0;
-}
-
-/* Remove bordas duplicadas só nessa tabela */
-#tabela_fixos {
-    border-collapse: collapse;
-}
-
-#tabela_fixos thead tr {
-    border-bottom: 1px solid #111;
-}
-
-#tabela_fixos thead th,
-#tabela_fixos tbody td {
-    border: none !important;
-}
-
-
-/* divisória cinza entre linhas da tabela de configurações */
-#tabela_fixos tbody tr {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.35);
-}
-#tabela_fixos tbody tr:last-child {
-    border-bottom: none;
-}
-
-/* remove faixa branca abaixo do footer */
-html, body {
-    height: 100%;
-}
-body {
-    background-color: rgb(237, 237, 237);
-}
-main {
-    min-height: calc(100vh - 80px - 190px);
-}
-
-/* remove linha grossa na última coluna */
-.config_esquerda thead th:last-child,
-.config_esquerda tbody td:last-child {
-    border-right: none !important;
-}
-.config_esquerda thead th {
-    border: none !important;
-    border-bottom: 1px solid #000000 !important;
-}
-
-/* Footer colado no fim em todas as páginas */
-html, body {
-    height: 100%;
-}
-
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-main {
-    flex: 1 0 auto;
-    padding-top: 100px;
-    padding-bottom: 40px;
-}
-
-footer {
-    flex-shrink: 0;
-}
-
-/* Remove bordas duplicadas só nessa tabela */
-#tabela_fixos {
-    border-collapse: collapse;
-}
-
-#tabela_fixos thead tr {
-    border-bottom: 1px solid #111;
-}
-
-#tabela_fixos thead th,
-#tabela_fixos tbody td {
-    border: none !important;
-}
-
-
-/* divisória cinza entre linhas da tabela de configurações */
-#tabela_fixos tbody tr {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.35);
-}
-#tabela_fixos tbody tr:last-child {
-    border-bottom: none;
-}
-
-/* remove faixa branca abaixo do footer */
-html, body {
-    height: 100%;
-}
-body {
-    background-color: rgb(237, 237, 237);
-}
-main {
-    min-height: calc(100vh - 80px - 190px);
-}
-
-/* remove linha grossa na última coluna */
-.config_esquerda thead th:last-child,
-.config_esquerda tbody td:last-child {
-    border-right: none !important;
-}
-.config_esquerda thead th {
-    border: none !important;
-    border-bottom: 1px solid #000000 !important;
-}
-
-/* Footer colado no fim em todas as páginas */
-html, body {
-    height: 100%;
-}
-
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-main {
-    flex: 1 0 auto;
-    padding-top: 100px;
-    padding-bottom: 40px;
-}
-
-footer {
-    flex-shrink: 0;
-}
-
-/* Remove bordas duplicadas só nessa tabela */
-#tabela_fixos {
-    border-collapse: collapse;
-}
-
-#tabela_fixos thead tr {
-    border-bottom: 1px solid #111;
-}
-
-#tabela_fixos thead th,
-#tabela_fixos tbody td {
-    border: none !important;
-}
-
-
-/* divisória cinza entre linhas da tabela de configurações */
-#tabela_fixos tbody tr {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.35);
-}
-#tabela_fixos tbody tr:last-child {
-    border-bottom: none;
-}
-
-/* remove faixa branca abaixo do footer */
-html, body {
-    height: 100%;
-}
-body {
-    background-color: rgb(237, 237, 237);
-}
-main {
-    min-height: calc(100vh - 80px - 190px);
-}
-
-/* remove linha grossa na última coluna */
-.config_esquerda thead th:last-child,
-.config_esquerda tbody td:last-child {
-    border-right: none !important;
-}
-.config_esquerda thead th {
-    border: none !important;
-    border-bottom: 1px solid #000000 !important;
-}
-
-/* Footer colado no fim em todas as páginas */
-html, body {
-    height: 100%;
-}
-
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-main {
-    flex: 1 0 auto;
-    padding-top: 100px;
-    padding-bottom: 40px;
-}
-
-footer {
-    flex-shrink: 0;
-}
-
-/* Remove bordas duplicadas só nessa tabela */
-#tabela_fixos {
-    border-collapse: collapse;
-}
-
-#tabela_fixos thead tr {
-    border-bottom: 1px solid #111;
-}
-
-#tabela_fixos thead th,
-#tabela_fixos tbody td {
-    border: none !important;
-}
-
-
-/* divisória cinza entre linhas da tabela de configurações */
-#tabela_fixos tbody tr {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.35);
-}
-#tabela_fixos tbody tr:last-child {
-    border-bottom: none;
-}
-
-
-
-
-
-
-.tabela_simulacao .tabela_wrapper {
-    flex: 1;
-    min-height: 400px;
-}
-
-.linha_vazia_simulacao td {
-    height: 260px;
-    vertical-align: middle;
-    font-size: 18px;
-}
-
-
-
-
-
-
-
-
-
-
-.th_situacao {
-    padding: 0 !important;
-}
-
-.botao_editar {
-    width: 100%;
-    min-height: 46px;
-    display: inline-flex;
+    height: 190px;
+    text-align: center;
     align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 10px 12px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    color: #333;
-    font-size: 14px;
-    font-weight: 800;
-    transition: background-color 0.25s ease, color 0.25s ease;
+    flex-shrink: 0;
 }
 
-.botao_editar:hover {
-    background-color: rgba(11, 60, 93, 0.08);
+.contatos {
+    display: flex;
+    gap: 50px;
+}
+
+.contatos i {
+    color: rgb(244, 244, 244);
+    padding: 20px;
+    font-size: 30px;
+    margin: 5px;
+    transition: 0.3s ease-in-out;
+}
+
+.contatos i:hover {
+    border-radius: 7px;
+    background-color: rgb(106, 223, 174);
     color: #0b3c5d;
 }
 
-.botao_editar:focus-visible {
-    outline: 2px solid #0b3c5d;
-    outline-offset: -2px;
+.texto_footer {
+    margin-top: 25px;
+    margin-bottom: 30px;
+    opacity: 0.8;
+    color: rgb(255, 255, 255);
 }
