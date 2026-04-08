@@ -84,7 +84,7 @@
                     <div class="campo_despesa_prioridade">
                         <label for="prioridade">Prioridade</label>
                         <select name="prioridade" id="prioridade" required class="select_prioridade">
-                            <option value="" disabled selected>Selecionar</option>
+                            <option value="" disabled selected hidden>Selecionar</option>
                             <option value="Necessário">Necessário</option>
                             <option value="Conveniente">Conveniente</option>
                             <option value="Desnecessário">Desnecessário</option>
@@ -150,10 +150,24 @@
                             {% for despesa in despesas %}
 
                             <tr>
-                                <td> {{ despesa["nome"] }} </td>
-                                <td> {{ despesa["prioridade"] }} </td>
-                                <td> {{ "%.2f"|format(despesa["valor"]) }} </td>
-                                <td> <a href="{{ url_for('excluir_despesa', id=despesa['id'], mes=mes_atual) }}"> <button class="botao_excluir"> <i class="fa-solid fa-trash-can"></i> </button> </a> </td>
+                                <td>{{ despesa["nome"] }}</td>
+                                <td>{{ despesa["prioridade"] }}</td>
+                                <td>{{ "%.2f"|format(despesa["valor"]) }}</td>
+                                <td>
+                                    {% if despesa["tipo"] == "manual" %}
+                                        <a href="{{ url_for('excluir_despesa', id=despesa['id'], mes=mes_atual) }}">
+                                            <button class="botao_excluir" type="button">
+                                                <i class="fa-solid fa-trash-can"></i>
+                                            </button>
+                                        </a>
+                                    {% else %}
+                                        <a href="{{ url_for('config') }}" title="Gerencie este gasto fixo nas configurações">
+                                            <button class="botao_excluir" type="button">
+                                                <i class="fa-solid fa-thumbtack"></i>
+                                            </button>
+                                        </a>
+                                    {% endif %}
+                                </td>
                             </tr>
 
                             {% endfor %}

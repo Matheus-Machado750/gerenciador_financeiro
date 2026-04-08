@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<section class="config">
+<section class="config" data-receita="{{ receita_config }}">
 
     <div class="config_esquerda tabela_mensal tabela_config">
         <div class="header_tabela_config">
@@ -77,12 +77,12 @@
                     </div>
 
                     <div class="campo_despesa_prioridade">
-                        <label for="fixo_categoria">Categoria</label>
-                        <select class="select_prioridade" id="fixo_categoria" required>
+                        <label for="fixo_prioridade">Prioridade</label>
+                        <select class="select_prioridade" id="fixo_prioridade" required>
                             <option value="" disabled selected hidden>Selecionar</option>
                             <option value="Necessário">Necessário</option>
                             <option value="Conveniente">Conveniente</option>
-                            <option value="Dispensável">Dispensável</option>
+                            <option value="Desnecessário">Desnecessário</option>
                         </select>
                     </div>
                 </div>
