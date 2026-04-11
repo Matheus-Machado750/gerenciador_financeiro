@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <section class="home">
+
+    <!-- ////////////////////////// PARTE SUPERIOR ////////////////////////// -->
+
+        <div class="home_superior">
+
+            <div class="input_salario">
+
+                <h3>Receita mensal</h3>
+
+                <form action="{{ url_for('salvar_receita') }}" method="POST">
+
+                    <input type="hidden" name="mes" value="{{ mes_atual }}">
+
+                    <div class="campo_input_receita">
+
+                        <label for="receita"></label>
+                        <input type="number" step="0.01" id="receita" name="valor"
+                        {% if receita is not none %}
+                            value="{{ receita }}"
+                        {% endif %}
+                        placeholder="Digite sua renda no formato: 000,00" class="input_valor_renda">
+
+                        <button type="submit" class="botao_receita">Salvar</button>
+                    </div>
+
+                    <div class="exibir_receita">
+
+                        <span class="texto_receita">Ganho do mês : </span>
+                        <span class="reais_receita">R$ {{ reais }},</span>
+                        <span class="centavos">{{ centavos }}</span>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="receita_vs_despesa" data-gasto="{{ total }}" data-receita="{{ receita }}">
+
+                <h3> Orçamento </h3>
+
+                <div class="container_svg">
+
+                    <svg class="grafico_progresso">
+                    
+                    </svg>
+
+                    <div class="texto_orçamento">
+
+                        <span class="texto_valor_gasto"> Gasto: R$ {} </span>
+                        <span class="texto_saldo_restante"> Restante: R$ {} </span>
+
+                    </div>
+                
+                </div>
+
+            </div>
+
+            <div class="adicionar_despesa">
+
+                <h3>Adicionar despesa</h3>
+
+                <form action="/enviar-dados" method="POST">
+
+                    <input type="hidden" name="mes" value="{{ mes_atual }}">
+
+                <div class="campo_despesa_nome"> 
+                    <label for="nome">Nome</label>
+                    <input type="text" id="nome" name="nome" placeholder="Insira o nome da despesa" required class="input_nome_despesa">
+                </div>
+
+                <div class="linha_dois_campos">
+
+                    <div class="campo_despesa_valor">
+                        <label for="valor">Valor</label>
+                        <input type="number" step="0.01" id="valor" name="valor" placeholder="Insira o valor da despesa" required class="input_valor_despesa">
+                    </div>
+
+                    <div class="campo_despesa_prioridade">
+                        <label for="prioridade">Prioridade</label>
+                        <select name="prioridade" id="prioridade" required class="select_prioridade">
+                            <option value="" disabled selected hidden>Selecionar</option>
+                            <option value="Necessário">Necessário</option>
+                            <option value="Conveniente">Conveniente</option>
+                            <option value="Desnecessário">Desnecessário</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <button type="submit" class="botao_adicionar">Adicionar</button>
+
+            </form>
+
+            </div>
+
+        </div>
+
+    <!-- ////////////////////////// PARTE INFERIOR ////////////////////////// -->
+
+        <div class="home_inferior">
+
+            <div class="tabela_mensal">
+
+                <div class= "header_tabela">
+
+                    <form method="GET" action="/">
+
+                        <select name="mes" class="select_mes" onchange="this.form.submit()">
+
+                            <option value="1" {% if mes_atual == 1 %}selected{% endif %}>Janeiro</option>
+                            <option value="2" {% if mes_atual == 2 %}selected{% endif %}>Fevereiro</option>
+                            <option value="3" {% if mes_atual == 3 %}selected{% endif %}>Março</option>
+                            <option value="4" {% if mes_atual == 4 %}selected{% endif %}>Abril</option>
+                            <option value="5" {% if mes_atual == 5 %}selected{% endif %}>Maio</option>
+                            <option value="6" {% if mes_atual == 6 %}selected{% endif %}>Junho</option>
+                            <option value="7" {% if mes_atual == 7 %}selected{% endif %}>Julho</option>
+                            <option value="8" {% if mes_atual == 8 %}selected{% endif %}>Agosto</option>
+                            <option value="9" {% if mes_atual == 9 %}selected{% endif %}>Setembro</option>
+                            <option value="10" {% if mes_atual == 10 %}selected{% endif %}>Outubro</option>
+                            <option value="11" {% if mes_atual == 11 %}selected{% endif %}>Novembro</option>
+                            <option value="12" {% if mes_atual == 12 %}selected{% endif %}>Dezembro</option>
+
+                        </select>
+                    </form>
+                </div>
+
+                <div class="tabela_wrapper">
+
+                    <table class="tabela_despesas">
+
+                        <thead> <!-- Cabeçalho da tabela -->
+                            <tr>
+                                <th>Despesas</th>
+                                <th>Prioridade</th>
+                                <th>Valor</th>
+                                <th>Excluir</th>
+                            </tr>
+                        </thead>
+
+                        <tbody> <!-- Corpo da tabela -->
+
+                        {% if despesas %}
+
+                            {% for despesa in despesas %}
+
+                            <tr>
+                                <td>{{ despesa["nome"] }}</td>
+                                <td>{{ despesa["prioridade"] }}</td>
+                                <td>{{ "%.2f"|format(despesa["valor"]) }}</td>
+                                <td>
+                                    {% if despesa["tipo"] == "manual" %}
+                                        <a href="{{ url_for('excluir_despesa', id=despesa['id'], mes=mes_atual) }}">
+                                            <button class="botao_excluir" type="button">
+                                                <i class="fa-solid fa-trash-can"></i>
+                                            </button>
+                                        </a>
+                                    {% else %}
+                                        <a href="{{ url_for('config') }}" title="Gerencie este gasto fixo nas configurações">
+                                            <button class="botao_excluir" type="button">
+                                                <i class="fa-solid fa-thumbtack"></i>
+                                            </button>
+                                        </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+
+                            {% endfor %}
+
+                        {% else %}
+
+                            <tr>
+                                <td colspan="4" style="text-align: center;">
+
+                                    Nenhuma despesa cadastrada
+                                </td>
+                            </tr>
+                            
+                        {% endif %}
+
+                        </tbody>
+
+                        <tfoot>
+                            <tr>
+
+                                <td colspan="2" id="texto_total"><strong>Total</strong></td>
+                                <td colspan="2" id="texto_custo_mensal"> <strong>R$ {{ "%.2f" | format(total) }}</strong> </td>
+
+                            </tr>
+                        </tfoot>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+            <div class="grafico_mensal" data-necessario = "{{ gastos_prioridade['necessario'] }}" data-conveniente= "{{ gastos_prioridade['conveniente'] }}" data-desnecessario="{{ gastos_prioridade['desnecessario'] }}">
+
+                <svg class="grafico_mensal_svg"> </svg>
+
+                <div class="legenda_grafico_mensal">
+                
+                    <div class="texto_legenda">
+
+                        <div class="item_legenda_desnecessario"> <p class="texto_desnecessario"> Desnecessário: </p> <div class="cor_desnecessario">  </div> </div>
+                        <div class="item_legenda_conveniente"> <p class="texto_conveniente"> Conveniente: </p> <div class="cor_conveniente">  </div> </div>
+                        <div class="item_legenda_necessario"> <p class="texto_necessario"> Necessário: </p> <div class="cor_necessario">  </div> </div>
+
+                    </div>
+                
+                </div>
+            
+            </div>
+
+        </div>
+
+    </section>
+
+{% endblock %}
+
+{% block page_scripts %}
+<script src="{{ url_for('static', filename='js/graficos.js') }}"></script>
+{% endblock %}
