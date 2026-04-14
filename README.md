@@ -12,3 +12,5 @@ ele foi feito com :
 - JS
 - SQL
 - SQLite
+
+Disponível apenas para Desktop
