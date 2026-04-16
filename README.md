@@ -6,7 +6,7 @@ Além de atender a uma necessidade prática de organização financeira, este pr
 
 ---
 
-![Interface do sistema](screenshot_projeto.png)
+![Interface do sistema](print_gerenciador_financeiro.png)
 
 ## 🌐 Acesse o Projeto Online
 
