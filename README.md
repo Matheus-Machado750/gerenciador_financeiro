@@ -3,6 +3,7 @@
 Aplicação web desenvolvida com **Python**, **Flask**, **SQLite**, **HTML**, **CSS** e **JavaScript**, com foco em controle financeiro pessoal, visualização de despesas, simulação de economia e organização de gastos fixos recorrentes.
 
 Além de atender a uma necessidade prática de organização financeira, este projeto foi construído para demonstrar competências importantes em **desenvolvimento web**, como **persistência de dados**, **estruturação de aplicações back-end** e **integração entre front e back-end**.
+
 ![Interface do sistema](print_gerenciador_financeiro.png)
 
 ## 🌐 Acesse o Projeto Online
