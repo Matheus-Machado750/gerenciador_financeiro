@@ -10,7 +10,7 @@ Além de atender a uma necessidade prática de organização financeira, este pr
 
 [Clique aqui para visualizar o projeto (Ctrl + clique para abrir em uma nova aba)](https://matheusmachado.pythonanywhere.com/)
 
-O projeto está disponível online e pode ser acessado diretamente pelo navegador, sem necessidade de instalação local. **Atenção:** antes de acessar e utilizar o sistema, é importante ler a seção de **Observações de Uso** disponível ao final desta descrição.
+O projeto está disponível online e pode ser acessado diretamente pelo navegador, sem necessidade de instalação local. **ATENÇÃO: antes de acessar e utilizar o sistema, é importante ler a seção de "Observações de Uso" disponível ao final desta descrição.**
 
 ---
 
