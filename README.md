@@ -4,15 +4,13 @@ Aplicação web desenvolvida com **Python**, **Flask**, **SQLite**, **HTML**, **
 
 Além de atender a uma necessidade prática de organização financeira, este projeto foi construído para demonstrar competências importantes em **desenvolvimento web**, **persistência de dados**, **estruturação de aplicações back-end** e **integração entre front e back-end**, servindo como um passo importante no meu **crescimento no desenvolvimento de software**.
 
----
-
 ![Interface do sistema](print_gerenciador_financeiro.png)
 
 ## 🌐 Acesse o Projeto Online
 
 [Clique aqui para visualizar o projeto (Ctrl + clique para abrir em uma nova aba)](https://matheusmachado.pythonanywhere.com/)
 
-O projeto está disponível online e pode ser acessado diretamente pelo navegador, sem necessidade de instalação local.
+O projeto está disponível online e pode ser acessado diretamente pelo navegador, sem necessidade de instalação local. **Atenção:** antes de acessar e utilizar o sistema, é importante ler a seção de **Observações de Uso** disponível ao final desta descrição.
 
 ---
 
@@ -120,7 +118,7 @@ projeto-flask/
 
 ---
 
-## 📜 Observação de Uso
+## 📜 Observações de Uso
 
 No estado atual, a aplicação está mais adequada apenas para **observação, demonstração e alterações simples**, especialmente em contexto de portfólio.
 
