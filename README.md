@@ -53,7 +53,7 @@ Ele representa um passo importante na minha formação como desenvolvedor, espec
 
 ## 💻 Arquitetura e Funcionamento
 
-### Sessão Home
+### Seção Home
 
 - Permite registrar a receita mensal correspondente ao mês selecionado.
 - Permite adicionar despesas avulsas manualmente, informando nome, valor e prioridade.
@@ -62,7 +62,7 @@ Ele representa um passo importante na minha formação como desenvolvedor, espec
 - Exibe um indicador visual de orçamento consumido com base na relação entre receita e despesas.
 - Gera a visualização gráfica da distribuição dos gastos por prioridade.
 
-### Sessão Simulação
+### Seção Simulação
 
 - Reaproveita as despesas do mês selecionado para análise sem modificar os dados reais.
 - Permite ocultar visualmente itens da tabela para testar cenários alternativos de consumo.
@@ -70,7 +70,7 @@ Ele representa um passo importante na minha formação como desenvolvedor, espec
 - Recalcula em tempo real o total considerado na simulação.
 - Compara o gasto original com a economia potencial por meio de barras visuais.
 
-### Sessão Configurações
+### Seção Configurações
 
 - Permite cadastrar gastos fixos recorrentes com nome, valor e prioridade.
 - Exibe os gastos fixos em uma tabela própria, separada das despesas avulsas.
