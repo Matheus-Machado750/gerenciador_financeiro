@@ -43,11 +43,11 @@ Ele representa um passo importante na minha formação como desenvolvedor, espec
 
 ## ⚙️ Stack e Tecnologias
 
-- **Python** — base da lógica do sistema, responsável pela manipulação dos dados financeiros.
-- **Flask** — framework utilizado para estruturar as rotas, processar formulários, renderizar páginas e integrar front-end, back-end e banco de dados.
-- **SQLite** — banco de dados utilizado para persistir receitas, despesas avulsas e gastos fixos recorrentes.
-- **HTML, CSS e JavaScript** — conjunto responsável pela construção da interface, estilização visual da aplicação e interações dinâmicas do usuário com as tabelas, filtros e gráficos.
-- **PythonAnywhere** — plataforma utilizada para realizar o deploy e disponibilizar a aplicação online.
+- **Python** : base da lógica do sistema, responsável pela manipulação dos dados financeiros.
+- **Flask** : framework utilizado para estruturar as rotas, processar formulários, renderizar páginas e integrar front-end, back-end e banco de dados.
+- **SQLite** : banco de dados utilizado para persistir receitas, despesas avulsas e gastos fixos recorrentes.
+- **HTML, CSS e JavaScript** : conjunto responsável pela construção da interface, estilização visual da aplicação e interações dinâmicas do usuário com as tabelas, filtros e gráficos.
+- **PythonAnywhere** : plataforma utilizada para realizar o deploy e disponibilizar a aplicação online.
 
 ---
 
