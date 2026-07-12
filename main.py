@@ -89,6 +89,26 @@ def criar_tabela_gastos_fixos():
     conexao.close()
 
 
+def criar_usuario(email, senha):
+    
+    senha_hash = generate_password_hash(senha) #Recebe a senha pura mas já tranforma ela com hash
+    criado_em = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    conexao = get_db_connection()
+    cursor = conexao.cursor()
+
+    cursor.execute(""" INSERT INTO usuarios (email, senha_hash, criado_em)
+                   VALUES (?, ?, ?)
+                   """, (email, senha_hash, criado_em))
+    
+    usuario_id = cursor.lastrowid #Pega o ultimo id
+
+    conexao.commit()
+    conexao.close()
+
+    return usuario_id
+
+
 def buscar_usuario_por_email(email):
     """
     Função para login e cadastro;
