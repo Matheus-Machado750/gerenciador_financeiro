@@ -1,9 +1,12 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for, jsonify, session
+from werkzeug.security import generate_password_hash, check_password_hash #Importação funções de Hash
 import sqlite3
 import os
 from datetime import datetime
 
 app = Flask(__name__)
+app.secret_key = os.environ.get("SECRET_KEY", "chave-dev-temporaria")
+"""O Flask vai usar essa chave para assinar o cookie de sessão, impedindo que alguém altere o conteúdo da sessão no navegador e o Flask aceite como se fosse verdadeiro"""
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "database", "finance.db")
@@ -84,6 +87,27 @@ def criar_tabela_gastos_fixos():
 
     conexao.commit()
     conexao.close()
+
+
+def buscar_usuario_por_email(email):
+    """
+    Função para login e cadastro;
+    No login, é usado p/ encontrar a conta, no cadastro impede email duplicado.
+    """
+
+    conexao = get_db_connection()
+    cursor = conexao.cursor()
+
+    cursor.execute(""" SELECT id, email, senha_hash, criado_em
+                   FROM usuarios
+                   WHERE email = ?
+                   """ (email,))
+    
+    usuario = cursor.fetchone()
+    conexao.close()
+
+    return usuario
+
 
 def buscar_despesas_avulsas(mes, ano):
     conexao = get_db_connection()
