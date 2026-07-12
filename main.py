@@ -16,21 +16,37 @@ def get_db_connection():
     return conexao
 
 
+def criar_tabela_usuarios():
+    conexao = get_db_connection()
+    cursor = conexao.cursor()
+
+    cursor.execute(""" CREATE TABLE IF NOT EXISTS usuarios (
+        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        email TEXT NOT NULL UNIQUE,
+        senha_hash TEXT NOT NULL,
+        criado_em TEXT NOT NULL
+        )""" ) #O Hash da senha já é nativo do Flask e traz mais segurança
+    
+    conexao.commit()
+    conexao.close()
+
+
 def criar_tabela_despesas():
     conexao = get_db_connection()
     cursor = conexao.cursor()
 
     cursor.execute(""" CREATE TABLE IF NOT EXISTS despesas (
                    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                   usuario_id INTEGER NOT NULL,
                    nome TEXT NOT NULL,
                    valor REAL NOT NULL,
                    prioridade TEXT NOT NULL,
-                   data_criacao TEXT NOT NULL
-                   )""")
+                   data_criacao TEXT NOT NULL,
+                   FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+                   )""" )
     
     conexao.commit()
     conexao.close()
-
 
 
 def criar_tabela_receita():
@@ -39,13 +55,17 @@ def criar_tabela_receita():
 
     cursor.execute(""" CREATE TABLE IF NOT EXISTS receita (
                    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                   usuario_id INTEGER NOT NULL,
                    valor REAL NOT NULL,
                    mes INTEGER NOT NULL,
-                   ano INTEGER NOT NULL
-                   )""")
+                   ano INTEGER NOT NULL,
+                   FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
+                   UNIQUE(usuario_id, mes, ano)
+                   )""" ) #Para garantir que cada usuario tenha uma receita por mês e ano
     
     conexao.commit()
     conexao.close()
+
 
 def criar_tabela_gastos_fixos():
     conexao = get_db_connection()
@@ -53,12 +73,14 @@ def criar_tabela_gastos_fixos():
 
     cursor.execute(""" CREATE TABLE IF NOT EXISTS gastos_fixos (
             id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+            usuario_id INTEGER NOT NULL,
             nome TEXT NOT NULL,
             valor REAL NOT NULL,
             prioridade TEXT NOT NULL,
             ativo INTEGER NOT NULL DEFAULT 1,
-            data_inicio TEXT NOT NULL
-        )""")
+            data_inicio TEXT NOT NULL,
+            FOREIGN KEY (usuario_id) REFERES usuarios(id)
+            )""")
 
     conexao.commit()
     conexao.close()
@@ -403,6 +425,7 @@ def excluir_gasto_fixo_api(id):
 
 
 def inicializar_banco():
+    criar_tabela_usuarios()
     criar_tabela_despesas()
     criar_tabela_receita()
     criar_tabela_gastos_fixos()
