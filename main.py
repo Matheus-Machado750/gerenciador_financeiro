@@ -79,7 +79,7 @@ def criar_tabela_gastos_fixos():
             prioridade TEXT NOT NULL,
             ativo INTEGER NOT NULL DEFAULT 1,
             data_inicio TEXT NOT NULL,
-            FOREIGN KEY (usuario_id) REFERES usuarios(id)
+            FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
             )""")
 
     conexao.commit()
