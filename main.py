@@ -90,7 +90,8 @@ def criar_tabela_gastos_fixos():
 
 
 def criar_usuario(email, senha):
-    
+
+    email = email.strip().lower() #Para garantir tratamento unitário dos e-mails
     senha_hash = generate_password_hash(senha) #Recebe a senha pura mas já tranforma ela com hash
     criado_em = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -114,6 +115,7 @@ def buscar_usuario_por_email(email):
     Função para login e cadastro;
     No login, é usado p/ encontrar a conta, no cadastro impede email duplicado.
     """
+    email = email.strip().lower() #Para garantir tratamento unitário dos e-mails
 
     conexao = get_db_connection()
     cursor = conexao.cursor()
@@ -121,12 +123,29 @@ def buscar_usuario_por_email(email):
     cursor.execute(""" SELECT id, email, senha_hash, criado_em
                    FROM usuarios
                    WHERE email = ?
-                   """ (email,))
+                   """, (email,))
     
     usuario = cursor.fetchone()
     conexao.close()
 
     return usuario
+
+
+def validar_login(email, senha):
+    usuario = buscar_usuario_por_email(email)
+
+    if usuario is None:
+        return None
+    
+    if not check_password_hash(usuario["senha_hash"], senha):
+        return None
+
+    return usuario
+
+
+def usuario_logado_id():
+
+    return session.get("usuario_id")
 
 
 def buscar_despesas_avulsas(mes, ano):
