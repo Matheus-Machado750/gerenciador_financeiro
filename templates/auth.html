@@ -1,0 +1,46 @@
+<section class="auth_container" id="authContainer">
+
+    <div class="campo_login">
+
+        <form action="{{ url_for('login') }}" method="POST" class="formulario_login">
+            <h2>Bem-vindo de volta!</h2>
+
+            <input type="email" name="email" autocomplete="email" placeholder="Email" required>
+            <input type="password" name="senh" autocomplete="current-password" placeholder="Senha" required>
+
+            <input type="checkbox" id="lembrar-de-mim" name="lembrar">
+            <label for="lembrar-de-mim"> Lembrar de mim </label>
+
+            <button type="submit"> Login </button>
+
+            <p>
+                Ainda não tem uma conta?
+                <button type="button" id="mostrarCadastro"> Cadastre-se </button>
+            </p>
+
+        </form>
+
+    </div>
+
+
+    <div class="campo_cadadstro">
+
+        <form action="{{ url_for('cadastro') }}" method="POST" class="formulario_cadastro">
+            <h2>Crie uma conta</h2>
+
+            <input type="email" name="email" autocomplete="email" placeholder="Email" required>
+            <input type="password" name="senha" autocomplete="new-password" placeholder="Crie uma senha" required>
+            <input type="password" name="confirmar-senha" autocomplete="new-password" placeholder="Confirme sua senha" required>
+
+            <button type="submit"> Cadastrar </button>
+
+            <p>
+                Já possui uma conta?
+                <button type="button"> Entrar </button>
+            </p>
+
+        </form>
+
+    </div>
+
+</section>
