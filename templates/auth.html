@@ -1,49 +1,69 @@
-<section class="auth_container modo-login" id="authContainer">
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- ////////////////////////// PARTE LOGIN ////////////////////////// -->    
+    <title>Login | Gerenciador Financeiro</title>
 
-    <div class="campo_login">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+</head>
 
-        <form action="{{ url_for('login') }}" method="POST" class="formulario_login">
-            <h2>Bem-vindo de volta!</h2>
 
-            <input type="email" name="email" autocomplete="email" placeholder="Email" required>
-            <input type="password" name="senh" autocomplete="current-password" placeholder="Senha" required>
+<body>
 
-            <input type="checkbox" id="lembrar-de-mim" name="lembrar">
-            <label for="lembrar-de-mim"> Lembrar de mim </label>
+    <section class="auth_container {% if modo == 'cadastro' %} modo-cadastro {% else %} modo-login {% endif %}" id="authContainer">
 
-            <button type="submit"> Login </button>
+    <!-- ////////////////////////// PARTE LOGIN ////////////////////////// -->    
 
-            <p>
-                Ainda não tem uma conta?
-                <button type="button" id="mostrarCadastro"> Cadastre-se </button>
-            </p>
+        <div class="campo_login">
 
-        </form>
+            <form action="{{ url_for('login') }}" method="POST" class="formulario_login">
+                <h2>Bem-vindo de volta!</h2>
 
-    </div>
+                <input type="email" name="email" autocomplete="email" placeholder="Email" required>
+                <input type="password" name="senha" autocomplete="current-password" placeholder="Senha" required>
 
-<!-- ////////////////////////// PARTE CADASTRO ////////////////////////// -->
+                <input type="checkbox" id="lembrar-de-mim" name="lembrar">
+                <label for="lembrar-de-mim"> Lembrar de mim </label>
 
-    <div class="campo_cadadstro">
+                <button type="submit"> Login </button>
 
-        <form action="{{ url_for('cadastro') }}" method="POST" class="formulario_cadastro">
-            <h2>Crie uma conta</h2>
+                <p>
+                    Ainda não tem uma conta?
+                    <button type="button" id="mostrarCadastro"> Cadastre-se </button>
+                </p>
 
-            <input type="email" name="email" autocomplete="email" placeholder="Email" required>
-            <input type="password" name="senha" autocomplete="new-password" placeholder="Crie uma senha" required>
-            <input type="password" name="confirmar-senha" autocomplete="new-password" placeholder="Confirme sua senha" required>
+            </form>
 
-            <button type="submit"> Cadastrar </button>
+        </div>
 
-            <p>
-                Já possui uma conta?
-                <button type="button" id="mostrarLogin"> Entrar </button>
-            </p>
+    <!-- ////////////////////////// PARTE CADASTRO ////////////////////////// -->
 
-        </form>
+        <div class="campo_cadastro">
 
-    </div>
+            <form action="{{ url_for('cadastro') }}" method="POST" class="formulario_cadastro">
+                <h2>Crie uma conta</h2>
 
-</section>
+                <input type="email" name="email" autocomplete="email" placeholder="Email" required>
+                <input type="password" name="senha" autocomplete="new-password" placeholder="Crie uma senha" required>
+                <input type="password" name="confirmar_senha" autocomplete="new-password" placeholder="Confirme sua senha" required>
+
+                <button type="submit"> Cadastrar </button>
+
+                <p>
+                    Já possui uma conta?
+                    <button type="button" id="mostrarLogin"> Entrar </button>
+                </p>
+
+            </form>
+
+        </div>
+
+    </section>
+
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+
+</body>
+</html>
