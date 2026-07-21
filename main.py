@@ -519,7 +519,7 @@ def cadastro():
     return redirect(url_for("index"))
 
 
-@app.route("/login", methods="POST")
+@app.route("/login", methods=["POST"])
 def login():
     email = request.form.get("email", "").strip().lower()
     senha = request.form.get("senha", "")
