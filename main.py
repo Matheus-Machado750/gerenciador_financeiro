@@ -496,6 +496,45 @@ def auth():
     return render_template("auth.html", modo=modo)
 
 
+@app.route("/cadastro", methods=["POST"])
+def cadastro():
+    email = request.form.get("email", "").strip().lower()
+    senha = request.form.get("senha", "")
+    confirmar_senha = request.form.get("confirmar_senha", "")
+
+    if not email or not senha or not confirmar_senha:
+        return redirect(url_for("auth", modo="cadastro"))
+    
+    if senha != confirmar_senha:
+        return redirect(url_for("auth", modo="cadastro"))
+    
+    if buscar_usuario_por_email(email):
+        return redirect(url_for("auth", modo="cadastro"))
+
+    usuario_id = criar_usuario(email, senha)
+
+    session.clear()
+    session["usuario_id"] = usuario_id
+
+    return redirect(url_for("index"))
+
+
+@app.route("/login", methods="POST")
+def login():
+    email = request.form.get("email", "").strip().lower()
+    senha = request.form.get("senha", "")
+
+    usuario = validar_login(email, senha)
+
+    if usuario is None:
+        return redirect(url_for("auth", modo="login"))
+
+    session.clear()
+    session["usuario_id"] = usuario["id"]
+
+    return redirect(url_for("index"))
+
+
 def inicializar_banco():
     criar_tabela_usuarios()
     criar_tabela_despesas()
