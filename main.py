@@ -487,6 +487,15 @@ def excluir_gasto_fixo_api(id):
     return "", 204
 
 
+@app.route("/auth")
+def auth():
+    if usuario_logado_id():
+        return redirect(url_for("index"))
+    
+    modo = request.args.get("modo", "login")
+    return render_template("auth.html", modo=modo)
+
+
 def inicializar_banco():
     criar_tabela_usuarios()
     criar_tabela_despesas()
