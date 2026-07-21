@@ -535,6 +535,12 @@ def login():
     return redirect(url_for("index"))
 
 
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("auth"))
+
+
 def inicializar_banco():
     criar_tabela_usuarios()
     criar_tabela_despesas()
