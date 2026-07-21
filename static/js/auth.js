@@ -4,12 +4,14 @@ const authContainer = document.getElementById("authContainer");
 const mostrarCadastro = document.getElementById("mostrarCadastro");
 const mostrarLogin = document.getElementById("mostrarLogin");
 
-mostrarCadastro.addEventListener("click", () => {
-    authContainer.classList.remove("modo-login");
-    authContainer.classList.add("modo-cadastro");
-});
+if (authContainer && mostrarCadastro && mostrarLogin) {
+    mostrarCadastro.addEventListener("click", () => {
+        authContainer.classList.remove("modo-login");
+        authContainer.classList.add("modo-cadastro");
+    });
 
-mostrarLogin.addEventListener("click", () => {
-    authContainer.classList.remove("modo-cadastro");
-    authContainer.classList.add("modo-login");
-});
+    mostrarLogin.addEventListener("click", () => {
+        authContainer.classList.remove("modo-cadastro");
+        authContainer.classList.add("modo-login");
+    });
+}
