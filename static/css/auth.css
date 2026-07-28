@@ -15,7 +15,9 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: rgb(237, 237, 237);
+    background-image: url("../img/fundo_auth.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 /* //////////////////////////////////// FUNDO ///////////////////////////////////// */
