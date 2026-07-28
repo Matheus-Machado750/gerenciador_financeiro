@@ -16,6 +16,8 @@
 
     <section class="auth_container {% if modo == 'cadastro' %} modo-cadastro {% else %} modo-login {% endif %}" id="authContainer">
 
+    <!-- ////////////////////////// CARD CENTRAL ////////////////////////// -->
+
         <div class="auth_card">
 
             <div class="auth_info">
@@ -39,13 +41,13 @@
 
             </div>
 
-        <!-- ////////////////////////// PARTE LOGIN ////////////////////////// -->    
-            <div class="auth_forms">
+    <!-- ////////////////////////// FORMULÁRIOS ////////////////////////// --> 
+ 
+            <div class="auth_forms">   
 
                 <div class="campo_login">
 
                     <form action="{{ url_for('login') }}" method="POST" class="formulario_login">
-                        <h2>Bem-vindo de volta!</h2>
 
                         <input type="email" name="email" autocomplete="email" placeholder="Email" required>
                         <input type="password" name="senha" autocomplete="current-password" placeholder="Senha" required>
@@ -69,7 +71,6 @@
                 <div class="campo_cadastro">
 
                     <form action="{{ url_for('cadastro') }}" method="POST" class="formulario_cadastro">
-                        <h2>Crie uma conta</h2>
 
                         <input type="email" name="email" autocomplete="email" placeholder="Email" required>
                         <input type="password" name="senha" autocomplete="new-password" placeholder="Crie uma senha" required>
