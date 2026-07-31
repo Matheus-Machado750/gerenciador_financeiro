@@ -3,6 +3,7 @@
 * {
     margin: 0; /* Margem externa */
     padding: 0; /* Margem interna */
+    box-sizing: border-box;
     font-family: "Poppins", sans-serif;
 }
 
@@ -17,7 +18,7 @@ html, body {
 body {
     min-height: 100vh;
     overflow: hidden;
-    background-color: #f7f7f7;
+    background-color: #ffffff;
 
     background-image:
         url("../img/canto_superior_esquerdo.png"),
@@ -32,24 +33,138 @@ body {
         no-repeat;
 
     background-position:
-        top left,
+        left 37px top 32px,
         top right,
         bottom left,
-        bottom right;
+        right 37px bottom 32px;
 
     background-size:
-        clamp(520px, 26vw, 1007px) auto,
+        clamp(420px, 26vw, 1007px) auto,
         clamp(460px, 22vw, 860px) auto,
-        clamp(460px, 23vw, 865px) auto,
-        clamp(380px, 18vw, 711px) auto;
+        clamp(400px, 20vw, 865px) auto,
+        clamp(350px, 17vw, 711px) auto;
 }
 
 
 
 /* //////////////////////////////////// FUNDO ///////////////////////////////////// */
 
+/* //////////////////////////////////// CARD CENTRAL ///////////////////////////////////// */
 
-/* //////////////////////////////////// LOGIN ///////////////////////////////////// */
+.auth_container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
+.auth_card {
+    width: 75%;
+    height: 510px;
+    display: flex;
+    overflow: hidden;
+    border-radius: 10px;
+    background-color: rgba(166, 166, 166, 0.548);
+}
 
-/* //////////////////////////////////// CADASTRO ///////////////////////////////////// */
+/* //////////////////////////////////// LADO ESQUERDO ///////////////////////////////////// */
+
+.auth_info {
+    position: relative;
+    width: 57%;
+    height: 100%;
+    padding: 70px 65px;
+    background-color: rgb(19, 56, 44);
+    color: #ffffff;
+}
+
+.texto_login,
+.texto_cadastro {
+    position: absolute;
+    top: 75px;
+    left: 65px;
+    right: 65px;
+    transition: opacity 0.35s ease, transform 0.35s ease, visibility 0.35s ease;
+}
+
+.texto_login h1,
+.texto_cadastro h1 {
+    font-size: 38px;
+    line-height: 1.1;
+    margin-bottom: 22px;
+}
+
+.texto_login p,
+.texto_cadastro p {
+    font-size: 17px;
+    line-height: 1.6;
+}
+
+.auth_contatos {
+    position: absolute;
+    left: 65px;
+    bottom: 55px;
+    display: flex;
+    gap: 30px;
+}
+
+.auth_contatos i {
+    color: rgb(244, 244, 244);
+    padding: 20px;
+    font-size: 30px;
+    margin: 5px;
+    transition: 0.3s ease-in-out;
+}
+
+.auth_contatos i:hover {
+    border-radius: 7px;
+    background-color: rgb(106, 223, 174);
+    color: #0b3c5d;
+}
+
+/* //////////////////////////////////// LADO DIREITO ///////////////////////////////////// */
+
+.auth_forms {
+    position: relative;
+    width: 43%;
+    height: 100%;
+    background-color: blue;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.campo_login,
+.campo_cadastro {
+    position: absolute;
+    width: 75%;
+    transition: opacity 0.35s ease, transform 0.35s ease, visibility 0.35s ease;
+}
+
+/* //////////////////////////////////// ALTERNANCIA ///////////////////////////////////// */
+
+.auth_container.modo-login .texto_login,
+.auth_container.modo-login .campo_login,
+.auth_container.modo-cadastro .texto_cadastro,
+.auth_container.modo-cadastro .campo_cadastro {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+    pointer-events: auto;
+}
+
+.auth_container.modo-login .texto_cadastro,
+.auth_container.modo-login .campo_cadastro {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(35px);
+    pointer-events: none;
+}
+
+.auth_container.modo-cadastro .texto_login,
+.auth_container.modo-cadastro .campo_login {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-35px);
+    pointer-events: none;
+}
