@@ -63,8 +63,10 @@ body {
     height: 510px;
     display: flex;
     overflow: hidden;
-    border-radius: 10px;
-    background-color: rgba(59, 182, 143, 0.548);
+    border-radius: 17px;
+    background-color: rgba(249, 249, 249, 0.548);
+    backdrop-filter: blur(2px);
+
 }
 
 /* //////////////////////////////////// LADO ESQUERDO ///////////////////////////////////// */
@@ -90,7 +92,7 @@ body {
 .texto_cadastro h1 {
     font-size: 38px;
     line-height: 1.1;
-    margin-top: 37px;
+    margin-top: 27px;
     margin-bottom: 50px;
     color: #1774B9;
 }
@@ -129,7 +131,7 @@ body {
     position: relative;
     width: 43%;
     height: 100%;
-    background-color: rgba(22, 160, 219, 0.629);
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -174,11 +176,19 @@ body {
 
 /* //////////////////////////////////// Formulário ///////////////////////////////////// */
 
-.auth_forms .email, .senha, .senha_repetida {
+.formulario_login, .formulario_cadastro {
+    display: flex;
+    flex-direction: column;
+}
+
+.auth_forms .email,
+.auth_forms .senha,
+.auth_forms .senha_repetida {
     border: none;
     background-color: #E7E7E7;
-    height: 20px;
+    height: 37px;
     border-radius: 3px;
+    margin-bottom: 20px;
 }
 
 .botao_login, .botao_cadastro {
@@ -203,7 +213,7 @@ body {
 
 
 
-#mostrarLogin, #mostrarCadastro {
+#mostrarLogin, #mostrarCadastro { /* Link de clique pra alterar visuamente */
     background-color: transparent;
     border: none;
     color: #ffffff;
@@ -214,4 +224,52 @@ body {
     cursor: pointer;
     opacity: 0.8;
     text-decoration: underline;
+}
+
+.input_div {
+    position: relative;
+    width: 100%;
+}
+
+.input_div input {
+    width: 100%;
+    height: 37px;
+    border: none;
+    border-radius: 3px;
+    background-color: #E7E7E7;
+    padding: 0 45px 0 14px;
+}
+
+.input_icon,
+.toggle_senha {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.input_icon {
+    color: #777;
+    pointer-events: none;
+}
+
+.toggle_senha {
+    border: none;
+    background: transparent;
+    color: #777;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lembrar_linha {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.lembrar_linha input {
+    width: 14px;
+    height: 14px;
 }

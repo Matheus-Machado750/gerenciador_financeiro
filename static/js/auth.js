@@ -15,3 +15,24 @@ if (authContainer && mostrarCadastro && mostrarLogin) {
         authContainer.classList.add("modo-login");
     });
 }
+
+const togglePasswordButtons = document.querySelectorAll(".toggle_senha");
+
+togglePasswordButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+        const input = button.parentElement.querySelector("input");
+        const icon = button.querySelector("i");
+
+        const senhaEstaOculta = input.type === "password";
+
+        input.type = senhaEstaOculta ? "text" : "password";
+
+        icon.classList.toggle("fa-eye", !senhaEstaOculta);
+        icon.classList.toggle("fa-eye-slash", senhaEstaOculta);
+
+        button.setAttribute(
+            "aria-label",
+            senhaEstaOculta ? "Ocultar senha" : "Mostrar senha"
+        );
+    });
+});

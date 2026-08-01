@@ -48,11 +48,25 @@
 
                     <form action="{{ url_for('login') }}" method="POST" class="formulario_login">
 
-                        <input type="email" name="email" autocomplete="email" placeholder="Email" required class="email">
-                        <input type="password" name="senha" autocomplete="current-password" placeholder="Senha" required class="senha">
+                        <h2 class="titulo_form"> Login </h2>
 
-                        <input type="checkbox" id="lembrar-de-mim" name="lembrar">
-                        <label for="lembrar-de-mim"> Lembrar de mim </label>
+                        <div class="input_div">
+                            <input type="email" name="email" autocomplete="email" placeholder="Email" required class="email">
+                            <i class="fa-solid fa-envelope input_icon"></i>
+                        </div>
+
+                        <div class="input_div">
+                            <input type="password" name="senha" autocomplete="current-password" placeholder="Senha" required class="senha">
+
+                            <button type="button" class="toggle_senha" aria-label="Mostrar senha">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+
+                        <div class="lembrar_linha">
+                            <label for="lembrar_de_mim"> Lembrar de mim </label>
+                            <input type="checkbox" id="lembrar_de_mim" name="lembrar">
+                        </div>
 
                         <button type="submit" class="botao_login"> Login </button>
 
@@ -71,9 +85,28 @@
 
                     <form action="{{ url_for('cadastro') }}" method="POST" class="formulario_cadastro">
 
-                        <input type="email" name="email" autocomplete="email" placeholder="Email" required class="email">
-                        <input type="password" name="senha" autocomplete="new-password" placeholder="Crie uma senha" required class="senha">
-                        <input type="password" name="confirmar_senha" autocomplete="new-password" placeholder="Confirme sua senha" required class="senha_repetida">
+                        <h2 class="titulo_form"> Cadastro </h2>
+
+                        <div class="input_div">
+                            <input type="email" name="email" autocomplete="email" placeholder="Email" required class="email">
+                            <i class="fa-solid fa-envelope input_icon"></i>
+                        </div>
+
+                        <div class="input_div">
+                            <input type="password" name="senha" autocomplete="new-password" placeholder="Crie uma senha" required class="senha">
+
+                            <button type="button" class="toggle_senha" aria-label="Mostrar senha">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+
+                        <div class="input_div">
+                            <input type="password" name="confirmar_senha" autocomplete="new-password" placeholder="Confirme sua senha" required class="senha_repetida">
+
+                            <button type="button" class="toggle_senha" aria-label="Mostrar senha">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
 
                         <button type="submit" class="botao_cadastro"> Cadastrar </button>
 
