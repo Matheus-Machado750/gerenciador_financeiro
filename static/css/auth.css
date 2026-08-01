@@ -66,7 +66,6 @@ body {
     border-radius: 17px;
     background-color: rgba(249, 249, 249, 0.548);
     backdrop-filter: blur(2px);
-
 }
 
 /* //////////////////////////////////// LADO ESQUERDO ///////////////////////////////////// */
@@ -76,7 +75,6 @@ body {
     width: 57%;
     height: 100%;
     padding: 70px 65px;
-    color: #ffffff;
 }
 
 .texto_login,
@@ -92,10 +90,11 @@ body {
 .texto_cadastro h1 {
     font-size: 38px;
     line-height: 1.1;
-    margin-top: 27px;
+    margin-top: 20px;
     margin-bottom: 50px;
-    color: #1774B9;
+    color: #146bad;
 }
+
 
 .texto_login p,
 .texto_cadastro p {
@@ -112,17 +111,16 @@ body {
 }
 
 .auth_contatos i {
-    color: rgb(244, 244, 244);
+    color: #1166a7;
     padding: 20px;
     font-size: 30px;
     margin: 5px;
-    transition: 0.3s ease-in-out;
+    transition: 0.2s ease-in-out;
 }
 
 .auth_contatos i:hover {
     border-radius: 7px;
-    background-color: rgb(106, 223, 174);
-    color: #0b3c5d;
+    background-color: rgb(155, 249, 212);
 }
 
 /* //////////////////////////////////// LADO DIREITO ///////////////////////////////////// */
@@ -136,6 +134,15 @@ body {
     align-items: center;
     justify-content: center;
 }
+
+h2 {
+    color:#146bad;
+    font-weight: bolder;
+    font-size: 30px;
+    text-align: center;
+    margin-bottom: 27px;
+}
+
 
 .campo_login,
 .campo_cadastro {
@@ -189,10 +196,20 @@ body {
     height: 37px;
     border-radius: 3px;
     margin-bottom: 20px;
+    font-size: 16px;
 }
 
+.auth_forms .email:focus,
+.auth_forms .senha:focus,
+.auth_forms .senha_repetida:focus {
+    border: none;
+    outline: 2px solid rgb(41, 193, 236)
+}
+
+
+
 .botao_login, .botao_cadastro {
-    margin-top: auto;
+    margin-bottom: 30px;
     width: 100%;
     height: 38px;
     font-size: 16px;
@@ -204,20 +221,23 @@ body {
 }
 
 .botao_login:hover, .botao_cadastro:hover {
-    box-shadow: 4px 4px 7px rgba(0, 0, 0, 0.171);
+    box-shadow: 4px 4px 7px rgba(22, 138, 221, 0.314);
     transition: 0.2s ease;
     cursor:pointer;
 }
 
-
+.texto_conta {
+    text-align: center;
+}
 
 
 
 #mostrarLogin, #mostrarCadastro { /* Link de clique pra alterar visuamente */
     background-color: transparent;
     border: none;
-    color: #ffffff;
-    font-weight: bolder;
+    color: #2f9cfb;
+    font-weight: bold;
+    font-size: 14px;
 }
 
 #mostrarLogin:hover, #mostrarCadastro:hover {
@@ -233,7 +253,7 @@ body {
 
 .input_div input {
     width: 100%;
-    height: 37px;
+    height: 40px;
     border: none;
     border-radius: 3px;
     background-color: #E7E7E7;
@@ -242,6 +262,7 @@ body {
 
 .input_icon,
 .toggle_senha {
+    font-size: 18px;
     position: absolute;
     right: 14px;
     top: 50%;
@@ -249,14 +270,14 @@ body {
 }
 
 .input_icon {
-    color: #777;
+    color: #808080;
     pointer-events: none;
 }
 
 .toggle_senha {
     border: none;
     background: transparent;
-    color: #777;
+    color:#808080;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -267,6 +288,7 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
+    margin-bottom: 20px;
 }
 
 .lembrar_linha input {
