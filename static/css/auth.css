@@ -64,7 +64,7 @@ body {
     display: flex;
     overflow: hidden;
     border-radius: 10px;
-    background-color: rgba(166, 166, 166, 0.548);
+    background-color: rgba(59, 182, 143, 0.548);
 }
 
 /* //////////////////////////////////// LADO ESQUERDO ///////////////////////////////////// */
@@ -74,7 +74,6 @@ body {
     width: 57%;
     height: 100%;
     padding: 70px 65px;
-    background-color: rgb(19, 56, 44);
     color: #ffffff;
 }
 
@@ -91,7 +90,9 @@ body {
 .texto_cadastro h1 {
     font-size: 38px;
     line-height: 1.1;
-    margin-bottom: 22px;
+    margin-top: 37px;
+    margin-bottom: 50px;
+    color: #1774B9;
 }
 
 .texto_login p,
@@ -128,7 +129,7 @@ body {
     position: relative;
     width: 43%;
     height: 100%;
-    background-color: blue;
+    background-color: rgba(22, 160, 219, 0.629);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -167,4 +168,50 @@ body {
     visibility: hidden;
     transform: translateX(-35px);
     pointer-events: none;
+}
+
+
+
+/* //////////////////////////////////// Formulário ///////////////////////////////////// */
+
+.auth_forms .email, .senha, .senha_repetida {
+    border: none;
+    background-color: #E7E7E7;
+    height: 20px;
+    border-radius: 3px;
+}
+
+.botao_login, .botao_cadastro {
+    margin-top: auto;
+    width: 100%;
+    height: 38px;
+    font-size: 16px;
+    border-radius: 4px;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: rgb(106, 223, 174);
+    border: none;
+}
+
+.botao_login:hover, .botao_cadastro:hover {
+    box-shadow: 4px 4px 7px rgba(0, 0, 0, 0.171);
+    transition: 0.2s ease;
+    cursor:pointer;
+}
+
+
+
+
+
+#mostrarLogin, #mostrarCadastro {
+    background-color: transparent;
+    border: none;
+    color: #ffffff;
+    font-weight: bolder;
+}
+
+#mostrarLogin:hover, #mostrarCadastro:hover {
+    cursor: pointer;
+    opacity: 0.8;
+    text-decoration: underline;
 }
