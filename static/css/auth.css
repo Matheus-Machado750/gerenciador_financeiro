@@ -129,13 +129,9 @@ body {
     position: relative;
     width: 43%;
     height: 100%;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
-h2 {
+.titulo_form {
     color:#146bad;
     font-weight: bolder;
     font-size: 30px;
@@ -147,6 +143,8 @@ h2 {
 .campo_login,
 .campo_cadastro {
     position: absolute;
+    top: 95px;
+    left: 12.5%;
     width: 75%;
     transition: opacity 0.35s ease, transform 0.35s ease, visibility 0.35s ease;
 }
@@ -193,9 +191,8 @@ h2 {
 .auth_forms .senha_repetida {
     border: none;
     background-color: #E7E7E7;
-    height: 37px;
+    height: 40px;
     border-radius: 3px;
-    margin-bottom: 20px;
     font-size: 16px;
 }
 
@@ -249,6 +246,7 @@ h2 {
 .input_div {
     position: relative;
     width: 100%;
+    margin-bottom: 20px;
 }
 
 .input_div input {
