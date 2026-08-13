@@ -3,6 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash #Impor
 import sqlite3
 import os
 from datetime import datetime
+from functools import wraps
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "chave-dev-temporaria")
@@ -147,6 +148,22 @@ def usuario_logado_id():
 
     return session.get("usuario_id")
 
+
+def login_obrigatorio(func):
+    """
+    função 'porteiro', que verifica se existe se existe usuario_id salvo na sessão. Se não existir, manda pra /auth
+    """
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if not usuario_logado_id():
+            if request.path.startswith("/api/"):
+                return jsonify({"erro": "Login obrigátorio."}), 401
+
+            return redirect(url_for("auth"))
+
+        return func(*args, **kwargs)
+
+    return wrapper
 
 def buscar_despesas_avulsas(mes, ano):
     conexao = get_db_connection()
