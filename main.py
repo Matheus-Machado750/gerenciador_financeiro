@@ -414,12 +414,14 @@ def salvar_receita():
     return redirect(url_for("index", mes=mes))
 
 @app.route("/api/gastos-fixos", methods=["GET"])
+@login_obrigatorio
 def listar_gastos_fixos_api():
     itens = [serializar_gasto_fixo(linha) for linha in buscar_gastos_fixos_config()]
     return jsonify(itens)
 
 
 @app.route("/api/gastos-fixos", methods=["POST"])
+@login_obrigatorio
 def criar_gasto_fixo_api():
     dados = request.get_json(silent=True) or {}
 
@@ -464,6 +466,7 @@ def criar_gasto_fixo_api():
 
 
 @app.route("/api/gastos-fixos/<int:id>/toggle", methods=["POST"])
+@login_obrigatorio
 def alternar_gasto_fixo_api(id):
     conexao = get_db_connection()
     cursor = conexao.cursor()
@@ -493,6 +496,7 @@ def alternar_gasto_fixo_api(id):
 
 
 @app.route("/api/gastos-fixos/<int:id>", methods=["DELETE"])
+@login_obrigatorio
 def excluir_gasto_fixo_api(id):
     conexao = get_db_connection()
     cursor = conexao.cursor()
