@@ -276,6 +276,7 @@ def buscar_receita_mes(mes, ano):
     return float(resultado["valor"]) if resultado else None
 
 @app.route("/")
+@login_obrigatorio
 def index():
     agora = datetime.now()
     mes = request.args.get("mes", type=int)
@@ -309,6 +310,7 @@ def index():
     )
 
 @app.route("/simulacao")
+@login_obrigatorio
 def simulacao():
     agora = datetime.now()
     mes = request.args.get("mes", type=int)
@@ -330,6 +332,7 @@ def simulacao():
     )
 
 @app.route("/config")
+@login_obrigatorio
 def config():
     agora = datetime.now()
     receita = buscar_receita_mes(agora.month, agora.year) or 0
@@ -337,6 +340,7 @@ def config():
 
 
 @app.route("/enviar-dados", methods=["POST"])
+@login_obrigatorio
 def enviar_dados():
     
     nome = request.form["nome"]
@@ -361,6 +365,7 @@ def enviar_dados():
     return redirect(url_for("index", mes=mes))
 
 @app.route("/excluir/<int:id>")
+@login_obrigatorio
 def excluir_despesa(id):
 
     mes = request.args.get("mes", type=int)
@@ -377,7 +382,7 @@ def excluir_despesa(id):
 
 
 @app.route("/salvar_receita", methods=["POST"])
-
+@login_obrigatorio
 def salvar_receita():
 
     mes = int(request.form["mes"])
