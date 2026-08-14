@@ -359,6 +359,7 @@ def enviar_dados():
     nome = request.form["nome"]
     valor = request.form["valor"]
     prioridade = request.form["prioridade"]
+    usuario_id = usuario_logado_id()
 
     mes = int(request.form["mes"])
     ano = datetime.now().year
@@ -368,9 +369,9 @@ def enviar_dados():
     conexao = get_db_connection()
     cursor = conexao.cursor()
 
-    cursor.execute("""INSERT INTO despesas (nome, valor, prioridade, data_criacao)
-                   VALUES (?, ?, ?, ?)
-                   """, (nome, valor, prioridade, data_criacao))
+    cursor.execute("""INSERT INTO despesas (usuario_id, nome, valor, prioridade, data_criacao)
+                   VALUES (?, ?, ?, ?, ?)
+                   """, (usuario_id, nome, valor, prioridade, data_criacao))
     
     conexao.commit()
     conexao.close()
@@ -386,7 +387,11 @@ def excluir_despesa(id):
     conexao = get_db_connection()
     cursor = conexao.cursor()
 
-    cursor.execute("DELETE from despesas WHERE id = ?", (id,))
+    cursor.execute("""
+        DELETE from despesas 
+        WHERE id = ?
+            AND usuario_id = ?
+        """, (id, usuario_logado_id())) #Para impedir que um usuário exclua despesas de outro manipulando a URL
 
     conexao.commit()
     conexao.close()
@@ -401,6 +406,7 @@ def salvar_receita():
     mes = int(request.form["mes"])
     ano = datetime.now().year
     valor_str = request.form.get("valor", "").strip()
+    usuario_id = usuario_logado_id()
 
     if not valor_str:
         return redirect(url_for("index", mes=mes))
@@ -415,10 +421,10 @@ def salvar_receita():
     cursor = conexao.cursor()
 
     # remove receita antiga
-    cursor.execute("DELETE FROM receita WHERE mes = ? AND ano = ?", (mes, ano))
+    cursor.execute("DELETE FROM receita WHERE usuario_id = ? AND mes = ? AND ano = ?", (usuario_id, mes, ano))
 
     # insere nova
-    cursor.execute("INSERT INTO receita (valor, mes, ano) VALUES (?, ?, ?)", (valor, mes, ano))
+    cursor.execute("INSERT INTO receita (usuario_id, valor, mes, ano) VALUES (?, ?, ?, ?)", (usuario_id, valor, mes, ano))
 
 
     conexao.commit()
@@ -429,7 +435,8 @@ def salvar_receita():
 @app.route("/api/gastos-fixos", methods=["GET"])
 @login_obrigatorio
 def listar_gastos_fixos_api():
-    itens = [serializar_gasto_fixo(linha) for linha in buscar_gastos_fixos_config()]
+    usuario_id = usuario_logado_id()
+    itens = [serializar_gasto_fixo(linha) for linha in buscar_gastos_fixos_config(usuario_id)]
     return jsonify(itens)
 
 
@@ -441,6 +448,7 @@ def criar_gasto_fixo_api():
     nome = str(dados.get("nome", "")).strip()
     valor_bruto = str(dados.get("valor", "")).strip().replace(",", ".")
     prioridade = str(dados.get("prioridade", "")).strip()
+    usuario_id = usuario_logado_id()
 
     if not nome or not valor_bruto or prioridade not in PRIORIDADES_VALIDAS:
         return jsonify({"erro": "Dados inválidos."}), 400
@@ -459,9 +467,9 @@ def criar_gasto_fixo_api():
     cursor = conexao.cursor()
 
     cursor.execute("""
-        INSERT INTO gastos_fixos (nome, valor, prioridade, ativo, data_inicio)
-        VALUES (?, ?, ?, 1, ?)
-    """, (nome[:20], valor, prioridade, data_inicio))
+        INSERT INTO gastos_fixos (usuario_id, nome, valor, prioridade, ativo, data_inicio)
+        VALUES (?, ?, ?, ?, 1, ?)
+    """, (usuario_id, nome[:20], valor, prioridade, data_inicio))
 
     novo_id = cursor.lastrowid
     conexao.commit()
@@ -470,7 +478,8 @@ def criar_gasto_fixo_api():
         SELECT id, nome, valor, prioridade, ativo, data_inicio
         FROM gastos_fixos
         WHERE id = ?
-    """, (novo_id,))
+        AND usuario_id = ?
+    """, (novo_id, usuario_id))
 
     novo_item = cursor.fetchone()
     conexao.close()
@@ -481,6 +490,8 @@ def criar_gasto_fixo_api():
 @app.route("/api/gastos-fixos/<int:id>/toggle", methods=["POST"])
 @login_obrigatorio
 def alternar_gasto_fixo_api(id):
+    usuario_id = usuario_logado_id()
+
     conexao = get_db_connection()
     cursor = conexao.cursor()
 
@@ -488,7 +499,8 @@ def alternar_gasto_fixo_api(id):
         UPDATE gastos_fixos
         SET ativo = CASE WHEN ativo = 1 THEN 0 ELSE 1 END
         WHERE id = ?
-    """, (id,))
+          AND usuario_id = ?
+    """, (id, usuario_id))
 
     if cursor.rowcount == 0:
         conexao.close()
@@ -500,7 +512,8 @@ def alternar_gasto_fixo_api(id):
         SELECT id, nome, valor, prioridade, ativo, data_inicio
         FROM gastos_fixos
         WHERE id = ?
-    """, (id,))
+          AND usuario_id = ?
+    """, (id, usuario_id))
 
     item = cursor.fetchone()
     conexao.close()
@@ -511,10 +524,12 @@ def alternar_gasto_fixo_api(id):
 @app.route("/api/gastos-fixos/<int:id>", methods=["DELETE"])
 @login_obrigatorio
 def excluir_gasto_fixo_api(id):
+    usuario_id = usuario_logado_id()
+
     conexao = get_db_connection()
     cursor = conexao.cursor()
 
-    cursor.execute("DELETE FROM gastos_fixos WHERE id = ?", (id,))
+    cursor.execute("DELETE FROM gastos_fixos WHERE id = ? AND usuario_id = ?", (id, usuario_id))
 
     if cursor.rowcount == 0:
         conexao.close()
