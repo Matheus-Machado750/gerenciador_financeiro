@@ -1,4 +1,4 @@
-* {
+﻿* {
     margin: 0; /* Margem externa */
     padding: 0; /* Margem interna */
     box-sizing: border-box;
@@ -37,11 +37,10 @@ nav { /* Toda a NAVBAR */
     position: fixed;
     justify-content: space-between;
     padding: 0 50px;
-    height: 80px;
+    height: 750px;
     align-items: center;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
     width: 100%;
-    z-index: 900;
 }
 
 .faixa_navbar {
@@ -620,7 +619,7 @@ tfoot {
     color: #e74e4e;
 }
 
-/*SESSAO 3 ///////////////////////////////////// SIMULACAO ///////////////////////////////////// */
+/*SESSAO 3 ///////////////////////////////////// SIMULAÇÃO ///////////////////////////////////// */
 
 .simulacao {
     padding-left: 20px;

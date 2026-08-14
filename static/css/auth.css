@@ -1,0 +1,295 @@
+/* auth CSS */
+
+* {
+    margin: 0; /* Margem externa */
+    padding: 0; /* Margem interna */
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+html {
+    scroll-behavior: smooth; /* Suaviza o scroll na movimentacao da página */
+}
+
+html, body {
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    overflow: hidden;
+    background-color: #ffffff;
+
+    background-image:
+        url("../img/canto_superior_esquerdo.png"),
+        url("../img/canto_superior_direito.png"),
+        url("../img/canto_inferior_esquerdo.png"),
+        url("../img/canto_inferior_direito.png");
+
+    background-repeat:
+        no-repeat,
+        no-repeat,
+        no-repeat,
+        no-repeat;
+
+    background-position:
+        left 37px top 32px,
+        top right,
+        bottom left,
+        right 37px bottom 32px;
+
+    background-size:
+        clamp(420px, 26vw, 1007px) auto,
+        clamp(460px, 22vw, 860px) auto,
+        clamp(400px, 20vw, 865px) auto,
+        clamp(350px, 17vw, 711px) auto;
+}
+
+
+
+/* //////////////////////////////////// FUNDO ///////////////////////////////////// */
+
+/* //////////////////////////////////// CARD CENTRAL ///////////////////////////////////// */
+
+.auth_container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth_card {
+    width: 75%;
+    height: 510px;
+    display: flex;
+    overflow: hidden;
+    border-radius: 17px;
+    background-color: rgba(249, 249, 249, 0.548);
+    backdrop-filter: blur(2px);
+}
+
+/* //////////////////////////////////// LADO ESQUERDO ///////////////////////////////////// */
+
+.auth_info {
+    position: relative;
+    width: 57%;
+    height: 100%;
+    padding: 70px 65px;
+}
+
+.texto_login,
+.texto_cadastro {
+    position: absolute;
+    top: 75px;
+    left: 65px;
+    right: 65px;
+    transition: opacity 0.35s ease, transform 0.35s ease, visibility 0.35s ease;
+}
+
+.texto_login h1,
+.texto_cadastro h1 {
+    font-size: 38px;
+    line-height: 1.1;
+    margin-top: 20px;
+    margin-bottom: 50px;
+    color: #146bad;
+}
+
+
+.texto_login p,
+.texto_cadastro p {
+    font-size: 17px;
+    line-height: 1.6;
+}
+
+.auth_contatos {
+    position: absolute;
+    left: 65px;
+    bottom: 55px;
+    display: flex;
+    gap: 30px;
+}
+
+.auth_contatos i {
+    color: #1166a7;
+    padding: 20px;
+    font-size: 30px;
+    margin: 5px;
+    transition: 0.2s ease-in-out;
+}
+
+.auth_contatos i:hover {
+    border-radius: 7px;
+    background-color: rgb(155, 249, 212);
+}
+
+/* //////////////////////////////////// LADO DIREITO ///////////////////////////////////// */
+
+.auth_forms {
+    position: relative;
+    width: 43%;
+    height: 100%;
+}
+
+.titulo_form {
+    color:#146bad;
+    font-weight: bolder;
+    font-size: 30px;
+    text-align: center;
+    margin-bottom: 27px;
+}
+
+
+.campo_login,
+.campo_cadastro {
+    position: absolute;
+    top: 95px;
+    left: 12.5%;
+    width: 75%;
+    transition: opacity 0.35s ease, transform 0.35s ease, visibility 0.35s ease;
+}
+
+/* //////////////////////////////////// ALTERNANCIA ///////////////////////////////////// */
+
+.auth_container.modo-login .texto_login,
+.auth_container.modo-login .campo_login,
+.auth_container.modo-cadastro .texto_cadastro,
+.auth_container.modo-cadastro .campo_cadastro {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+    pointer-events: auto;
+}
+
+.auth_container.modo-login .texto_cadastro,
+.auth_container.modo-login .campo_cadastro {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(35px);
+    pointer-events: none;
+}
+
+.auth_container.modo-cadastro .texto_login,
+.auth_container.modo-cadastro .campo_login {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-35px);
+    pointer-events: none;
+}
+
+
+
+/* //////////////////////////////////// Formulário ///////////////////////////////////// */
+
+.formulario_login, .formulario_cadastro {
+    display: flex;
+    flex-direction: column;
+}
+
+.auth_forms .email,
+.auth_forms .senha,
+.auth_forms .senha_repetida {
+    border: none;
+    background-color: #E7E7E7;
+    height: 40px;
+    border-radius: 3px;
+    font-size: 16px;
+}
+
+.auth_forms .email:focus,
+.auth_forms .senha:focus,
+.auth_forms .senha_repetida:focus {
+    border: none;
+    outline: 2px solid rgb(41, 193, 236)
+}
+
+
+
+.botao_login, .botao_cadastro {
+    margin-bottom: 30px;
+    width: 100%;
+    height: 38px;
+    font-size: 16px;
+    border-radius: 4px;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: rgb(106, 223, 174);
+    border: none;
+}
+
+.botao_login:hover, .botao_cadastro:hover {
+    box-shadow: 4px 4px 7px rgba(22, 138, 221, 0.314);
+    transition: 0.2s ease;
+    cursor:pointer;
+}
+
+.texto_conta {
+    text-align: center;
+}
+
+
+
+#mostrarLogin, #mostrarCadastro { /* Link de clique pra alterar visualmente */
+    background-color: transparent;
+    border: none;
+    color: #2f9cfb;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+#mostrarLogin:hover, #mostrarCadastro:hover {
+    cursor: pointer;
+    opacity: 0.8;
+    text-decoration: underline;
+}
+
+.input_div {
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.input_div input {
+    width: 100%;
+    height: 40px;
+    border: none;
+    border-radius: 3px;
+    background-color: #E7E7E7;
+    padding: 0 45px 0 14px;
+}
+
+.input_icon,
+.toggle_senha {
+    font-size: 18px;
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.input_icon {
+    color: #808080;
+    pointer-events: none;
+}
+
+.toggle_senha {
+    border: none;
+    background: transparent;
+    color:#808080;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lembrar_linha {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.lembrar_linha input {
+    width: 14px;
+    height: 14px;
+}

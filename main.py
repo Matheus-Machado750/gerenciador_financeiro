@@ -1,9 +1,13 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for, jsonify, session
+from werkzeug.security import generate_password_hash, check_password_hash #Importação funções de Hash
 import sqlite3
 import os
 from datetime import datetime
+from functools import wraps
 
 app = Flask(__name__)
+app.secret_key = os.environ.get("SECRET_KEY", "chave-dev-temporaria")
+"""O Flask vai usar essa chave para assinar o cookie de sessão, impedindo que alguém altere o conteúdo da sessão no navegador e o Flask aceite como se fosse verdadeiro"""
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "database", "finance.db")
@@ -16,21 +20,37 @@ def get_db_connection():
     return conexao
 
 
+def criar_tabela_usuarios():
+    conexao = get_db_connection()
+    cursor = conexao.cursor()
+
+    cursor.execute(""" CREATE TABLE IF NOT EXISTS usuarios (
+        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        email TEXT NOT NULL UNIQUE,
+        senha_hash TEXT NOT NULL,
+        criado_em TEXT NOT NULL
+        )""" ) #O Hash da senha já é nativo do Flask e traz mais segurança
+    
+    conexao.commit()
+    conexao.close()
+
+
 def criar_tabela_despesas():
     conexao = get_db_connection()
     cursor = conexao.cursor()
 
     cursor.execute(""" CREATE TABLE IF NOT EXISTS despesas (
                    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                   usuario_id INTEGER NOT NULL,
                    nome TEXT NOT NULL,
                    valor REAL NOT NULL,
                    prioridade TEXT NOT NULL,
-                   data_criacao TEXT NOT NULL
-                   )""")
+                   data_criacao TEXT NOT NULL,
+                   FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+                   )""" )
     
     conexao.commit()
     conexao.close()
-
 
 
 def criar_tabela_receita():
@@ -39,13 +59,17 @@ def criar_tabela_receita():
 
     cursor.execute(""" CREATE TABLE IF NOT EXISTS receita (
                    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                   usuario_id INTEGER NOT NULL,
                    valor REAL NOT NULL,
                    mes INTEGER NOT NULL,
-                   ano INTEGER NOT NULL
-                   )""")
+                   ano INTEGER NOT NULL,
+                   FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
+                   UNIQUE(usuario_id, mes, ano)
+                   )""" ) #Para garantir que cada usuario tenha uma receita por mês e ano
     
     conexao.commit()
     conexao.close()
+
 
 def criar_tabela_gastos_fixos():
     conexao = get_db_connection()
@@ -53,33 +77,112 @@ def criar_tabela_gastos_fixos():
 
     cursor.execute(""" CREATE TABLE IF NOT EXISTS gastos_fixos (
             id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+            usuario_id INTEGER NOT NULL,
             nome TEXT NOT NULL,
             valor REAL NOT NULL,
             prioridade TEXT NOT NULL,
             ativo INTEGER NOT NULL DEFAULT 1,
-            data_inicio TEXT NOT NULL
-        )""")
+            data_inicio TEXT NOT NULL,
+            FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+            )""")
 
     conexao.commit()
     conexao.close()
 
-def buscar_despesas_avulsas(mes, ano):
+
+def criar_usuario(email, senha):
+
+    email = email.strip().lower() #Para garantir tratamento unitário dos e-mails
+    senha_hash = generate_password_hash(senha) #Recebe a senha pura mas já tranforma ela com hash
+    criado_em = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    conexao = get_db_connection()
+    cursor = conexao.cursor()
+
+    cursor.execute(""" INSERT INTO usuarios (email, senha_hash, criado_em)
+                   VALUES (?, ?, ?)
+                   """, (email, senha_hash, criado_em))
+    
+    usuario_id = cursor.lastrowid #Pega o ultimo id
+
+    conexao.commit()
+    conexao.close()
+
+    return usuario_id
+
+
+def buscar_usuario_por_email(email):
+    """
+    Função para login e cadastro;
+    No login, é usado p/ encontrar a conta, no cadastro impede email duplicado.
+    """
+    email = email.strip().lower() #Para garantir tratamento unitário dos e-mails
+
+    conexao = get_db_connection()
+    cursor = conexao.cursor()
+
+    cursor.execute(""" SELECT id, email, senha_hash, criado_em
+                   FROM usuarios
+                   WHERE email = ?
+                   """, (email,))
+    
+    usuario = cursor.fetchone()
+    conexao.close()
+
+    return usuario
+
+
+def validar_login(email, senha):
+    usuario = buscar_usuario_por_email(email)
+
+    if usuario is None:
+        return None
+    
+    if not check_password_hash(usuario["senha_hash"], senha):
+        return None
+
+    return usuario
+
+
+def usuario_logado_id():
+
+    return session.get("usuario_id")
+
+
+def login_obrigatorio(func):
+    """
+    função 'porteiro', que verifica se existe se existe usuario_id salvo na sessão. Se não existir, manda pra /auth
+    """
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if not usuario_logado_id():
+            if request.path.startswith("/api/"):
+                return jsonify({"erro": "Login obrigátorio."}), 401
+
+            return redirect(url_for("auth"))
+
+        return func(*args, **kwargs)
+
+    return wrapper
+
+def buscar_despesas_avulsas(usuario_id, mes, ano):
     conexao = get_db_connection()
     cursor = conexao.cursor()
 
     cursor.execute(""" SELECT id, nome, valor, prioridade, data_criacao
         FROM despesas
-        WHERE strftime('%m', data_criacao) = ?
+        WHERE usuario_id = ?
+          AND strftime('%m', data_criacao) = ?
           AND strftime('%Y', data_criacao) = ?
         ORDER BY data_criacao DESC, id DESC
-    """, (f"{mes:02d}", str(ano)))
+    """, (usuario_id, f"{mes:02d}", str(ano)))
 
     despesas = cursor.fetchall()
     conexao.close()
     return despesas
 
 
-def buscar_gastos_fixos_ativos(mes, ano):
+def buscar_gastos_fixos_ativos(usuario_id, mes, ano):
     data_referencia = f"{ano}-{mes:02d}-01"
 
     conexao = get_db_connection()
@@ -87,26 +190,27 @@ def buscar_gastos_fixos_ativos(mes, ano):
 
     cursor.execute(""" SELECT id, nome, valor, prioridade, ativo, data_inicio
         FROM gastos_fixos
-        WHERE ativo = 1
+        WHERE usuario_id = ?
+          AND ativo = 1
           AND date(data_inicio) <= date(?)
         ORDER BY id DESC
-    """, (data_referencia,))
+    """, (usuario_id, data_referencia,))
 
     gastos_fixos = cursor.fetchall()
     conexao.close()
     return gastos_fixos
 
 
-def buscar_despesas(mes, ano):
+def buscar_despesas(usuario_id, mes, ano):
     despesas = []
 
-    for linha in buscar_despesas_avulsas(mes, ano):
+    for linha in buscar_despesas_avulsas(usuario_id, mes, ano):
         item = dict(linha)
         item["uid"] = f"manual-{linha['id']}"
         item["tipo"] = "manual"
         despesas.append(item)
 
-    for linha in buscar_gastos_fixos_ativos(mes, ano):
+    for linha in buscar_gastos_fixos_ativos(usuario_id, mes, ano):
         despesas.append({
             "id": linha["id"],
             "uid": f"fixo-{linha['id']}",
@@ -139,13 +243,15 @@ def calcular_gastos_por_prioridade(despesas):
     return gastos
 
 
-def buscar_gastos_fixos_config():
+def buscar_gastos_fixos_config(usuario_id):
     conexao = get_db_connection()
     cursor = conexao.cursor()
 
     cursor.execute(""" SELECT id, nome, valor, prioridade, ativo, data_inicio
         FROM gastos_fixos
-        ORDER BY id DESC """)
+        WHERE usuario_id = ?
+        ORDER BY id DESC 
+        """, (usuario_id,))
 
     itens = cursor.fetchall()
     conexao.close()
@@ -162,11 +268,17 @@ def serializar_gasto_fixo(linha):
         "data_inicio": linha["data_inicio"],
     }
 
-def buscar_receita_mes(mes, ano):
+def buscar_receita_mes(usuario_id, mes, ano):
     conexao = get_db_connection()
     cursor = conexao.cursor()
 
-    cursor.execute("SELECT valor FROM receita WHERE mes = ? AND ano = ?", (mes, ano))
+    cursor.execute("""
+        SELECT valor 
+        FROM receita 
+        WHERE usuario_id = ?
+        AND mes = ? 
+        AND ano = ?
+        """, (usuario_id, mes, ano))
 
     resultado = cursor.fetchone()
     conexao.close()
@@ -174,20 +286,22 @@ def buscar_receita_mes(mes, ano):
     return float(resultado["valor"]) if resultado else None
 
 @app.route("/")
+@login_obrigatorio
 def index():
     agora = datetime.now()
     mes = request.args.get("mes", type=int)
+    usuario_id = usuario_logado_id()
 
     if not mes:
         mes = agora.month
 
     ano = agora.year
 
-    despesas = buscar_despesas(mes, ano)
+    despesas = buscar_despesas(usuario_id, mes, ano)
     total = calcular_total_despesas(despesas)
     gastos_prioridade = calcular_gastos_por_prioridade(despesas)
 
-    receita = buscar_receita_mes(mes, ano)
+    receita = buscar_receita_mes(usuario_id, mes, ano)
     if receita is None:
         receita_formatada = "0.00"
     else:
@@ -207,16 +321,18 @@ def index():
     )
 
 @app.route("/simulacao")
+@login_obrigatorio
 def simulacao():
     agora = datetime.now()
     mes = request.args.get("mes", type=int)
+    usuario_id = usuario_logado_id()
 
     if not mes or mes < 1 or mes > 12:
         mes = agora.month
 
     ano = agora.year
 
-    despesas = buscar_despesas(mes, ano)
+    despesas = buscar_despesas(usuario_id, mes, ano)
     total_original = calcular_total_despesas(despesas)
 
     return render_template(
@@ -228,18 +344,22 @@ def simulacao():
     )
 
 @app.route("/config")
+@login_obrigatorio
 def config():
     agora = datetime.now()
-    receita = buscar_receita_mes(agora.month, agora.year) or 0
+    usuario_id = usuario_logado_id()
+    receita = buscar_receita_mes(usuario_id, agora.month, agora.year) or 0
     return render_template("config.html", receita_config=receita)
 
 
 @app.route("/enviar-dados", methods=["POST"])
+@login_obrigatorio
 def enviar_dados():
     
     nome = request.form["nome"]
     valor = request.form["valor"]
     prioridade = request.form["prioridade"]
+    usuario_id = usuario_logado_id()
 
     mes = int(request.form["mes"])
     ano = datetime.now().year
@@ -249,9 +369,9 @@ def enviar_dados():
     conexao = get_db_connection()
     cursor = conexao.cursor()
 
-    cursor.execute("""INSERT INTO despesas (nome, valor, prioridade, data_criacao)
-                   VALUES (?, ?, ?, ?)
-                   """, (nome, valor, prioridade, data_criacao))
+    cursor.execute("""INSERT INTO despesas (usuario_id, nome, valor, prioridade, data_criacao)
+                   VALUES (?, ?, ?, ?, ?)
+                   """, (usuario_id, nome, valor, prioridade, data_criacao))
     
     conexao.commit()
     conexao.close()
@@ -259,6 +379,7 @@ def enviar_dados():
     return redirect(url_for("index", mes=mes))
 
 @app.route("/excluir/<int:id>")
+@login_obrigatorio
 def excluir_despesa(id):
 
     mes = request.args.get("mes", type=int)
@@ -266,7 +387,11 @@ def excluir_despesa(id):
     conexao = get_db_connection()
     cursor = conexao.cursor()
 
-    cursor.execute("DELETE from despesas WHERE id = ?", (id,))
+    cursor.execute("""
+        DELETE from despesas 
+        WHERE id = ?
+            AND usuario_id = ?
+        """, (id, usuario_logado_id())) #Para impedir que um usuário exclua despesas de outro manipulando a URL
 
     conexao.commit()
     conexao.close()
@@ -275,12 +400,13 @@ def excluir_despesa(id):
 
 
 @app.route("/salvar_receita", methods=["POST"])
-
+@login_obrigatorio
 def salvar_receita():
 
     mes = int(request.form["mes"])
     ano = datetime.now().year
     valor_str = request.form.get("valor", "").strip()
+    usuario_id = usuario_logado_id()
 
     if not valor_str:
         return redirect(url_for("index", mes=mes))
@@ -295,10 +421,10 @@ def salvar_receita():
     cursor = conexao.cursor()
 
     # remove receita antiga
-    cursor.execute("DELETE FROM receita WHERE mes = ? AND ano = ?", (mes, ano))
+    cursor.execute("DELETE FROM receita WHERE usuario_id = ? AND mes = ? AND ano = ?", (usuario_id, mes, ano))
 
     # insere nova
-    cursor.execute("INSERT INTO receita (valor, mes, ano) VALUES (?, ?, ?)", (valor, mes, ano))
+    cursor.execute("INSERT INTO receita (usuario_id, valor, mes, ano) VALUES (?, ?, ?, ?)", (usuario_id, valor, mes, ano))
 
 
     conexao.commit()
@@ -307,18 +433,22 @@ def salvar_receita():
     return redirect(url_for("index", mes=mes))
 
 @app.route("/api/gastos-fixos", methods=["GET"])
+@login_obrigatorio
 def listar_gastos_fixos_api():
-    itens = [serializar_gasto_fixo(linha) for linha in buscar_gastos_fixos_config()]
+    usuario_id = usuario_logado_id()
+    itens = [serializar_gasto_fixo(linha) for linha in buscar_gastos_fixos_config(usuario_id)]
     return jsonify(itens)
 
 
 @app.route("/api/gastos-fixos", methods=["POST"])
+@login_obrigatorio
 def criar_gasto_fixo_api():
     dados = request.get_json(silent=True) or {}
 
     nome = str(dados.get("nome", "")).strip()
     valor_bruto = str(dados.get("valor", "")).strip().replace(",", ".")
     prioridade = str(dados.get("prioridade", "")).strip()
+    usuario_id = usuario_logado_id()
 
     if not nome or not valor_bruto or prioridade not in PRIORIDADES_VALIDAS:
         return jsonify({"erro": "Dados inválidos."}), 400
@@ -337,9 +467,9 @@ def criar_gasto_fixo_api():
     cursor = conexao.cursor()
 
     cursor.execute("""
-        INSERT INTO gastos_fixos (nome, valor, prioridade, ativo, data_inicio)
-        VALUES (?, ?, ?, 1, ?)
-    """, (nome[:20], valor, prioridade, data_inicio))
+        INSERT INTO gastos_fixos (usuario_id, nome, valor, prioridade, ativo, data_inicio)
+        VALUES (?, ?, ?, ?, 1, ?)
+    """, (usuario_id, nome[:20], valor, prioridade, data_inicio))
 
     novo_id = cursor.lastrowid
     conexao.commit()
@@ -348,7 +478,8 @@ def criar_gasto_fixo_api():
         SELECT id, nome, valor, prioridade, ativo, data_inicio
         FROM gastos_fixos
         WHERE id = ?
-    """, (novo_id,))
+        AND usuario_id = ?
+    """, (novo_id, usuario_id))
 
     novo_item = cursor.fetchone()
     conexao.close()
@@ -357,7 +488,10 @@ def criar_gasto_fixo_api():
 
 
 @app.route("/api/gastos-fixos/<int:id>/toggle", methods=["POST"])
+@login_obrigatorio
 def alternar_gasto_fixo_api(id):
+    usuario_id = usuario_logado_id()
+
     conexao = get_db_connection()
     cursor = conexao.cursor()
 
@@ -365,7 +499,8 @@ def alternar_gasto_fixo_api(id):
         UPDATE gastos_fixos
         SET ativo = CASE WHEN ativo = 1 THEN 0 ELSE 1 END
         WHERE id = ?
-    """, (id,))
+          AND usuario_id = ?
+    """, (id, usuario_id))
 
     if cursor.rowcount == 0:
         conexao.close()
@@ -377,7 +512,8 @@ def alternar_gasto_fixo_api(id):
         SELECT id, nome, valor, prioridade, ativo, data_inicio
         FROM gastos_fixos
         WHERE id = ?
-    """, (id,))
+          AND usuario_id = ?
+    """, (id, usuario_id))
 
     item = cursor.fetchone()
     conexao.close()
@@ -386,11 +522,14 @@ def alternar_gasto_fixo_api(id):
 
 
 @app.route("/api/gastos-fixos/<int:id>", methods=["DELETE"])
+@login_obrigatorio
 def excluir_gasto_fixo_api(id):
+    usuario_id = usuario_logado_id()
+
     conexao = get_db_connection()
     cursor = conexao.cursor()
 
-    cursor.execute("DELETE FROM gastos_fixos WHERE id = ?", (id,))
+    cursor.execute("DELETE FROM gastos_fixos WHERE id = ? AND usuario_id = ?", (id, usuario_id))
 
     if cursor.rowcount == 0:
         conexao.close()
@@ -402,7 +541,62 @@ def excluir_gasto_fixo_api(id):
     return "", 204
 
 
+@app.route("/auth")
+def auth():
+    if usuario_logado_id():
+        return redirect(url_for("index"))
+    
+    modo = request.args.get("modo", "login")
+    return render_template("auth.html", modo=modo)
+
+
+@app.route("/cadastro", methods=["POST"])
+def cadastro():
+    email = request.form.get("email", "").strip().lower()
+    senha = request.form.get("senha", "")
+    confirmar_senha = request.form.get("confirmar_senha", "")
+
+    if not email or not senha or not confirmar_senha:
+        return redirect(url_for("auth", modo="cadastro"))
+    
+    if senha != confirmar_senha:
+        return redirect(url_for("auth", modo="cadastro"))
+    
+    if buscar_usuario_por_email(email):
+        return redirect(url_for("auth", modo="cadastro"))
+
+    usuario_id = criar_usuario(email, senha)
+
+    session.clear()
+    session["usuario_id"] = usuario_id
+
+    return redirect(url_for("index"))
+
+
+@app.route("/login", methods=["POST"])
+def login():
+    email = request.form.get("email", "").strip().lower()
+    senha = request.form.get("senha", "")
+
+    usuario = validar_login(email, senha)
+
+    if usuario is None:
+        return redirect(url_for("auth", modo="login"))
+
+    session.clear()
+    session["usuario_id"] = usuario["id"]
+
+    return redirect(url_for("index"))
+
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("auth"))
+
+
 def inicializar_banco():
+    criar_tabela_usuarios()
     criar_tabela_despesas()
     criar_tabela_receita()
     criar_tabela_gastos_fixos()

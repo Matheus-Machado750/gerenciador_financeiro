@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | Gerenciador Financeiro</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+
+<body>
+
+    <section class="auth_container {% if modo == 'cadastro' %} modo-cadastro {% else %} modo-login {% endif %}" id="authContainer">
+
+    <!-- ////////////////////////// CARD CENTRAL ////////////////////////// -->
+
+        <div class="auth_card">
+
+            <div class="auth_info">
+
+                <div class="texto_login">
+                    <h1>Que bom ter você de volta!</h1>
+                    <p>Acesse sua conta e continue acompanhando suas despesas, planejando seu orçamento e organizando sua vida financeira.</p>
+                </div>
+
+                <div class="texto_cadastro">
+                    <h1>Seja bem-vindo!</h1>
+                    <p>Crie sua conta e descubra uma forma simples de registrar despesas, acompanhar gastos recorrentes, visualizar simulações e manter suas finanças sempre organizadas.</p>
+                </div>
+
+                <div class="auth_contatos">
+                    <a href=https://github.com/Matheus-Machado750 title="Github" target="_blank"> <i class="fa-brands fa-github"></i></a>
+                    <a href="https://wa.me/5571997144718" title="WhatsApp" target="_blank"> <i class="fa-brands fa-whatsapp" ></i></a>
+                    <a href=https://www.linkedin.com/in/matheus-machado-dos-santos-dev/ title="Linkedln" target="_blank"> <i class="fa-brands fa-linkedin"></i></a>
+                    <a href="mailto:marilenemateus750@gmail.com" title="Email" target="_blank"> <i class="fa-solid fa-envelope"></i></a>
+                </div>
+
+            </div>
+
+    <!-- ////////////////////////// FORMULÁRIOS ////////////////////////// --> 
+ 
+            <div class="auth_forms">   
+
+                <div class="campo_login">
+
+                    <form action="{{ url_for('login') }}" method="POST" class="formulario_login">
+
+                        <h2 class="titulo_form"> Login </h2>
+
+                        <div class="input_div">
+                            <input type="email" name="email" autocomplete="email" placeholder="Email" required class="email">
+                            <i class="fa-solid fa-envelope input_icon"></i>
+                        </div>
+
+                        <div class="input_div">
+                            <input type="password" name="senha" autocomplete="current-password" placeholder="Senha" required class="senha">
+
+                            <button type="button" class="toggle_senha" aria-label="Mostrar senha">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+
+                        <div class="lembrar_linha">
+                            <label for="lembrar_de_mim"> Lembrar de mim </label>
+                            <input type="checkbox" id="lembrar_de_mim" name="lembrar">
+                        </div>
+
+                        <button type="submit" class="botao_login"> Login </button>
+
+                        <p class="texto_conta">
+                            Ainda não tem uma conta?
+                            <button type="button" id="mostrarCadastro"> Cadastre-se </button>
+                        </p>
+
+                    </form>
+
+                </div>
+
+            <!-- ////////////////////////// PARTE CADASTRO ////////////////////////// -->
+
+                <div class="campo_cadastro">
+
+                    <form action="{{ url_for('cadastro') }}" method="POST" class="formulario_cadastro">
+
+                        <h2 class="titulo_form"> Cadastro </h2>
+
+                        <div class="input_div">
+                            <input type="email" name="email" autocomplete="email" placeholder="Email" required class="email">
+                            <i class="fa-solid fa-envelope input_icon"></i>
+                        </div>
+
+                        <div class="input_div">
+                            <input type="password" name="senha" autocomplete="new-password" placeholder="Crie uma senha" required class="senha">
+
+                            <button type="button" class="toggle_senha" aria-label="Mostrar senha">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+
+                        <div class="input_div">
+                            <input type="password" name="confirmar_senha" autocomplete="new-password" placeholder="Confirme sua senha" required class="senha_repetida">
+
+                            <button type="button" class="toggle_senha" aria-label="Mostrar senha">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+
+                        <button type="submit" class="botao_cadastro"> Cadastrar </button>
+
+                        <p class="texto_conta">
+                            Já possui uma conta?
+                            <button type="button" id="mostrarLogin"> Entrar </button>
+                        </p>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+
+</body>
+</html>
