@@ -165,23 +165,24 @@ def login_obrigatorio(func):
 
     return wrapper
 
-def buscar_despesas_avulsas(mes, ano):
+def buscar_despesas_avulsas(usuario_id, mes, ano):
     conexao = get_db_connection()
     cursor = conexao.cursor()
 
     cursor.execute(""" SELECT id, nome, valor, prioridade, data_criacao
         FROM despesas
-        WHERE strftime('%m', data_criacao) = ?
+        WHERE usuario_id = ?
+          AND strftime('%m', data_criacao) = ?
           AND strftime('%Y', data_criacao) = ?
         ORDER BY data_criacao DESC, id DESC
-    """, (f"{mes:02d}", str(ano)))
+    """, (usuario_id, f"{mes:02d}", str(ano)))
 
     despesas = cursor.fetchall()
     conexao.close()
     return despesas
 
 
-def buscar_gastos_fixos_ativos(mes, ano):
+def buscar_gastos_fixos_ativos(usuario_id, mes, ano):
     data_referencia = f"{ano}-{mes:02d}-01"
 
     conexao = get_db_connection()
@@ -189,26 +190,27 @@ def buscar_gastos_fixos_ativos(mes, ano):
 
     cursor.execute(""" SELECT id, nome, valor, prioridade, ativo, data_inicio
         FROM gastos_fixos
-        WHERE ativo = 1
+        WHERE usuario_id = ?
+          AND ativo = 1
           AND date(data_inicio) <= date(?)
         ORDER BY id DESC
-    """, (data_referencia,))
+    """, (usuario_id, data_referencia,))
 
     gastos_fixos = cursor.fetchall()
     conexao.close()
     return gastos_fixos
 
 
-def buscar_despesas(mes, ano):
+def buscar_despesas(usuario_id, mes, ano):
     despesas = []
 
-    for linha in buscar_despesas_avulsas(mes, ano):
+    for linha in buscar_despesas_avulsas(usuario_id, mes, ano):
         item = dict(linha)
         item["uid"] = f"manual-{linha['id']}"
         item["tipo"] = "manual"
         despesas.append(item)
 
-    for linha in buscar_gastos_fixos_ativos(mes, ano):
+    for linha in buscar_gastos_fixos_ativos(usuario_id, mes, ano):
         despesas.append({
             "id": linha["id"],
             "uid": f"fixo-{linha['id']}",
@@ -241,13 +243,15 @@ def calcular_gastos_por_prioridade(despesas):
     return gastos
 
 
-def buscar_gastos_fixos_config():
+def buscar_gastos_fixos_config(usuario_id):
     conexao = get_db_connection()
     cursor = conexao.cursor()
 
     cursor.execute(""" SELECT id, nome, valor, prioridade, ativo, data_inicio
         FROM gastos_fixos
-        ORDER BY id DESC """)
+        WHERE usuario_id = ?
+        ORDER BY id DESC 
+        """, (usuario_id,))
 
     itens = cursor.fetchall()
     conexao.close()
@@ -264,11 +268,17 @@ def serializar_gasto_fixo(linha):
         "data_inicio": linha["data_inicio"],
     }
 
-def buscar_receita_mes(mes, ano):
+def buscar_receita_mes(usuario_id, mes, ano):
     conexao = get_db_connection()
     cursor = conexao.cursor()
 
-    cursor.execute("SELECT valor FROM receita WHERE mes = ? AND ano = ?", (mes, ano))
+    cursor.execute("""
+        SELECT valor 
+        FROM receita 
+        WHERE usuario_id = ?
+        AND mes = ? 
+        AND ano = ?
+        """, (usuario_id, mes, ano))
 
     resultado = cursor.fetchone()
     conexao.close()
@@ -280,17 +290,18 @@ def buscar_receita_mes(mes, ano):
 def index():
     agora = datetime.now()
     mes = request.args.get("mes", type=int)
+    usuario_id = usuario_logado_id()
 
     if not mes:
         mes = agora.month
 
     ano = agora.year
 
-    despesas = buscar_despesas(mes, ano)
+    despesas = buscar_despesas(usuario_id, mes, ano)
     total = calcular_total_despesas(despesas)
     gastos_prioridade = calcular_gastos_por_prioridade(despesas)
 
-    receita = buscar_receita_mes(mes, ano)
+    receita = buscar_receita_mes(usuario_id, mes, ano)
     if receita is None:
         receita_formatada = "0.00"
     else:
@@ -314,13 +325,14 @@ def index():
 def simulacao():
     agora = datetime.now()
     mes = request.args.get("mes", type=int)
+    usuario_id = usuario_logado_id()
 
     if not mes or mes < 1 or mes > 12:
         mes = agora.month
 
     ano = agora.year
 
-    despesas = buscar_despesas(mes, ano)
+    despesas = buscar_despesas(usuario_id, mes, ano)
     total_original = calcular_total_despesas(despesas)
 
     return render_template(
@@ -335,7 +347,8 @@ def simulacao():
 @login_obrigatorio
 def config():
     agora = datetime.now()
-    receita = buscar_receita_mes(agora.month, agora.year) or 0
+    usuario_id = usuario_logado_id()
+    receita = buscar_receita_mes(usuario_id, agora.month, agora.year) or 0
     return render_template("config.html", receita_config=receita)
 
 
