@@ -4,7 +4,8 @@ Aplicação web desenvolvida com **Python**, **Flask**, **SQLite**, **HTML**, **
 
 Além de atender a uma necessidade prática de organização financeira, este projeto foi construído para demonstrar competências importantes em **desenvolvimento web**, como **persistência de dados**, **estruturação de aplicações back-end** e **integração entre front e back-end**.
 
-![Interface do sistema](print_gerenciador_financeiro.png)
+![Interface auth](print-gerenciador-financeiro-auth.png)
+![Interface do sistema](print-gerenciador-financeiro.png)
 
 ## 🌐 Acesse o Projeto Online
 
