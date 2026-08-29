@@ -49,7 +49,7 @@ nav { /* Toda a NAVBAR */
     left: 0;
     top: 0;
     height: 100%;
-    background-color: #0e456a;
+    background-color: rgb(18, 83, 135);
     display: flex;
     align-items: center;
     width: 570px;
@@ -81,7 +81,7 @@ nav { /* Toda a NAVBAR */
     bottom: 2px;
     width: 100%;
     height: 4px;
-    background-color: #0e456a;
+    background-color: rgb(18, 83, 135);
     border-radius: 999px;
     transform: scaleX(0);
     transform-origin: center;
@@ -139,7 +139,7 @@ nav { /* Toda a NAVBAR */
 }
 
 .input_salario h3 {
-    color: #0e456a;
+    color: rgb(18, 83, 135);
     font-weight: 700;
     font-size: 30px;
     padding: 7px 0 20px 15px;
@@ -230,7 +230,7 @@ nav { /* Toda a NAVBAR */
 }
 
 .receita_vs_despesa h3 {
-    color: #0e456a;
+    color: rgb(18, 83, 135);
     font-weight: 700;
     font-size: 30px;
 }
@@ -286,7 +286,7 @@ nav { /* Toda a NAVBAR */
 
 .adicionar_despesa h3,
 .formulario_gasto_fixo h3 {
-    color: #0b3c5d;
+    color: rgb(18, 83, 135);
     font-weight: 700;
     font-size: 30px;
     margin-bottom: 13px;
@@ -311,7 +311,7 @@ nav { /* Toda a NAVBAR */
 
 .adicionar_despesa label,
 .formulario_gasto_fixo label {
-    color: #0e456a;
+    color: rgb(18, 83, 135);
     font-weight: 700;
     font-size: 16px;
     letter-spacing: 0.5px;
@@ -371,7 +371,7 @@ nav { /* Toda a NAVBAR */
     color: #000;
 }
 
-/* ---------- Botao de adicionar ---------- */
+/* ---------- Botão de adicionar ---------- */
 
 .botao_adicionar {
     margin-top: auto;
@@ -497,7 +497,7 @@ nav { /* Toda a NAVBAR */
     border-bottom: none;
 }
 
-/* -------- Rodape -------- */
+/* -------- Rodapé -------- */
 
 .tabela_mensal tfoot td,
 .tabela_simulacao tfoot td {
@@ -516,6 +516,7 @@ tfoot {
     padding-left: 185px;
     font-size: 25px;
     white-space: nowrap;
+    color: #3a3a3a;
 }
 
 #texto_custo_mensal,
@@ -523,7 +524,7 @@ tfoot {
     padding-left: 120px;
     padding-right: 28px;
     min-width: 290px;
-    background-color: #0e456a;
+    background-color: rgb(18, 83, 135);
     font-size: 30px;
     color: rgb(237, 237, 237);
     clip-path: polygon(5% 0, 100% 0, 100% 100%, 0% 100%);
@@ -537,7 +538,7 @@ tfoot {
     font-variant-numeric: tabular-nums;
 }
 
-/* -------- Botoes de acao -------- */
+/* -------- Botões de ação -------- */
 
 .botao_excluir,
 .botao_ocultar {
@@ -692,7 +693,7 @@ tfoot {
 
 .filtro_titulo {
     margin: 0;
-    color: #0e456a;
+    color: rgb(18, 83, 135);
     font-size: 27px;
     font-weight: 800;
     white-space: nowrap;
@@ -770,7 +771,7 @@ tfoot {
     accent-color: #48a8f1;
 }
 
-/* ----------------- Grafico de barras da simulacao ---------------------- */
+/* ----------------- Gráfico de barras da simulação ---------------------- */
 
 .grafico_simulacao {
     background: #efefef;
@@ -863,7 +864,7 @@ tfoot {
 }
 
 .titulo_config {
-    color: #0e456a;
+    color: rgb(18, 83, 135);
     font-weight: 700;
     font-size: 30px;
     margin-bottom: 13px;
@@ -888,7 +889,7 @@ tfoot {
 }
 
 .config_esquerda tbody td {
-    background: #0e456a;
+    background: rgb(14, 71, 118);
     padding: 10px;
     text-align: center;
     font-weight: 700;
@@ -981,7 +982,7 @@ tfoot {
     margin: 30px 0;
 }
 
-/* ----------------- Coluna Situacao / Excluir ---------------------- */
+/* ----------------- Coluna Situação / Excluir ---------------------- */
 
 .th_situacao {
     display: table-cell !important;
@@ -1137,7 +1138,7 @@ tfoot {
     margin-bottom: 14px;
 }
 
-/*SESSAO 5 ///////////////////////////////////// RODAPE /////////////////////////////////////// */
+/*SESSAO 5 ///////////////////////////////////// RODAPÉ /////////////////////////////////////// */
 
 footer {
     background-color: rgb(49, 49, 49);
