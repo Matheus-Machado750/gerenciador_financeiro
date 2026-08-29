@@ -371,7 +371,7 @@ nav { /* Toda a NAVBAR */
     color: #000;
 }
 
-/* ---------- Botao de adicionar ---------- */
+/* ---------- Botão de adicionar ---------- */
 
 .botao_adicionar {
     margin-top: auto;
@@ -497,7 +497,7 @@ nav { /* Toda a NAVBAR */
     border-bottom: none;
 }
 
-/* -------- Rodape -------- */
+/* -------- Rodapé -------- */
 
 .tabela_mensal tfoot td,
 .tabela_simulacao tfoot td {
@@ -538,7 +538,7 @@ tfoot {
     font-variant-numeric: tabular-nums;
 }
 
-/* -------- Botoes de acao -------- */
+/* -------- Botões de ação -------- */
 
 .botao_excluir,
 .botao_ocultar {
@@ -771,7 +771,7 @@ tfoot {
     accent-color: #48a8f1;
 }
 
-/* ----------------- Grafico de barras da simulacao ---------------------- */
+/* ----------------- Gráfico de barras da simulação ---------------------- */
 
 .grafico_simulacao {
     background: #efefef;
@@ -982,7 +982,7 @@ tfoot {
     margin: 30px 0;
 }
 
-/* ----------------- Coluna Situacao / Excluir ---------------------- */
+/* ----------------- Coluna Situação / Excluir ---------------------- */
 
 .th_situacao {
     display: table-cell !important;
@@ -1138,7 +1138,7 @@ tfoot {
     margin-bottom: 14px;
 }
 
-/*SESSAO 5 ///////////////////////////////////// RODAPE /////////////////////////////////////// */
+/*SESSAO 5 ///////////////////////////////////// RODAPÉ /////////////////////////////////////// */
 
 footer {
     background-color: rgb(49, 49, 49);
