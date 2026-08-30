@@ -13,7 +13,7 @@ Além de atender a uma necessidade prática de organização financeira, este pr
 
 O projeto está disponível online e pode ser acessado diretamente pelo navegador, sem necessidade de instalação local.
 
->[!CAUTION]
+>[!NOTE]
 >**ATENÇÃO : Antes de acessar e utilizar o sistema, é importante ler a seção de "Observações de Uso" disponível ao final desta descrição.**
 
 ---
@@ -91,6 +91,7 @@ projeto-flask/
 │
 ├── static/
 │   ├── css/
+│   │   ├── auth.css
 │   │   ├── style.css
 │   │   └── responsive.css
 │   │
@@ -100,6 +101,7 @@ projeto-flask/
 │       └── simulacao.js
 │
 ├── templates/
+│   ├── auth.html
 │   ├── base.html
 │   ├── home.html
 │   ├── simulacao.html
@@ -113,8 +115,6 @@ projeto-flask/
 
 ## 📈 Evoluções Planejadas
 
-- autenticação e login individual por usuário
-- isolamento de dados por conta
 - melhorias de responsividade para múltiplos dispositivos
 - refinamento de UX/UI
 - novas métricas e indicadores financeiros
@@ -122,10 +122,6 @@ projeto-flask/
 
 ---
 
-## 📜 Observações de Uso
+## 📃 Observações de Uso
 
-No estado atual, a aplicação está mais adequada apenas para **observação, demonstração e alterações simples**, especialmente em contexto de portfólio.
-
-Como o sistema ainda **não possui autenticação e login individual por usuário**, qualquer alteração feita por uma pessoa pode impactar diretamente a experiência das demais, já que os dados persistidos ainda são compartilhados no mesmo banco da aplicação.
-
-Além disso, no momento, o projeto foi desenvolvido com foco principal em **uso desktop**. A versão atual ainda **não possui responsividade completa para dispositivos móveis**, o que significa que futuras melhorias nessa área já estão previstas na evolução do sistema.
+No momento, o projeto foi desenvolvido com foco principal em **uso desktop** (computadores e notebooks). A versão atual ainda **não possui responsividade completa para dispositivos móveis**, o que significa que futuras melhorias nessa área já estão previstas na evolução do sistema.
