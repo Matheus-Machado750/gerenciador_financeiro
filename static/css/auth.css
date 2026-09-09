@@ -18,7 +18,7 @@ html, body {
 body {
     min-height: 100vh;
     overflow: hidden;
-    background-color: #ffffff;
+    background-color: #dbdbdb;
 
     background-image:
         url("../img/canto_superior_esquerdo.png"),
