@@ -4,7 +4,7 @@ import sqlite3
 import os
 from datetime import datetime
 from functools import wraps
-
+# comentário perdido de Mari
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "chave-dev-temporaria")
 """O Flask vai usar essa chave para assinar o cookie de sessão, impedindo que alguém altere o conteúdo da sessão no navegador e o Flask aceite como se fosse verdadeiro"""
